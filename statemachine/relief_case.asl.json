@@ -1,0 +1,91 @@
+{
+  "Comment": "Reprieve Relief Approval Workflow with waitForTaskToken human approval",
+  "StartAt": "RecheckPolicy",
+  "States": {
+    "RecheckPolicy": {
+      "Type": "Task",
+      "Resource": "${WfRecheckFnArn}",
+      "Retry": [
+        {
+          "ErrorEquals": ["States.TaskFailed"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2.0
+        }
+      ],
+      "Next": "RouteByAuthority"
+    },
+    "RouteByAuthority": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.auth.outcome",
+          "StringEquals": "ALLOWED",
+          "Next": "ApplyPlan"
+        },
+        {
+          "Variable": "$.auth.outcome",
+          "StringEquals": "NEEDS_MANAGER_APPROVAL",
+          "Next": "RequestApproval"
+        }
+      ],
+      "Default": "RejectPlan"
+    },
+    "RequestApproval": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+      "Parameters": {
+        "FunctionName": "${WfRequestApprovalFnArn}",
+        "Payload": {
+          "taskToken.$": "$$.Task.Token",
+          "case_id.$": "$.case_id",
+          "plan.$": "$.plan"
+        }
+      },
+      "TimeoutSeconds": 86400,
+      "Catch": [
+        {
+          "ErrorEquals": ["States.Timeout"],
+          "Next": "HandoffToHuman"
+        }
+      ],
+      "Next": "ApprovalRoute"
+    },
+    "ApprovalRoute": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.decision",
+          "StringEquals": "APPROVED",
+          "Next": "ApplyPlan"
+        }
+      ],
+      "Default": "RejectPlan"
+    },
+    "ApplyPlan": {
+      "Type": "Task",
+      "Resource": "${WfApplyFnArn}",
+      "Next": "NotifyBorrower"
+    },
+    "RejectPlan": {
+      "Type": "Task",
+      "Resource": "${WfRejectFnArn}",
+      "Next": "NotifyBorrower"
+    },
+    "NotifyBorrower": {
+      "Type": "Task",
+      "Resource": "${WfNotifyFnArn}",
+      "Next": "CloseCase"
+    },
+    "CloseCase": {
+      "Type": "Task",
+      "Resource": "${WfCloseFnArn}",
+      "End": true
+    },
+    "HandoffToHuman": {
+      "Type": "Task",
+      "Resource": "${WfHandoffFnArn}",
+      "End": true
+    }
+  }
+}

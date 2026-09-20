@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Environments & Secrets
+.env
+.env.local
+*.pem
+samconfig.toml
+
+# AWS SAM build
+.aws-sam/
+
+# OS Files
+.DS_Store
+Thumbs.db

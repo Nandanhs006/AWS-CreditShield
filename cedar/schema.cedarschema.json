@@ -1,0 +1,87 @@
+{
+  "Relief": {
+    "entityTypes": {
+      "AiAgent": {
+        "shape": {
+          "type": "Record",
+          "attributes": {}
+        }
+      },
+      "Manager": {
+        "shape": {
+          "type": "Record",
+          "attributes": {}
+        }
+      },
+      "ManagerGroup": {
+        "shape": {
+          "type": "Record",
+          "attributes": {}
+        }
+      },
+      "Loan": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "dpd": { "type": "Long", "required": true },
+            "priorReliefs": { "type": "Long", "required": true },
+            "legalHold": { "type": "Boolean", "required": true },
+            "emi": { "type": "Long", "required": true },
+            "outstanding": { "type": "Long", "required": true }
+          }
+        }
+      }
+    },
+    "actions": {
+      "OfferDueDateShift": {
+        "appliesTo": {
+          "principalTypes": ["AiAgent", "Manager"],
+          "resourceTypes": ["Loan"],
+          "context": {
+            "type": "Record",
+            "attributes": {
+              "days": { "type": "Long", "required": true }
+            }
+          }
+        }
+      },
+      "OfferPartialPlan": {
+        "appliesTo": {
+          "principalTypes": ["AiAgent", "Manager"],
+          "resourceTypes": ["Loan"],
+          "context": {
+            "type": "Record",
+            "attributes": {
+              "upfrontPct": { "type": "Long", "required": true },
+              "installments": { "type": "Long", "required": true }
+            }
+          }
+        }
+      },
+      "OfferTenureExtension": {
+        "appliesTo": {
+          "principalTypes": ["AiAgent", "Manager"],
+          "resourceTypes": ["Loan"],
+          "context": {
+            "type": "Record",
+            "attributes": {
+              "months": { "type": "Long", "required": true }
+            }
+          }
+        }
+      },
+      "OfferFeeWaiver": {
+        "appliesTo": {
+          "principalTypes": ["AiAgent", "Manager"],
+          "resourceTypes": ["Loan"],
+          "context": {
+            "type": "Record",
+            "attributes": {
+              "amount": { "type": "Long", "required": true }
+            }
+          }
+        }
+      }
+    }
+  }
+}

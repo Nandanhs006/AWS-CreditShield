@@ -1,0 +1,241 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Reprieve — Hardship-First Relief Agent for Lenders
+  First Commit Hackathon 2026 (Ship It Track)
+
+Parameters:
+  BedrockModelId:
+    Type: String
+    Default: apac.amazon.nova-lite-v1:0
+    Description: Bedrock Model ID for the Conversational Agent
+  LenderName:
+    Type: String
+    Default: Harbour Finance
+  PublicAppUrl:
+    Type: String
+    Default: http://localhost:3000
+  EnableTamperDemo:
+    Type: String
+    Default: 'true'
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Architectures:
+      - arm64
+    MemorySize: 512
+    Timeout: 15
+    Environment:
+      Variables:
+        TABLE_ACCOUNTS: !Ref AccountsTable
+        TABLE_CASES: !Ref CasesTable
+        TABLE_MESSAGES: !Ref MessagesTable
+        TABLE_APPROVALS: !Ref ApprovalsTable
+        TABLE_LOG: !Ref DecisionLogTable
+        SIGNING_KEY_ID: !GetAtt SigningKey.Arn
+        BEDROCK_MODEL_ID: !Ref BedrockModelId
+        LENDER_NAME: !Ref LenderName
+        ENABLE_TAMPER_DEMO: !Ref EnableTamperDemo
+
+Resources:
+  # =========================================================================
+  # 1. DYNAMODB TABLES (ON-DEMAND)
+  # =========================================================================
+  AccountsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: account_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: account_id
+          KeyType: HASH
+
+  CasesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: case_id
+          AttributeType: S
+        - AttributeName: borrower_token
+          AttributeType: S
+      KeySchema:
+        - AttributeName: case_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: by_token
+          KeySchema:
+            - AttributeName: borrower_token
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: case_id
+          AttributeType: S
+        - AttributeName: ts_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: case_id
+          KeyType: HASH
+        - AttributeName: ts_id
+          KeyType: RANGE
+
+  ApprovalsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: approval_id
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: requested_at
+          AttributeType: S
+      KeySchema:
+        - AttributeName: approval_id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: by_status
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: requested_at
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  DecisionLogTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: case_id
+          AttributeType: S
+        - AttributeName: seq
+          AttributeType: N
+      KeySchema:
+        - AttributeName: case_id
+          KeyType: HASH
+        - AttributeName: seq
+          KeyType: RANGE
+
+  # =========================================================================
+  # 2. CRYPTOGRAPHIC SIGNING & IMMUTABILITY
+  # =========================================================================
+  SigningKey:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: Asymmetric P-256 key for signing Reprieve Decision Log entries
+      KeySpec: ECC_NIST_P256
+      KeyUsage: SIGN_VERIFY
+      KeyPolicy:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: EnableRootPermissions
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action: 'kms:*'
+            Resource: '*'
+
+  CheckpointsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      ObjectLockEnabled: true
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # =========================================================================
+  # 3. AMAZON VERIFIED PERMISSIONS (CEDAR)
+  # =========================================================================
+  PolicyStore:
+    Type: AWS::VerifiedPermissions::PolicyStore
+    Properties:
+      ValidationSettings:
+        Mode: STRICT
+
+  # =========================================================================
+  # 4. COGNITO AUTHENTICATION
+  # =========================================================================
+  StaffUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: reprieve-staff-pool
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+
+  OpsGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: ops
+      UserPoolId: !Ref StaffUserPool
+      Description: Operations Analysts
+
+  ManagerGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: manager
+      UserPoolId: !Ref StaffUserPool
+      Description: Senior Credit Approval Managers
+
+  StaffUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: reprieve-staff-client
+      UserPoolId: !Ref StaffUserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+
+  # =========================================================================
+  # 5. API GATEWAY (HTTP API)
+  # =========================================================================
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+
+Outputs:
+  ApiUrl:
+    Description: HTTP API Stage Endpoint
+    Value: !Sub https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com
+  UserPoolId:
+    Description: Cognito User Pool ID
+    Value: !Ref StaffUserPool
+  UserPoolClientId:
+    Description: Cognito User Pool Client ID
+    Value: !Ref StaffUserPoolClient
+  PolicyStoreId:
+    Description: Verified Permissions Policy Store ID
+    Value: !Ref PolicyStore
+  SigningKeyArn:
+    Description: KMS Asymmetric Key ARN
+    Value: !GetAtt SigningKey.Arn
