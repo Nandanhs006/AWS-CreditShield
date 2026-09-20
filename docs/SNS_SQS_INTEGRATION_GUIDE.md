@@ -55,7 +55,7 @@ flowchart TD
 ### 1. Amazon SNS: Manager Escalation Alerts
 
 #### Why It's Required:
-When a requested concession exceeds the AI agent's autonomous limit (e.g., Arjun asking for a 30-day shift), Step Functions halts on `waitForTaskToken`. A human credit manager must be alerted immediately so the case does not hit the 24-hour timeout.
+When a requested concession exceeds the AI agent's autonomous limit (e.g., Dev asking for a 30-day shift), Step Functions halts on `waitForTaskToken`. A human credit manager must be alerted immediately so the case does not hit the 24-hour timeout.
 
 #### SAM / CloudFormation Definition (`template.yaml`):
 

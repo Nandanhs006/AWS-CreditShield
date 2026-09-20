@@ -25,17 +25,17 @@
       <!-- Quick Hero Scenario Switcher -->
       <div class="header-center-scenarios">
         <span id="scenarioGroupLabel" class="scenario-label">SCENARIOS</span>
-        <button id="btnHeroMeera" class="scenario-btn active" onclick="loadHeroScenario('ACC-1001')">
-          <span class="scenario-indicator meera"></span> Meera (7d)
+        <button id="btnHeroPriya" class="scenario-btn active" onclick="loadHeroScenario('ACC-1001')">
+          <span class="scenario-indicator priya"></span> Priya (7d)
         </button>
-        <button id="btnHeroArjun" class="scenario-btn" onclick="loadHeroScenario('ACC-1002')">
-          <span class="scenario-indicator arjun"></span> Arjun (30d)
+        <button id="btnHeroDev" class="scenario-btn" onclick="loadHeroScenario('ACC-1002')">
+          <span class="scenario-indicator dev"></span> Dev (30d)
         </button>
-        <button id="btnHeroSana" class="scenario-btn" onclick="loadHeroScenario('ACC-1003')">
-          <span class="scenario-indicator sana"></span> Sana (Jailbreak)
+        <button id="btnHeroZara" class="scenario-btn" onclick="loadHeroScenario('ACC-1003')">
+          <span class="scenario-indicator zara"></span> Zara (Jailbreak)
         </button>
-        <button id="btnHeroVikram" class="scenario-btn" onclick="loadHeroScenario('ACC-1004')">
-          <span class="scenario-indicator vikram"></span> Vikram (Hold)
+        <button id="btnHeroKabir" class="scenario-btn" onclick="loadHeroScenario('ACC-1004')">
+          <span class="scenario-indicator kabir"></span> Kabir (Hold)
         </button>
       </div>
 
@@ -99,7 +99,7 @@
               </div>
               <div class="lender-info">
                 <h3>Harbour Finance</h3>
-                <span><i class="fa-solid fa-circle-check"></i> CreditShield Assistant</span>
+                <span><i class="fa-solid fa-circle-check"></i> ShieldVoice Assistant</span>
               </div>
             </div>
             <button class="btn-handoff-phone" onclick="triggerHumanHandoff()" title="Request human officer handoff">
@@ -110,14 +110,14 @@
           <!-- Supervisor Takeover Banner -->
           <div id="supervisorOverrideBanner" class="supervisor-override-banner">
             <span><i class="fa-solid fa-triangle-exclamation"></i> SUPERVISOR OVERRIDE ACTIVE</span>
-            <span style="font-size:0.62rem; opacity:0.9;">OFFICER RAMAN</span>
+            <span style="font-size:0.62rem; opacity:0.9;">OFFICER RAJIV MENON</span>
           </div>
 
           <!-- Borrower Context Mini-Card -->
           <div class="borrower-quick-card">
             <div class="borrower-card-header">
               <div class="borrower-name-segment">
-                <strong id="borrowerNameDisplay">Meera Iyer</strong>
+                <strong id="borrowerNameDisplay">Priya Sharma</strong>
                 <span id="borrowerSegmentTag" class="borrower-segment-tag">GIG RIDER</span>
               </div>
               <span id="borrowerStressTag" class="stress-tag high">HIGH (73)</span>
@@ -168,7 +168,7 @@
 
           <!-- Supervisor Quick Action Toolbar (Visible in Supervisor Role) -->
           <div id="supervisorActionToolbar" class="supervisor-action-toolbar">
-            <button class="btn-supervisor-action" onclick="supervisorSendQuick('Hello, this is Officer Raman from Hardship Operations. I have taken over this chat directly.')" title="Takeover greeting">
+            <button class="btn-supervisor-action" onclick="supervisorSendQuick('Hello, this is Officer Rajiv Menon from Hardship Operations. I have taken over this chat directly.')" title="Takeover greeting">
               Takeover Greet
             </button>
             <button class="btn-supervisor-action" onclick="supervisorSendQuick('I have reviewed your case and can approve a 30-day grace extension under discretionary authority.')" title="Discretionary 30d offer">
@@ -329,7 +329,7 @@
 
                 <div class="borrower-quick-card" style="margin: 0;">
                   <div class="borrower-card-header">
-                    <span id="activeCaseTitle" class="mono">CASE-1001 &bull; Meera Iyer</span>
+                    <span id="activeCaseTitle" class="mono">CASE-1001 &bull; Priya Sharma</span>
                     <span id="activeCaseCohort" class="cohort-badge treated">TREATED ARM</span>
                   </div>
                   <p id="activeCaseDesc" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
@@ -341,7 +341,7 @@
                 <div class="panel-subhead" style="margin-top: 0.5rem;">
                   <h3>TOOL EXECUTION TRACE</h3>
                   <span style="font-size: 0.7rem; color: var(--accent-industrial); font-family: var(--font-mono);">
-                    AI ASSISTANT
+                    SHIELDVOICE AI
                   </span>
                 </div>
 
@@ -837,7 +837,7 @@
         <form id="authLoginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
           <div class="auth-field">
             <label for="authEmailInput"><i class="fa-solid fa-envelope"></i> STAFF EMAIL</label>
-            <input type="email" id="authEmailInput" class="auth-input" placeholder="analyst@harbourfin.com or raman.supervisor@harbourfin.com" required>
+            <input type="email" id="authEmailInput" class="auth-input" placeholder="analyst@harbourfin.com or menon.supervisor@harbourfin.com" required>
           </div>
           <div class="auth-field">
             <label for="authPasswordInput"><i class="fa-solid fa-lock"></i> PASSWORD</label>
@@ -861,7 +861,7 @@
               <strong>AI OPERATIONS ANALYST</strong>
             </div>
             <span class="quick-auth-email mono">analyst@harbourfin.com</span>
-            <span class="quick-auth-desc">Standard access &bull; 3 Hero Scenarios (Meera, Arjun, Sana) &bull; Manager approvals restricted</span>
+            <span class="quick-auth-desc">Standard access &bull; 3 Hero Scenarios (Priya, Dev, Zara) &bull; Manager approvals restricted</span>
           </button>
 
           <button class="btn-quick-auth" onclick="quickLogin('supervisor')">
@@ -869,7 +869,7 @@
               <i class="fa-solid fa-user-tie" style="color:var(--accent-terminal);"></i>
               <strong>SENIOR HUMAN SUPERVISOR</strong>
             </div>
-            <span class="quick-auth-email mono">raman.supervisor@harbourfin.com</span>
+            <span class="quick-auth-email mono">menon.supervisor@harbourfin.com</span>
             <span class="quick-auth-desc">Full Master access &bull; All 4 AI Ops &bull; Live chat takeover &bull; Human Handoff Desk &bull; Discretionary approvals</span>
           </button>
         </div>

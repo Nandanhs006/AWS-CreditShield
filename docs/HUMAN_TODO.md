@@ -12,12 +12,12 @@ Your showpiece web application is currently live and running locally at:
 👉 **[http://localhost:3000/](http://localhost:3000/)**
 
 Open it in your browser to verify:
-- **Left Phone Screen**: Interactive Borrower Terminal (Meera, Arjun, Sana, Vikram).
+- **Left Phone Screen**: Interactive Borrower Terminal (Priya, Dev, Zara, Kabir).
 - **Hero Buttons (Top Bar)**: Switch between the 4 demo accounts with 1 click.
 - **Top Right Tabs**:
   - **[01] Portfolio Radar**: Filter by High Stress, Watch Tier, or Cohort.
   - **[02] Policy Envelope & Tools**: See the mechanical gauge (1-10d Agent, 11-30d Manager, >30d Denied) and Cedar code.
-  - **[03] Step Functions Queue**: Click *Approve Concession* for Arjun and watch the workflow advance.
+  - **[03] Step Functions Queue**: Click *Approve Concession* for Dev and watch the workflow advance.
   - **[04] Decision Log & Tamper Demo**: Click *Simulate DB Tampering* (turns red) then *Restore from S3 Lock* (turns green).
   - **[05] A/B Impact & Economics**: Shows cure rate uplift (+27.4pp) and Bedrock Nova Lite cost ($0.0031/case).
   - **[06] AWS Free Tier Topology**: Review the complete Ship It compliant architecture.

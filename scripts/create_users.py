@@ -16,14 +16,14 @@ def create_users():
         print("[!] USER_POOL_ID environment variable not set. Pass USER_POOL_ID or deploy SAM first.")
         print("[i] Demo Persona Credentials:")
         print("  1. AI Operations: analyst@harbourfin.com / CreditShield2026! (Group: ops)")
-        print("  2. Senior Supervisor: raman.supervisor@harbourfin.com / CreditShield2026! (Group: manager)")
+        print("  2. Senior Supervisor: menon.supervisor@harbourfin.com / CreditShield2026! (Group: manager)")
         return
 
     cognito = boto3.client("cognito-idp", region_name=config.AWS_REGION)
 
     users = [
         {"email": "analyst@harbourfin.com", "group": "ops"},
-        {"email": "raman.supervisor@harbourfin.com", "group": "manager"}
+        {"email": "menon.supervisor@harbourfin.com", "group": "manager"}
     ]
     password = "CreditShield2026!"
 

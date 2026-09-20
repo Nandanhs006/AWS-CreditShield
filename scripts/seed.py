@@ -18,8 +18,8 @@ from backend.src.domain import stress
 HERO_ACCOUNTS = [
     {
         "account_id": "ACC-1001",
-        "name": "Meera Iyer",
-        "first_name": "Meera",
+        "name": "Priya Sharma",
+        "first_name": "Priya",
         "segment": "GIG",
         "product": "TWO_WHEELER",
         "emi": 6200,
@@ -40,8 +40,8 @@ HERO_ACCOUNTS = [
     },
     {
         "account_id": "ACC-1002",
-        "name": "Arjun Mehta",
-        "first_name": "Arjun",
+        "name": "Dev Malhotra",
+        "first_name": "Dev",
         "segment": "SHOP_OWNER",
         "product": "MICRO_BUSINESS",
         "emi": 14500,
@@ -62,8 +62,8 @@ HERO_ACCOUNTS = [
     },
     {
         "account_id": "ACC-1003",
-        "name": "Sana Qureshi",
-        "first_name": "Sana",
+        "name": "Zara Khan",
+        "first_name": "Zara",
         "segment": "SALARIED",
         "product": "PERSONAL_LOAN",
         "emi": 9800,
@@ -84,8 +84,8 @@ HERO_ACCOUNTS = [
     },
     {
         "account_id": "ACC-1004",
-        "name": "Vikram Rao",
-        "first_name": "Vikram",
+        "name": "Kabir Singhania",
+        "first_name": "Kabir",
         "segment": "SALARIED",
         "product": "PERSONAL_LOAN",
         "emi": 11000,

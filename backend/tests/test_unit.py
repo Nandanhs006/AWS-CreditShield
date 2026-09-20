@@ -14,7 +14,7 @@ from backend.src.common import jsonutil
 
 # 1. TEST HERO ACCOUNTS STRESS SCORING (Section 7 specs)
 def test_hero_stress_scoring():
-    meera = {
+    priya = {
         "account_id": "ACC-1001",
         "emi": 6200,
         "dpd": 0,
@@ -26,11 +26,11 @@ def test_hero_stress_scoring():
             "avg_balance_7d": 2100
         }
     }
-    score_meera, tier_meera, _ = stress.calculate_stress_score(meera)
-    assert score_meera == 73
-    assert tier_meera == "HIGH"
+    score_priya, tier_priya, _ = stress.calculate_stress_score(priya)
+    assert score_priya == 73
+    assert tier_priya == "HIGH"
 
-    arjun = {
+    dev = {
         "account_id": "ACC-1002",
         "emi": 14500,
         "dpd": 9,
@@ -42,11 +42,11 @@ def test_hero_stress_scoring():
             "avg_balance_7d": 3800
         }
     }
-    score_arjun, tier_arjun, _ = stress.calculate_stress_score(arjun)
-    assert score_arjun == 87
-    assert tier_arjun == "HIGH"
+    score_dev, tier_dev, _ = stress.calculate_stress_score(dev)
+    assert score_dev == 87
+    assert tier_dev == "HIGH"
 
-    sana = {
+    zara = {
         "account_id": "ACC-1003",
         "emi": 9800,
         "dpd": 35,
@@ -58,11 +58,11 @@ def test_hero_stress_scoring():
             "avg_balance_7d": 5000
         }
     }
-    score_sana, tier_sana, _ = stress.calculate_stress_score(sana)
-    assert score_sana == 62
-    assert tier_sana == "HIGH"
+    score_zara, tier_zara, _ = stress.calculate_stress_score(zara)
+    assert score_zara == 62
+    assert tier_zara == "HIGH"
 
-    vikram = {
+    kabir = {
         "account_id": "ACC-1004",
         "emi": 11000,
         "dpd": 20,
@@ -75,9 +75,9 @@ def test_hero_stress_scoring():
             "avg_balance_7d": 4000
         }
     }
-    score_vikram, tier_vikram, _ = stress.calculate_stress_score(vikram)
-    assert score_vikram == 74
-    assert tier_vikram == "HIGH"
+    score_kabir, tier_kabir, _ = stress.calculate_stress_score(kabir)
+    assert score_kabir == 74
+    assert tier_kabir == "HIGH"
 
 
 # 2. TEST DETERMINISTIC PLAN SUMMARIES (Section 9.6)
@@ -111,41 +111,41 @@ def test_numeric_verifier():
 
 # 4. TEST CEDAR COMPLETE 15-ROW AUTHORIZATION MATRIX (Section 8.6)
 def test_cedar_complete_15_matrix():
-    meera = {"account_id": "ACC-1001", "dpd": 0, "prior_reliefs": 0, "legal_hold": False, "emi": 6200, "outstanding": 88000}
-    arjun = {"account_id": "ACC-1002", "dpd": 9, "prior_reliefs": 1, "legal_hold": False, "emi": 14500, "outstanding": 310000}
-    sana  = {"account_id": "ACC-1003", "dpd": 35, "prior_reliefs": 2, "legal_hold": False, "emi": 9800, "outstanding": 210000}
-    vikram = {"account_id": "ACC-1004", "dpd": 20, "prior_reliefs": 1, "legal_hold": True, "emi": 11000, "outstanding": 260000}
+    priya = {"account_id": "ACC-1001", "dpd": 0, "prior_reliefs": 0, "legal_hold": False, "emi": 6200, "outstanding": 88000}
+    dev   = {"account_id": "ACC-1002", "dpd": 9, "prior_reliefs": 1, "legal_hold": False, "emi": 14500, "outstanding": 310000}
+    zara  = {"account_id": "ACC-1003", "dpd": 35, "prior_reliefs": 2, "legal_hold": False, "emi": 9800, "outstanding": 210000}
+    kabir = {"account_id": "ACC-1004", "dpd": 20, "prior_reliefs": 1, "legal_hold": True, "emi": 11000, "outstanding": 260000}
 
-    # Row 1: Meera DUE_DATE_SHIFT days=7 -> ALLOWED
-    assert authorize.authorize_relief(meera, "DUE_DATE_SHIFT", {"days": 7})["outcome"] == "ALLOWED"
-    # Row 2: Meera DUE_DATE_SHIFT days=14 -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(meera, "DUE_DATE_SHIFT", {"days": 14})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 3: Meera DUE_DATE_SHIFT days=45 -> DENIED
-    assert authorize.authorize_relief(meera, "DUE_DATE_SHIFT", {"days": 45})["outcome"] == "DENIED"
-    # Row 4: Meera PARTIAL_PLAN 50%, 3 installments -> ALLOWED
-    assert authorize.authorize_relief(meera, "PARTIAL_PLAN", {"upfront_pct": 50, "installments": 3})["outcome"] == "ALLOWED"
-    # Row 5: Meera PARTIAL_PLAN 25%, 6 installments -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(meera, "PARTIAL_PLAN", {"upfront_pct": 25, "installments": 6})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 6: Meera TENURE_EXTENSION months=3 -> ALLOWED
-    assert authorize.authorize_relief(meera, "TENURE_EXTENSION", {"months": 3})["outcome"] == "ALLOWED"
-    # Row 7: Meera TENURE_EXTENSION months=9 -> DENIED
-    assert authorize.authorize_relief(meera, "TENURE_EXTENSION", {"months": 9})["outcome"] == "DENIED"
-    # Row 8: Meera FEE_WAIVER amount=350 -> ALLOWED
-    assert authorize.authorize_relief(meera, "FEE_WAIVER", {"amount": 350})["outcome"] == "ALLOWED"
-    # Row 9: Arjun DUE_DATE_SHIFT days=30 -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(arjun, "DUE_DATE_SHIFT", {"days": 30})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 10: Arjun TENURE_EXTENSION months=2 -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(arjun, "TENURE_EXTENSION", {"months": 2})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 11: Arjun FEE_WAIVER amount=1200 -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(arjun, "FEE_WAIVER", {"amount": 1200})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 12: Sana DUE_DATE_SHIFT days=5 -> NEEDS_MANAGER_APPROVAL
-    assert authorize.authorize_relief(sana, "DUE_DATE_SHIFT", {"days": 5})["outcome"] == "NEEDS_MANAGER_APPROVAL"
-    # Row 13: Sana TENURE_EXTENSION months=24 -> DENIED
-    assert authorize.authorize_relief(sana, "TENURE_EXTENSION", {"months": 24})["outcome"] == "DENIED"
-    # Row 14: Sana TENURE_EXTENSION months=3 -> DENIED (prior_reliefs >= 2)
-    assert authorize.authorize_relief(sana, "TENURE_EXTENSION", {"months": 3})["outcome"] == "DENIED"
-    # Row 15: Vikram DUE_DATE_SHIFT days=3 -> DENIED (legal hold)
-    assert authorize.authorize_relief(vikram, "DUE_DATE_SHIFT", {"days": 3})["outcome"] == "DENIED"
+    # Row 1: Priya DUE_DATE_SHIFT days=7 -> ALLOWED
+    assert authorize.authorize_relief(priya, "DUE_DATE_SHIFT", {"days": 7})["outcome"] == "ALLOWED"
+    # Row 2: Priya DUE_DATE_SHIFT days=14 -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(priya, "DUE_DATE_SHIFT", {"days": 14})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 3: Priya DUE_DATE_SHIFT days=45 -> DENIED
+    assert authorize.authorize_relief(priya, "DUE_DATE_SHIFT", {"days": 45})["outcome"] == "DENIED"
+    # Row 4: Priya PARTIAL_PLAN 50%, 3 installments -> ALLOWED
+    assert authorize.authorize_relief(priya, "PARTIAL_PLAN", {"upfront_pct": 50, "installments": 3})["outcome"] == "ALLOWED"
+    # Row 5: Priya PARTIAL_PLAN 25%, 6 installments -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(priya, "PARTIAL_PLAN", {"upfront_pct": 25, "installments": 6})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 6: Priya TENURE_EXTENSION months=3 -> ALLOWED
+    assert authorize.authorize_relief(priya, "TENURE_EXTENSION", {"months": 3})["outcome"] == "ALLOWED"
+    # Row 7: Priya TENURE_EXTENSION months=9 -> DENIED
+    assert authorize.authorize_relief(priya, "TENURE_EXTENSION", {"months": 9})["outcome"] == "DENIED"
+    # Row 8: Priya FEE_WAIVER amount=350 -> ALLOWED
+    assert authorize.authorize_relief(priya, "FEE_WAIVER", {"amount": 350})["outcome"] == "ALLOWED"
+    # Row 9: Dev DUE_DATE_SHIFT days=30 -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(dev, "DUE_DATE_SHIFT", {"days": 30})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 10: Dev TENURE_EXTENSION months=2 -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(dev, "TENURE_EXTENSION", {"months": 2})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 11: Dev FEE_WAIVER amount=1200 -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(dev, "FEE_WAIVER", {"amount": 1200})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 12: Zara DUE_DATE_SHIFT days=5 -> NEEDS_MANAGER_APPROVAL
+    assert authorize.authorize_relief(zara, "DUE_DATE_SHIFT", {"days": 5})["outcome"] == "NEEDS_MANAGER_APPROVAL"
+    # Row 13: Zara TENURE_EXTENSION months=24 -> DENIED
+    assert authorize.authorize_relief(zara, "TENURE_EXTENSION", {"months": 24})["outcome"] == "DENIED"
+    # Row 14: Zara TENURE_EXTENSION months=3 -> DENIED (prior_reliefs >= 2)
+    assert authorize.authorize_relief(zara, "TENURE_EXTENSION", {"months": 3})["outcome"] == "DENIED"
+    # Row 15: Kabir DUE_DATE_SHIFT days=3 -> DENIED (legal hold)
+    assert authorize.authorize_relief(kabir, "DUE_DATE_SHIFT", {"days": 3})["outcome"] == "DENIED"
 
 
 # 5. TEST CRYPTOGRAPHIC HASH CHAIN
@@ -185,7 +185,7 @@ def test_core_banking_adapter():
 def test_auth_group_parsing():
     from backend.src.common import auth
     # Format 1: List of groups
-    claims_list = {"cognito:groups": ["ops", "manager"], "email": "raman@harbourfin.com"}
+    claims_list = {"cognito:groups": ["ops", "manager"], "email": "menon@harbourfin.com"}
     groups = auth.parse_groups(claims_list.get("cognito:groups"))
     assert "ops" in groups and "manager" in groups
     assert auth.is_manager(claims_list) is True
@@ -210,7 +210,7 @@ def test_gemini_agent_provider(monkeypatch):
     case = {"case_id": "CASE-1001", "status": "OPEN", "plan": None}
     account = {
         "account_id": "ACC-1001",
-        "name": "Meera Iyer",
+        "name": "Priya Sharma",
         "emi": 6200,
         "product": "TWO_WHEELER",
         "days_to_emi": 6,
@@ -236,7 +236,7 @@ def test_sns_sqs_messaging_pipeline(monkeypatch):
 
     plan = {
         "account_id": "ACC-1002",
-        "borrower_name": "Arjun Mehta",
+        "borrower_name": "Dev Malhotra",
         "action": "DUE_DATE_SHIFT",
         "params": {"days": 30},
         "summary": "Move next EMI of ₹14,500 by 30 days"

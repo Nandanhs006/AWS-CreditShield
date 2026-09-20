@@ -6,7 +6,7 @@
 
 // Global State
 let currentTheme = 'dark'; // 'dark' (Graphite Terminal) or 'light' (Paper Sheet)
-let currentRole = 'ops'; // 'ops' (AI Operations) or 'supervisor' (Human Officer Raman)
+let currentRole = 'ops'; // 'ops' (AI Operations) or 'supervisor' (Human Officer Rajiv Menon)
 let isAuthenticated = true;
 let activeAccountId = 'ACC-1001';
 let activeFilter = 'ALL';
@@ -22,7 +22,7 @@ let HANDOFF_TICKETS = [
   {
     ticketId: 'HD-1004',
     accountId: 'ACC-1004',
-    name: 'Vikram Rao',
+    name: 'Kabir Singhania',
     segment: 'SALARIED',
     emi: 11000,
     reason: 'Active legal dispute attached to account. Automated relief blocked by policy rule F1. Immediate human specialist required.',
@@ -39,7 +39,7 @@ const ACCOUNTS_DB = {
   'ACC-1001': {
     id: 'ACC-1001',
     caseId: 'CASE-1001',
-    name: 'Meera Iyer',
+    name: 'Priya Sharma',
     segment: 'GIG RIDER',
     product: 'TWO_WHEELER',
     emi: 6200,
@@ -69,7 +69,7 @@ const ACCOUNTS_DB = {
   'ACC-1002': {
     id: 'ACC-1002',
     caseId: 'CASE-1002',
-    name: 'Arjun Mehta',
+    name: 'Dev Malhotra',
     segment: 'SHOP OWNER',
     product: 'MICRO_BUSINESS',
     emi: 14500,
@@ -99,7 +99,7 @@ const ACCOUNTS_DB = {
   'ACC-1003': {
     id: 'ACC-1003',
     caseId: 'CASE-1003',
-    name: 'Sana Qureshi',
+    name: 'Zara Khan',
     segment: 'SALARIED',
     product: 'PERSONAL_LOAN',
     emi: 9800,
@@ -129,7 +129,7 @@ const ACCOUNTS_DB = {
   'ACC-1004': {
     id: 'ACC-1004',
     caseId: 'CASE-1004',
-    name: 'Vikram Rao',
+    name: 'Kabir Singhania',
     segment: 'SALARIED',
     product: 'PERSONAL_LOAN',
     emi: 11000,
@@ -178,7 +178,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '10:42 AM',
-      text: 'Hello Meera, I am CreditShield Assistant working with Harbour Finance. We noticed your platform payout had an unexpected delay this week. Your ₹6,200 two-wheeler EMI is due in 6 days. Would a short due-date extension help ease things?'
+      text: 'Hello Priya, I am ShieldVoice Assistant working with Harbour Finance. We noticed your platform payout had an unexpected delay this week. Your ₹6,200 two-wheeler EMI is due in 6 days. Would a short due-date extension help ease things?'
     },
     {
       role: 'borrower',
@@ -188,7 +188,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '10:43 AM',
-      text: 'I can certainly help with that. I checked with our credit policy engine, and moving your due date by 7 days is pre-approved for your account.'
+      text: 'I can certainly help with that. I checked with our Sentinel-Cedar policy engine, and moving your due date by 7 days is pre-approved for your account.'
     },
     {
       type: 'plan_card',
@@ -205,7 +205,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '09:15 AM',
-      text: 'Hello Arjun, CreditShield Assistant with Harbour Finance. We observed a slower festival cycle in retail turnover recently. Your ₹14,500 EMI is scheduled in 3 days. Are you looking for relief options?'
+      text: 'Hello Dev, ShieldVoice Assistant with Harbour Finance. We observed a slower festival cycle in retail turnover recently. Your ₹14,500 EMI is scheduled in 3 days. Are you looking for relief options?'
     },
     {
       role: 'borrower',
@@ -232,7 +232,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '11:05 AM',
-      text: 'Hello Sana, CreditShield Assistant from Harbour Finance here. We noticed your account is currently 35 days past due with ₹800 late fees. Let us explore structured options to get your loan back on track.'
+      text: 'Hello Zara, ShieldVoice Assistant from Harbour Finance here. We noticed your account is currently 35 days past due with ₹800 late fees. Let us explore structured options to get your loan back on track.'
     },
     {
       role: 'borrower',
@@ -249,7 +249,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '08:30 AM',
-      text: 'Hello Vikram, CreditShield Assistant from Harbour Finance. I am reviewing your account regarding your upcoming EMI.'
+      text: 'Hello Kabir, ShieldVoice Assistant from Harbour Finance. I am reviewing your account regarding your upcoming EMI.'
     },
     {
       role: 'borrower',
@@ -295,7 +295,7 @@ let DECISION_LOG = [
     seq: 3,
     ts: '2026-09-20T05:13:20Z',
     type: 'BORROWER_MESSAGE',
-    actor: { kind: 'BORROWER', id: 'borrower:meera' },
+    actor: { kind: 'BORROWER', id: 'borrower:priya' },
     summary: 'Borrower requested 7-day relief: "My delivery app payout was pushed back..."',
     prev_hash: '3a7b9c1d5e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b',
     entry_hash: 'c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2',
@@ -328,7 +328,7 @@ const TOOL_TRACES = [
   {
     name: 'get_case_context',
     input: '{}',
-    output: '{"first_name": "Meera", "segment": "GIG", "emi": 6200, "days_to_emi": 6, "dpd": 0, "late_fee": 350, "prior_reliefs": 0}'
+    output: '{"first_name": "Priya", "segment": "GIG", "emi": 6200, "days_to_emi": 6, "dpd": 0, "late_fee": 350, "prior_reliefs": 0}'
   },
   {
     name: 'get_relief_options',
@@ -436,7 +436,7 @@ function startClock() {
 // HERO SCENARIO SWITCHER
 // ==========================================================================
 function loadHeroScenario(accountId) {
-  // RBAC Enforcement: AI Ops is restricted from Vikram Rao (Legal Hold)
+  // RBAC Enforcement: AI Ops is restricted from Kabir Singhania (Legal Hold)
   if (currentRole === 'ops' && accountId === 'ACC-1004') {
     showToast('SUPERVISOR REQUIRED: Case ACC-1004 is under legal hold and requires Senior Supervisor review.', 'warning');
     return;
@@ -448,9 +448,9 @@ function loadHeroScenario(accountId) {
 
   // Update Hero scenario buttons in header
   ['ACC-1001', 'ACC-1002', 'ACC-1003', 'ACC-1004'].forEach(id => {
-    const btnId = id === 'ACC-1001' ? 'btnHeroMeera' :
-                  id === 'ACC-1002' ? 'btnHeroArjun' :
-                  id === 'ACC-1003' ? 'btnHeroSana' : 'btnHeroVikram';
+    const btnId = id === 'ACC-1001' ? 'btnHeroPriya' :
+                  id === 'ACC-1002' ? 'btnHeroDev' :
+                  id === 'ACC-1003' ? 'btnHeroZara' : 'btnHeroKabir';
     const btn = document.getElementById(btnId);
     if (btn) {
       btn.classList.toggle('active', id === accountId);
@@ -576,7 +576,7 @@ function applyRole(role, email = null) {
   const toolbar = document.getElementById('supervisorActionToolbar');
   const chips = document.getElementById('phoneScenarioChips');
   const chatInput = document.getElementById('phoneChatInput');
-  const btnVikram = document.getElementById('btnHeroVikram');
+  const btnKabir = document.getElementById('btnHeroKabir');
   const tabHandoff = document.getElementById('tabBtnHandoff');
 
   if (currentRole === 'supervisor') {
@@ -589,7 +589,7 @@ function applyRole(role, email = null) {
       btnSwitch.innerHTML = '<i class="fa-solid fa-robot"></i> SWITCH TO AI OPS';
     }
     if (userEmail) {
-      userEmail.textContent = email || 'raman.supervisor@harbourfin.com';
+      userEmail.textContent = email || 'menon.supervisor@harbourfin.com';
       userEmail.style.display = 'inline-block';
     }
     if (banner) {
@@ -602,11 +602,11 @@ function applyRole(role, email = null) {
       chips.style.display = 'none';
     }
     if (chatInput) {
-      chatInput.placeholder = 'Type response as Human Supervisor (Officer Raman)...';
+      chatInput.placeholder = 'Type response as Human Supervisor (Officer Rajiv Menon)...';
     }
-    if (btnVikram) {
-      btnVikram.classList.remove('restricted');
-      btnVikram.title = 'Vikram Rao (Legal Hold - Escalated)';
+    if (btnKabir) {
+      btnKabir.classList.remove('restricted');
+      btnKabir.title = 'Kabir Singhania (Legal Hold - Escalated)';
     }
     if (tabHandoff) {
       tabHandoff.style.display = 'inline-flex';
@@ -614,7 +614,7 @@ function applyRole(role, email = null) {
 
     appendLogEntry('ROLE_SWITCH', 'Session switched: Senior Human Supervisor', 'SUPERVISOR');
   } else {
-    // AI Operations Mode: Restricted Access (Only 3 Hero accounts; no Vikram; no approvals)
+    // AI Operations Mode: Restricted Access (Only 3 Hero accounts; no Kabir; no approvals)
     if (roleBadge) {
       roleBadge.textContent = 'AI OPS';
       roleBadge.className = 'role-tag-pill ops';
@@ -636,14 +636,14 @@ function applyRole(role, email = null) {
       chips.style.display = 'flex';
     }
     if (chatInput) {
-      chatInput.placeholder = 'Enter message to CreditShield Assistant...';
+      chatInput.placeholder = 'Enter message to ShieldVoice Assistant...';
     }
-    if (btnVikram) {
-      btnVikram.classList.add('restricted');
-      btnVikram.title = 'Restricted: Legal Hold Escalated to Supervisor';
+    if (btnKabir) {
+      btnKabir.classList.add('restricted');
+      btnKabir.title = 'Restricted: Legal Hold Escalated to Supervisor';
     }
 
-    // If currently on Vikram, force switch to Meera
+    // If currently on Kabir, force switch to Priya
     if (activeAccountId === 'ACC-1004') {
       loadHeroScenario('ACC-1001');
     }
@@ -690,13 +690,13 @@ function handleLoginSubmit(e) {
 }
 
 function quickLogin(role) {
-  const email = role === 'supervisor' ? 'raman.supervisor@harbourfin.com' : 'analyst@harbourfin.com';
+  const email = role === 'supervisor' ? 'menon.supervisor@harbourfin.com' : 'analyst@harbourfin.com';
   isAuthenticated = true;
   localStorage.setItem('creditshield_user_role', role);
   localStorage.setItem('creditshield_user_email', email);
   document.getElementById('authOverlay').style.display = 'none';
   applyRole(role, email);
-  showToast(`Signed in as ${role === 'supervisor' ? 'Senior Supervisor (Raman)' : 'AI Operations Analyst'}`, 'success');
+  showToast(`Signed in as ${role === 'supervisor' ? 'Senior Supervisor (Officer Rajiv Menon)' : 'AI Operations Analyst'}`, 'success');
 }
 
 // ==========================================================================
@@ -785,7 +785,7 @@ function claimHandoffTicket(accountId, ticketId) {
   loadHeroScenario(accountId);
 
   // Focus left pane / phone
-  supervisorSendQuick(`Hello, this is Officer Raman from Hardship Operations. I have claimed your handoff ticket (${ticketId}) directly. How can I best assist you today?`);
+  supervisorSendQuick(`Hello, this is Officer Rajiv Menon from Hardship Operations. I have claimed your handoff ticket (${ticketId}) directly. How can I best assist you today?`);
 
   showToast(`Claimed Ticket ${ticketId}! Live Supervisor session started with ${ACCOUNTS_DB[accountId].name}.`, 'success');
 }
@@ -804,14 +804,14 @@ function supervisorSendQuick(text) {
   const supBubble = document.createElement('div');
   supBubble.className = 'chat-bubble supervisor';
   supBubble.innerHTML = `
-    <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Raman</div>
+    <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Officer Menon</div>
     <div>${text}</div>
     <span class="msg-time">${timeStr}</span>
   `;
   container.appendChild(supBubble);
   container.scrollTop = container.scrollHeight;
 
-  appendLogEntry('SUPERVISOR_ACTION', `Officer Raman injected response: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
+  appendLogEntry('SUPERVISOR_ACTION', `Officer Rajiv Menon injected response: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
   showToast('Supervisor response injected into live channel', 'success');
 
   // Simulate borrower response
@@ -819,7 +819,7 @@ function supervisorSendQuick(text) {
     const borrowerBubble = document.createElement('div');
     borrowerBubble.className = 'chat-bubble borrower';
     borrowerBubble.innerHTML = `
-      <div>Thank you Officer Raman. I appreciate you taking over and reviewing my hardship personally.</div>
+      <div>Thank you Officer Menon. I appreciate you taking over and reviewing my hardship personally.</div>
       <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
     `;
     container.appendChild(borrowerBubble);
@@ -848,14 +848,14 @@ function supervisorForceApprove() {
     <div style="color: var(--accent-industrial); font-weight: 700; margin-bottom: 2px;">
       <i class="fa-solid fa-stamp"></i> DISCRETIONARY CONCESSION OVERRIDE APPROVED
     </div>
-    <div>Officer Raman has approved this relief arrangement directly under Credit Policy P2 / Discretionary Authority.</div>
+    <div>Officer Rajiv Menon has approved this relief arrangement directly under Credit Policy P2 / Discretionary Authority.</div>
     <span class="msg-time">${timeStr}</span>
   `;
   container.appendChild(sysBubble);
   container.scrollTop = container.scrollHeight;
 
-  appendLogEntry('DISCRETIONARY_OVERRIDE', `Supervisor Raman authorized discretionary override for ${activeAccountId}.`, 'SUPERVISOR');
-  showToast('Discretionary Override Applied by Supervisor Raman!', 'success');
+  appendLogEntry('DISCRETIONARY_OVERRIDE', `Supervisor Rajiv Menon authorized discretionary override for ${activeAccountId}.`, 'SUPERVISOR');
+  showToast('Discretionary Override Applied by Supervisor Rajiv Menon!', 'success');
 }
 
 // ==========================================================================
@@ -1021,7 +1021,7 @@ async function sendBorrowerMessage() {
     const supBubble = document.createElement('div');
     supBubble.className = 'chat-bubble supervisor';
     supBubble.innerHTML = `
-      <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Raman</div>
+      <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Officer Menon</div>
       <div>${text}</div>
       <span class="msg-time">${timeStr}</span>
     `;
@@ -1029,7 +1029,7 @@ async function sendBorrowerMessage() {
     input.value = '';
     container.scrollTop = container.scrollHeight;
 
-    appendLogEntry('SUPERVISOR_MESSAGE', `Officer Raman: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
+    appendLogEntry('SUPERVISOR_MESSAGE', `Officer Rajiv Menon: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
     showToast('Supervisor message sent to borrower', 'info');
 
     // Simulate borrower response
@@ -1037,7 +1037,7 @@ async function sendBorrowerMessage() {
       const borrowerBubble = document.createElement('div');
       borrowerBubble.className = 'chat-bubble borrower';
       borrowerBubble.innerHTML = `
-        <div>Thank you Officer Raman. I appreciate you looking into this personally.</div>
+        <div>Thank you Officer Menon. I appreciate you looking into this personally.</div>
         <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
       `;
       container.appendChild(borrowerBubble);
@@ -1455,8 +1455,8 @@ function renderApprovalsQueue() {
     <div class="approval-queue-item">
       <div class="approval-item-header">
         <strong style="color: var(--text-main); font-size: 0.82rem; font-family: var(--font-mono);">
-          <span class="scenario-indicator arjun" style="display:inline-block; margin-right: 6px;"></span>
-          Arjun Mehta (ACC-1002)
+          <span class="scenario-indicator dev" style="display:inline-block; margin-right: 6px;"></span>
+          Dev Malhotra (ACC-1002)
         </strong>
         <span class="status-badge-warning">30-DAY EXTENSION</span>
       </div>
