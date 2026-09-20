@@ -6,6 +6,7 @@
 
 // Global State
 let currentTheme = 'dark'; // 'dark' (Graphite Terminal) or 'light' (Paper Sheet)
+let currentRole = 'ops'; // 'ops' (AI Operations & 4 Hero Agents) or 'supervisor' (Human Officer Raman)
 let activeAccountId = 'ACC-1001';
 let activeFilter = 'ALL';
 let isTampered = false;
@@ -519,6 +520,143 @@ function createPlanCardElement(plan) {
 }
 
 // ==========================================================================
+// DUAL ROLE SWITCHING & AUTH (AI OPS VS SUPERVISOR HUMAN)
+// ==========================================================================
+function toggleDualRole() {
+  currentRole = currentRole === 'ops' ? 'supervisor' : 'ops';
+
+  const roleBadge = document.getElementById('roleBadgeChip');
+  const btnSwitch = document.getElementById('btnSwitchRole');
+  const userEmail = document.getElementById('currentUserEmail');
+  const banner = document.getElementById('supervisorOverrideBanner');
+  const toolbar = document.getElementById('supervisorActionToolbar');
+  const chips = document.getElementById('phoneScenarioChips');
+  const chatInput = document.getElementById('phoneChatInput');
+
+  if (currentRole === 'supervisor') {
+    // Switch to Supervisor / Human Oversight mode
+    if (roleBadge) {
+      roleBadge.textContent = 'SUPERVISOR (HUMAN)';
+      roleBadge.className = 'role-tag-pill supervisor';
+    }
+    if (btnSwitch) {
+      btnSwitch.innerHTML = '<i class="fa-solid fa-robot"></i> SWITCH TO AI OPS';
+    }
+    if (userEmail) {
+      userEmail.textContent = 'raman.supervisor@harbourfin.com';
+      userEmail.style.display = 'inline-block';
+    }
+    if (banner) {
+      banner.classList.add('active');
+    }
+    if (toolbar) {
+      toolbar.classList.add('active');
+    }
+    if (chips) {
+      chips.style.display = 'none';
+    }
+    if (chatInput) {
+      chatInput.placeholder = 'Type response as Human Supervisor (Officer Raman)...';
+    }
+
+    // Auto-navigate to approvals / concession queue
+    switchTab('approvals');
+    appendLogEntry('ROLE_SWITCH', 'Auth session switched to Human Supervisor: Raman (Cognito: CreditManagersGroup)', 'SUPERVISOR');
+    showToast('Authenticated as Human Supervisor (Officer Raman)', 'success');
+  } else {
+    // Switch back to AI Operations mode (4 hero scenarios)
+    if (roleBadge) {
+      roleBadge.textContent = 'AI OPS (4 AGENTS)';
+      roleBadge.className = 'role-tag-pill ops';
+    }
+    if (btnSwitch) {
+      btnSwitch.innerHTML = '<i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR';
+    }
+    if (userEmail) {
+      userEmail.textContent = 'analyst@harbourfin.com';
+      userEmail.style.display = 'none';
+    }
+    if (banner) {
+      banner.classList.remove('active');
+    }
+    if (toolbar) {
+      toolbar.classList.remove('active');
+    }
+    if (chips) {
+      chips.style.display = 'flex';
+    }
+    if (chatInput) {
+      chatInput.placeholder = 'Enter message to CreditShield Assistant...';
+    }
+
+    appendLogEntry('ROLE_SWITCH', 'Auth session switched to AI Operations & 4 Hero Agents', 'SYSTEM');
+    showToast('Switched to Autonomous AI Operations Mode', 'info');
+  }
+}
+
+function supervisorSendQuick(text) {
+  const container = document.getElementById('phoneChatMessages');
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const supBubble = document.createElement('div');
+  supBubble.className = 'chat-bubble supervisor';
+  supBubble.innerHTML = `
+    <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Raman</div>
+    <div>${text}</div>
+    <span class="msg-time">${timeStr}</span>
+  `;
+  container.appendChild(supBubble);
+  container.scrollTop = container.scrollHeight;
+
+  appendLogEntry('SUPERVISOR_ACTION', `Officer Raman injected response: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
+  showToast('Supervisor response injected into live channel', 'success');
+
+  // Simulate borrower response
+  setTimeout(() => {
+    const borrowerBubble = document.createElement('div');
+    borrowerBubble.className = 'chat-bubble borrower';
+    borrowerBubble.innerHTML = `
+      <div>Thank you Officer Raman. I appreciate you taking over and reviewing my hardship personally.</div>
+      <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+    `;
+    container.appendChild(borrowerBubble);
+    container.scrollTop = container.scrollHeight;
+    appendLogEntry('BORROWER_ACK', `Borrower acknowledged supervisor response.`, 'BORROWER');
+  }, 1000);
+}
+
+function supervisorForceApprove() {
+  // Ensure we are in supervisor mode
+  if (currentRole !== 'supervisor') {
+    toggleDualRole();
+  }
+
+  // Trigger approval in Step Functions queue
+  managerDecision('APPROVED');
+
+  // Inject system message in chat
+  const container = document.getElementById('phoneChatMessages');
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const sysBubble = document.createElement('div');
+  sysBubble.className = 'chat-bubble system';
+  sysBubble.innerHTML = `
+    <div style="color: var(--accent-industrial); font-weight: 700; margin-bottom: 2px;">
+      <i class="fa-solid fa-stamp"></i> DISCRETIONARY CONCESSION OVERRIDE APPROVED
+    </div>
+    <div>Officer Raman has approved this relief arrangement directly under Credit Policy P2 / Discretionary Authority.</div>
+    <span class="msg-time">${timeStr}</span>
+  `;
+  container.appendChild(sysBubble);
+  container.scrollTop = container.scrollHeight;
+
+  appendLogEntry('DISCRETIONARY_OVERRIDE', `Supervisor Raman authorized discretionary override for ${activeAccountId}.`, 'SUPERVISOR');
+  showToast('Discretionary Override Applied by Supervisor Raman!', 'success');
+}
+
+// ==========================================================================
 // BORROWER ACTIONS & INTERACTION
 // ==========================================================================
 function sendBorrowerMessage() {
@@ -528,9 +666,40 @@ function sendBorrowerMessage() {
 
   const now = new Date();
   const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-  // Append Borrower Message
   const container = document.getElementById('phoneChatMessages');
+
+  // If in Supervisor mode, send as Supervisor Takeover message!
+  if (currentRole === 'supervisor') {
+    const supBubble = document.createElement('div');
+    supBubble.className = 'chat-bubble supervisor';
+    supBubble.innerHTML = `
+      <div class="supervisor-tag"><i class="fa-solid fa-user-tie"></i> Human Supervisor &bull; Raman</div>
+      <div>${text}</div>
+      <span class="msg-time">${timeStr}</span>
+    `;
+    container.appendChild(supBubble);
+    input.value = '';
+    container.scrollTop = container.scrollHeight;
+
+    appendLogEntry('SUPERVISOR_MESSAGE', `Officer Raman: "${text.substring(0, 45)}..."`, 'SUPERVISOR');
+    showToast('Supervisor message sent to borrower', 'info');
+
+    // Simulate borrower response
+    setTimeout(() => {
+      const borrowerBubble = document.createElement('div');
+      borrowerBubble.className = 'chat-bubble borrower';
+      borrowerBubble.innerHTML = `
+        <div>Thank you Officer Raman. I appreciate you looking into this personally.</div>
+        <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      `;
+      container.appendChild(borrowerBubble);
+      container.scrollTop = container.scrollHeight;
+      appendLogEntry('BORROWER_ACK', `Borrower acknowledged supervisor response.`, 'BORROWER');
+    }, 1200);
+    return;
+  }
+
+  // Append Borrower Message (AI Ops mode)
   const borrowerBubble = document.createElement('div');
   borrowerBubble.className = 'chat-bubble borrower';
   borrowerBubble.innerHTML = `<div>${text}</div><span class="msg-time">${timeStr}</span>`;

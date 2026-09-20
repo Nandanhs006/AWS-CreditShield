@@ -19,9 +19,7 @@
          ==================================================================== -->
     <header class="app-header">
       <div class="brand-section">
-        <div class="brand-logo-badge">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
+        <img src="logo-light.png" alt="CreditShield" class="brand-logo-img" onerror="this.style.display='none'">
         <div class="brand-meta">
           <h1>CREDITSHIELD <span class="highlight">CORE</span></h1>
           <p>Deterministic Hardship Governance &bull; AWS Free Tier &bull; Ship It Track</p>
@@ -30,12 +28,12 @@
 
       <!-- Quick Hero Scenario Switcher -->
       <div class="header-center-scenarios">
-        <span class="scenario-label">Scenarios:</span>
+        <span id="scenarioGroupLabel" class="scenario-label">AI Scenarios:</span>
         <button id="btnHeroMeera" class="scenario-btn active" onclick="loadHeroScenario('ACC-1001')">
-          <i class="fa-solid fa-motorcycle"></i> Meera (7d Allow)
+          <i class="fa-solid fa-motorcycle"></i> Meera (7d)
         </button>
         <button id="btnHeroArjun" class="scenario-btn" onclick="loadHeroScenario('ACC-1002')">
-          <i class="fa-solid fa-store"></i> Arjun (30d Review)
+          <i class="fa-solid fa-store"></i> Arjun (30d)
         </button>
         <button id="btnHeroSana" class="scenario-btn" onclick="loadHeroScenario('ACC-1003')">
           <i class="fa-solid fa-shield-cat"></i> Sana (Jailbreak)
@@ -45,29 +43,32 @@
         </button>
       </div>
 
+      <!-- Dual Role Switcher & Auth Section -->
+      <div class="role-auth-section">
+        <span id="currentUserEmail" class="mono" style="font-size:0.68rem; color:var(--text-muted); display:none;">analyst@harbourfin.com</span>
+        <span id="roleBadgeChip" class="role-tag-pill ops">AI OPS (4 AGENTS)</span>
+        <button id="btnSwitchRole" class="btn-toggle-role" onclick="toggleDualRole()" title="Switch between AI Operations and Supervisor Human Oversight">
+          <i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR
+        </button>
+      </div>
+
       <!-- AWS Free Tier Strip & Theme Toggle -->
       <div class="header-right-actions">
         <div class="aws-services-strip">
           <div class="aws-badge active-service" title="AWS Lambda Serverless Functions">
             <span class="dot"></span> Lambda
           </div>
-          <div class="aws-badge active-service" title="Amazon API Gateway HTTP API">
-            <span class="dot"></span> API GW
-          </div>
-          <div class="aws-badge active-service" title="AWS Step Functions Human-in-the-loop State Machine">
+          <div class="aws-badge active-service" title="AWS Step Functions State Machine">
             <span class="dot"></span> Step Functions
           </div>
-          <div class="aws-badge active-service" title="Amazon DynamoDB On-Demand NoSQL">
+          <div class="aws-badge active-service" title="Amazon DynamoDB On-Demand">
             <span class="dot"></span> DynamoDB
           </div>
           <div class="aws-badge active-service" title="Amazon Cognito User Pools">
             <span class="dot"></span> Cognito
           </div>
-          <div class="aws-badge active-service" title="AWS KMS ECC_NIST_P256 Asymmetric Key">
+          <div class="aws-badge active-service" title="AWS KMS ECC P-256">
             <span class="dot"></span> KMS P-256
-          </div>
-          <div class="aws-badge" title="Amazon S3 Object Lock Checkpoints">
-            <span class="dot"></span> S3 Lock
           </div>
         </div>
 
@@ -120,6 +121,12 @@
             </button>
           </div>
 
+          <!-- Supervisor Takeover Banner -->
+          <div id="supervisorOverrideBanner" class="supervisor-override-banner">
+            <span><i class="fa-solid fa-triangle-exclamation"></i> SUPERVISOR OVERRIDE ACTIVE</span>
+            <span style="font-size:0.62rem; opacity:0.9;">OFFICER RAMAN</span>
+          </div>
+
           <!-- Borrower Context Mini-Card -->
           <div class="borrower-quick-card">
             <div class="borrower-card-header">
@@ -158,7 +165,7 @@
           </div>
 
           <!-- Quick Scenario Trigger Chips -->
-          <div class="phone-scenario-chips">
+          <div id="phoneScenarioChips" class="phone-scenario-chips">
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_7D')">
               [ 7D EXTENSION ]
             </button>
@@ -170,6 +177,22 @@
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_HANDOFF')">
               [ ESCALATE ]
+            </button>
+          </div>
+
+          <!-- Supervisor Quick Action Toolbar (Visible in Supervisor Role) -->
+          <div id="supervisorActionToolbar" class="supervisor-action-toolbar">
+            <button class="btn-supervisor-action" onclick="supervisorSendQuick('Hello, this is Officer Raman from Hardship Operations. I have taken over this chat directly.')" title="Takeover greeting">
+              [ GREET ]
+            </button>
+            <button class="btn-supervisor-action" onclick="supervisorSendQuick('I have reviewed your case and can approve a 30-day grace extension under discretionary authority.')" title="Discretionary 30d offer">
+              [ 30D WAIVER ]
+            </button>
+            <button class="btn-supervisor-action" onclick="supervisorSendQuick('We will halt collections activity for 14 days while your medical documents are processed.')" title="Freeze collections">
+              [ FREEZE CALLS ]
+            </button>
+            <button class="btn-supervisor-action" onclick="supervisorForceApprove()" title="Approve pending task directly">
+              [ APPROVE NOW ]
             </button>
           </div>
 

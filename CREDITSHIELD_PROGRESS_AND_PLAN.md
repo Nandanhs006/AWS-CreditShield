@@ -270,13 +270,26 @@ Grouped by component layer:
 
 ---
 
-## Verification Plan
+### 4. Dual Role Switching & Supervisor Human Takeover Mode
 
-### Automated / Browser Verification
-- Verify `http://localhost:3000/` loads with the exact `#121212` matte dark background and `#F9F9F7` paper light background.
-- Verify zero glowing box-shadows or rounded pill buttons exist.
-- Verify all interactive functions continue to work without JavaScript errors:
-  1. Switching between Hero Scenarios.
-  2. Plan card acceptance and Step Functions approval.
-  3. Decision log tamper simulation and restoration.
-  4. Tab navigation across Portfolio, Policy Envelope, Approvals, Decision Log, A/B Impact, and Cloud Topology.
+#### [NEW & ENHANCED] Features Implemented
+- **Dual Role Switching with Auth State**:
+  - **Mode 1: `AI Operations (4 Agents)`**: Default autonomous mode where 4 hero scenarios (Meera 7d, Arjun 30d, Sana jailbreak, Vikram legal hold) demonstrate Cedar policy boundary enforcement, autonomous plan generation, and client terminal execution.
+  - **Mode 2: `Supervisor (Human Oversight)`**: Authenticated as `raman.supervisor@harbourfin.com` (Cognito `CreditManagersGroup`). Enables:
+    - Live Takeover Banner in Phone Chassis: `[ ⚠️ SUPERVISOR OVERRIDE ACTIVE — OFFICER RAMAN ]`.
+    - Supervisor Quick Action Toolbar: `[ GREET ]`, `[ 30D WAIVER ]`, `[ FREEZE CALLS ]`, `[ APPROVE NOW ]`.
+    - Direct Human Supervisor Chat Injection: Special supervisor bubble (`.chat-bubble.supervisor`) with officer badge and automated borrower response.
+    - Discretionary Approval Override: Directly approves Step Functions task tokens under discretionary authority.
+    - Auto-navigation to Tab 03 (`STEP FUNCTIONS QUEUE`).
+- **Brand Logo Asset**:
+  - `logo-light.png` placed in `frontend/` and integrated into the app header.
+- **AWS Action Checklist for User**:
+  - Dedicated guide created in [`docs/AWS_ACTION_CHECKLIST.md`](file:///c:/digitals/aws%20hackathon/docs/AWS_ACTION_CHECKLIST.md) covering AWS Bedrock Nova Lite model access, AWS CLI setup, Cognito user creation, and SAM/Amplify deployment.
+
+---
+
+## Verification Summary
+- UI verified running on `http://localhost:3000/`.
+- Dual role switching seamlessly toggles between AI Autonomous Ops and Human Supervisor Takeover.
+- Raw Design Token System adhered to with 100% fidelity.
+

@@ -225,6 +225,16 @@ body {
   gap: 0.75rem;
 }
 
+.brand-logo-img {
+  height: 32px;
+  width: auto;
+  max-width: 80px;
+  object-fit: contain;
+  border: var(--border-weight) solid var(--border);
+  background: var(--surface-alt);
+  padding: 2px 4px;
+}
+
 .brand-logo-badge {
   width: 32px;
   height: 32px;
@@ -247,6 +257,126 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+}
+
+/* Dual Role Switcher & Auth Elements */
+.role-auth-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-alt);
+  border: var(--border-weight) solid var(--border);
+  padding: 2px 6px;
+  border-radius: var(--radius-sharp);
+}
+
+.role-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+}
+
+.role-tag-pill.ops {
+  color: var(--accent-industrial);
+  border: var(--border-weight) solid var(--accent-industrial);
+}
+
+.role-tag-pill.supervisor {
+  color: var(--accent-terminal);
+  border: var(--border-weight) solid var(--accent-terminal);
+  background: rgba(0, 163, 108, 0.08);
+}
+
+.btn-toggle-role {
+  background: var(--surface);
+  border: var(--border-weight) solid var(--border-strong);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: var(--radius-sharp);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-toggle-role:hover {
+  background: var(--accent-industrial);
+  color: #FFFFFF;
+  border-color: var(--text-main);
+}
+
+/* Supervisor Live Takeover Banner in Phone */
+.supervisor-override-banner {
+  background: var(--accent-industrial);
+  color: #FFFFFF;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-weight) solid var(--text-main);
+}
+
+.supervisor-override-banner.active {
+  display: flex;
+}
+
+.chat-bubble.supervisor {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 2px solid var(--accent-industrial);
+  color: var(--text-main);
+}
+
+.chat-bubble.supervisor .supervisor-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: var(--accent-industrial);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+/* Supervisor Quick Action Toolbar */
+.supervisor-action-toolbar {
+  display: none;
+  padding: 6px 10px;
+  background: var(--surface-alt);
+  border-top: var(--border-weight) solid var(--border);
+  gap: 6px;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.supervisor-action-toolbar.active {
+  display: flex;
+}
+
+.btn-supervisor-action {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 6px;
+  background: var(--surface);
+  border: var(--border-weight) solid var(--accent-industrial);
+  color: var(--text-main);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-supervisor-action:hover {
+  background: var(--accent-industrial);
+  color: #FFFFFF;
 }
 
 .brand-meta h1 span.highlight {
