@@ -1,4 +1,4 @@
-# Reprieve — Key Architectural Decisions
+# CreditShield — Key Architectural Decisions
 
 1. **Two-Tier Cedar Policy Authorization**  
    - First ask Cedar: *"May the AI agent offer this alone?"*  
@@ -19,6 +19,6 @@
    - When a concession requires manager approval, the workflow pauses via `waitForTaskToken`.  
    - *Rationale:* Eliminates polling loops, handles automatic timeouts (24h), and provides a visual execution graph for compliance review.
 
-5. **Serverless & On-Demand Economics**  
-   - Architecture runs on DynamoDB on-demand, AWS Lambda arm64, and Amazon Nova Lite.  
-   - *Rationale:* Near-zero idle costs ($0.00/month standby) and micro-cost scaling ($0.0031 per borrower resolution).
+5. **Serverless & AWS Free Tier ("Ship It" Track) Compliance**  
+   - Architecture runs on DynamoDB on-demand (25GB free tier), AWS Lambda arm64 (1M free calls), Amazon Cognito (50,000 MAUs free), and Amazon Nova Lite.  
+   - *Rationale:* Zero idle costs ($0.00/month standby) and micro-cost scaling ($0.0031 per borrower resolution).

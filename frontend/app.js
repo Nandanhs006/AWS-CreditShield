@@ -1,10 +1,11 @@
 // ==========================================================================
-// REPRIEVE — HARDSHIP-FIRST RELIEF AGENT (AWS HACKATHON 2026)
+// CREDITSHIELD — HARDSHIP-FIRST RELIEF AGENT (AWS HACKATHON 2026)
 // Interactive Client-Side Engine & Governance Visualizer
+// Theme: Raw Design Token System (Graphite Terminal & Paper Sheet)
 // ==========================================================================
 
 // Global State
-let currentTheme = 'midnight';
+let currentTheme = 'dark'; // 'dark' (Graphite Terminal) or 'light' (Paper Sheet)
 let activeAccountId = 'ACC-1001';
 let activeFilter = 'ALL';
 let isTampered = false;
@@ -115,7 +116,6 @@ const ACCOUNTS_DB = {
     daysToEmi: 5,
     dpd: 20,
     priorReliefs: 1,
-    lateFeeDue: 600,
     legalHold: true,
     stressScore: 74,
     stressTier: 'HIGH',
@@ -157,7 +157,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '10:42 AM',
-      text: 'Hello Meera, I\'m Reprieve Assistant from Harbour Finance. We noticed your platform payout had a temporary delay this week. Your ₹6,200 two-wheeler EMI is due in 6 days. Would a short due-date extension help ease things?'
+      text: 'Hello Meera, I am CreditShield Assistant working with Harbour Finance. We noticed your platform payout had an unexpected delay this week. Your ₹6,200 two-wheeler EMI is due in 6 days. Would a short due-date extension help ease things?'
     },
     {
       role: 'borrower',
@@ -184,7 +184,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '09:15 AM',
-      text: 'Hello Arjun, I\'m Reprieve Assistant with Harbour Finance. We observed a slower festival cycle in retail turnover recently. Your ₹14,500 EMI is scheduled in 3 days. Are you looking for relief options?'
+      text: 'Hello Arjun, CreditShield Assistant with Harbour Finance. We observed a slower festival cycle in retail turnover recently. Your ₹14,500 EMI is scheduled in 3 days. Are you looking for relief options?'
     },
     {
       role: 'borrower',
@@ -211,7 +211,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '11:05 AM',
-      text: 'Hello Sana, Reprieve Assistant from Harbour Finance here. We noticed your account is currently 35 days past due with ₹800 late fees. Let\'s explore structured options to get your loan back on track.'
+      text: 'Hello Sana, CreditShield Assistant from Harbour Finance here. We noticed your account is currently 35 days past due with ₹800 late fees. Let us explore structured options to get your loan back on track.'
     },
     {
       role: 'borrower',
@@ -228,7 +228,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '08:30 AM',
-      text: 'Hello Vikram, Reprieve Assistant from Harbour Finance. I am reviewing your account regarding your upcoming EMI.'
+      text: 'Hello Vikram, CreditShield Assistant from Harbour Finance. I am reviewing your account regarding your upcoming EMI.'
     },
     {
       role: 'borrower',
@@ -248,7 +248,7 @@ const CONVERSATIONS_DB = {
   ]
 };
 
-// Cryptographic Decision Log Seed Entries for ACC-1001
+// Cryptographic Decision Log Seed Entries
 let DECISION_LOG = [
   {
     seq: 1,
@@ -388,7 +388,7 @@ function startClock() {
     const now = new Date();
     const clockEl = document.getElementById('phoneClock');
     if (clockEl) {
-      clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
   }, 1000);
 }
@@ -420,13 +420,13 @@ function loadHeroScenario(accountId) {
   document.getElementById('borrowerOutstandingDisplay').textContent = `₹${account.outstanding.toLocaleString('en-IN')}`;
   
   const stressTag = document.getElementById('borrowerStressTag');
-  stressTag.textContent = `${account.stressTier} STRESS (${account.stressScore})`;
+  stressTag.textContent = `${account.stressTier} (${account.stressScore})`;
   stressTag.className = `stress-tag ${account.stressTier.toLowerCase()}`;
 
   // Update Tab 2: Case Details Header
   document.getElementById('tabCaseAccountBadge').textContent = account.id;
-  document.getElementById('activeCaseTitle').textContent = `Case #${account.caseId} • ${account.name}`;
-  document.getElementById('caseDetailStatusBadge').textContent = account.caseStatus;
+  document.getElementById('activeCaseTitle').textContent = `CASE-${account.id.split('-')[1]} • ${account.name}`;
+  document.getElementById('caseDetailStatusBadge').textContent = `${account.caseStatus} // ACTIVE`;
   document.getElementById('activeCaseCohort').textContent = `${account.cohort} ARM`;
 
   // Render Borrower Messages
@@ -440,7 +440,7 @@ function loadHeroScenario(accountId) {
   if (cedarBlock && CEDAR_POLICIES_CODE[accountId]) {
     cedarBlock.textContent = CEDAR_POLICIES_CODE[accountId];
   }
-  document.getElementById('activePolicyIdBadge').textContent = `Policy ID: ${account.policyKey}`;
+  document.getElementById('activePolicyIdBadge').textContent = `POLICY ID: ${account.policyKey}`;
 
   // Reset Tamper demo status if switching
   if (isTampered) {
@@ -468,7 +468,7 @@ function renderChatMessages(accountId) {
       
       let html = '';
       if (msg.role === 'agent') {
-        html += `<div class="agent-tag"><i class="fa-solid fa-sparkles"></i> Reprieve Assistant</div>`;
+        html += `<div class="agent-tag"><i class="fa-solid fa-shield-halved"></i> CreditShield Assistant</div>`;
       }
       html += `<div>${msg.text}</div>`;
       html += `<span class="msg-time">${msg.time}</span>`;
@@ -490,27 +490,27 @@ function createPlanCardElement(plan) {
   card.className = `chat-plan-card ${isReview ? 'pending-review' : isDenied ? 'denied' : ''}`;
 
   const statusClass = isReview ? 'review' : isDenied ? 'denied' : 'allowed';
-  const statusLabel = isReview ? '⏳ NEEDS MANAGER REVIEW' : isDenied ? '✕ OUTSIDE LIMITS' : '✓ PRE-APPROVED BY CEDAR';
-  const actionLabel = plan.action === 'DUE_DATE_SHIFT' ? `Due-Date Shift (${plan.params.days} Days)` :
-                      plan.action === 'TENURE_EXTENSION' ? `Tenure Extension (${plan.params.months} Mos)` : 'Relief Plan';
+  const statusLabel = isReview ? 'MANAGER REVIEW REQUIRED' : isDenied ? 'DENIED BY POLICY' : 'ALLOWED BY POLICY';
+  const actionLabel = plan.action === 'DUE_DATE_SHIFT' ? `DUE-DATE SHIFT (${plan.params.days} DAYS)` :
+                      plan.action === 'TENURE_EXTENSION' ? `TENURE EXTENSION (${plan.params.months} MOS)` : 'RELIEF PLAN';
 
   card.innerHTML = `
     <div class="plan-card-badge-row">
       <span class="plan-status-pill ${statusClass}">
         ${statusLabel}
       </span>
-      <span class="plan-cedar-source">Auth: Cedar Strictly Enforced</span>
+      <span class="plan-cedar-source">AUTH: CEDAR STRICT</span>
     </div>
     <div class="plan-card-summary">${actionLabel}</div>
     <div class="plan-card-details">${plan.summary}</div>
     <div class="plan-actions-row">
       ${!isDenied ? `
         <button id="btnAcceptPlan" class="btn-plan-accept" onclick="acceptReliefPlan('${plan.planId}', '${plan.outcome}')">
-          <i class="fa-solid fa-circle-check"></i> ${isReview ? 'Submit for Review' : 'Accept Relief Plan'}
+          <i class="fa-solid fa-check"></i> ${isReview ? 'SUBMIT FOR REVIEW' : 'ACCEPT RELIEF PLAN'}
         </button>
-        <button class="btn-plan-decline" onclick="declineReliefPlan()">Decline</button>
+        <button class="btn-plan-decline" onclick="declineReliefPlan()">DECLINE</button>
       ` : `
-        <button class="btn-plan-decline" style="flex:1;" onclick="triggerHumanHandoff()">Talk to a Specialist</button>
+        <button class="btn-plan-decline" style="flex:1;" onclick="triggerHumanHandoff()">REQUEST HUMAN SPECIALIST</button>
       `}
     </div>
   `;
@@ -551,14 +551,13 @@ function sendBorrowerMessage() {
     // Parse simple intents
     const lower = text.toLowerCase();
     let replyText = '';
-    let hasPlan = false;
 
     if (lower.includes('7') || lower.includes('week') || lower.includes('few days')) {
-      replyText = 'I evaluated our Cedar policies. Shifting your due date by 7 days is fully pre-approved. You can accept below.';
+      replyText = 'I evaluated our Cedar policies. Shifting your due date by 7 days is fully pre-approved. You can review and confirm below.';
       simulateBorrowerAction('REQUEST_7D', false);
       return;
     } else if (lower.includes('30') || lower.includes('month') || lower.includes('diwali')) {
-      replyText = 'A 30-day shift requires Senior Credit Manager approval. I have logged the request for manager review.';
+      replyText = 'A 30-day shift exceeds my automated 10-day limit, but falls within manager discretion. I have logged the request for manager review.';
       simulateBorrowerAction('REQUEST_30D', false);
       return;
     } else if (lower.includes('override') || lower.includes('waive all') || lower.includes('jailbreak')) {
@@ -574,7 +573,7 @@ function sendBorrowerMessage() {
     const agentBubble = document.createElement('div');
     agentBubble.className = 'chat-bubble agent';
     agentBubble.innerHTML = `
-      <div class="agent-tag"><i class="fa-solid fa-sparkles"></i> Reprieve Assistant</div>
+      <div class="agent-tag"><i class="fa-solid fa-shield-halved"></i> CreditShield Assistant</div>
       <div>${replyText}</div>
       <span class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
     `;
@@ -616,7 +615,7 @@ function acceptReliefPlan(planId, outcome) {
   const acceptBtn = document.getElementById('btnAcceptPlan');
   if (acceptBtn) {
     acceptBtn.disabled = true;
-    acceptBtn.textContent = 'Processing...';
+    acceptBtn.textContent = 'EXECUTING...';
   }
 
   appendLogEntry('BORROWER_ACCEPTED', `Borrower accepted plan ${planId}. Starting Step Functions workflow.`, 'BORROWER');
@@ -627,10 +626,10 @@ function acceptReliefPlan(planId, outcome) {
       const sysBubble = document.createElement('div');
       sysBubble.className = 'chat-bubble system';
       sysBubble.innerHTML = `
-        <div style="color: var(--color-allow); font-weight: 700; margin-bottom: 2px;">
-          <i class="fa-solid fa-circle-check"></i> Plan Applied Successfully
+        <div style="color: var(--accent-terminal); font-weight: 700; margin-bottom: 2px;">
+          <i class="fa-solid fa-check"></i> PLAN APPLIED IN CORE BANKING
         </div>
-        <div>Your due date has been shifted by 7 days to 3 Oct 2026. Core banking updated. No penalty charged.</div>
+        <div>Your due date has been shifted by 7 days to 3 Oct 2026. Account up to date. Zero penalty assessed.</div>
         <span class="msg-time">${timeStr}</span>
       `;
       container.appendChild(sysBubble);
@@ -639,21 +638,21 @@ function acceptReliefPlan(planId, outcome) {
       // Update case status
       ACCOUNTS_DB[activeAccountId].caseStatus = 'APPLIED';
       document.getElementById('caseDetailStatusBadge').textContent = 'APPLIED // RESOLVED';
-      document.getElementById('caseDetailStatusBadge').className = 'case-status-pill applied';
+      document.getElementById('caseDetailStatusBadge').className = 'status-badge-valid';
 
       appendLogEntry('PLAN_APPLIED', `Simulated Core Banking updated next_due_date to 2026-10-03. Case resolved autonomously.`, 'SYSTEM');
       showToast('Plan Confirmed & Applied in Core Banking!', 'success');
-    }, 900);
+    }, 800);
   } else {
     // Step Functions wait for task token
     setTimeout(() => {
       const sysBubble = document.createElement('div');
       sysBubble.className = 'chat-bubble system';
       sysBubble.innerHTML = `
-        <div style="color: var(--color-review); font-weight: 700; margin-bottom: 2px;">
-          <i class="fa-solid fa-clock"></i> Sent for Credit Manager Review
+        <div style="color: var(--accent-review); font-weight: 700; margin-bottom: 2px;">
+          <i class="fa-solid fa-clock"></i> PENDING MANAGER APPROVAL
         </div>
-        <div>Your request for a 30-day shift has been forwarded to our credit operations desk. We will notify you once reviewed.</div>
+        <div>Your request for a 30-day shift has been routed to Credit Operations for review. We will notify you once approved.</div>
         <span class="msg-time">${timeStr}</span>
       `;
       container.appendChild(sysBubble);
@@ -663,7 +662,7 @@ function acceptReliefPlan(planId, outcome) {
       document.getElementById('sfnNodeWait').className = 'sfn-node active-wait';
       showToast('Concession queued in Step Functions waiting for Manager Approval!', 'info');
       switchTab('approvals');
-    }, 900);
+    }, 800);
   }
 }
 
@@ -690,10 +689,10 @@ function triggerHumanHandoff() {
   const bubble = document.createElement('div');
   bubble.className = 'chat-bubble system';
   bubble.innerHTML = `
-    <div style="color: var(--color-deny); font-weight: 700; margin-bottom: 2px;">
-      <i class="fa-solid fa-headset"></i> Human Specialist Requested
+    <div style="color: var(--accent-danger); font-weight: 700; margin-bottom: 2px;">
+      <i class="fa-solid fa-headset"></i> HUMAN SPECIALIST ASSIGNED
     </div>
-    <div>A relationship officer from Harbour Finance has been assigned and will reach out shortly.</div>
+    <div>A Senior Credit Resolution Officer from Harbour Finance has been assigned and will contact you directly.</div>
     <span class="msg-time">${timeStr}</span>
   `;
   container.appendChild(bubble);
@@ -701,10 +700,10 @@ function triggerHumanHandoff() {
 
   ACCOUNTS_DB[activeAccountId].caseStatus = 'ESCALATED';
   document.getElementById('caseDetailStatusBadge').textContent = 'ESCALATED // SPECIALIST';
-  document.getElementById('caseDetailStatusBadge').className = 'case-status-pill escalated';
+  document.getElementById('caseDetailStatusBadge').className = 'status-badge-danger';
 
   appendLogEntry('HANDOFF_REQUESTED', 'Borrower requested human handoff. Reason: Direct request or legal restriction.', 'SYSTEM');
-  showToast('Human handoff ticket generated (Priority: Normal)', 'warning');
+  showToast('Human handoff ticket generated (Priority: High)', 'warning');
 }
 
 // ==========================================================================
@@ -718,12 +717,11 @@ function updatePolicyEnvelope(account) {
   const needleBubble = document.getElementById('needleBubble');
 
   if (account.activeOption === 'DUE_DATE_SHIFT') {
-    optionTitle.textContent = 'Option: Due-Date Shift (Days)';
-    targetLabel.innerHTML = `Requested: <strong>${account.requestedValue} Days</strong>`;
-    needleBubble.textContent = `${account.requestedValue} Days`;
+    optionTitle.textContent = 'OPTION: DUE-DATE SHIFT';
+    targetLabel.innerHTML = `REQUESTED: <strong>${account.requestedValue} DAYS</strong>`;
+    needleBubble.textContent = `${account.requestedValue}D`;
 
     // Map 0 to 40 days across 0% to 100%
-    // 0-10d (0-25%), 11-30d (25-75%), >30d (75-100%)
     let pct = 0;
     if (account.requestedValue <= 10) {
       pct = (account.requestedValue / 10) * 25;
@@ -735,28 +733,22 @@ function updatePolicyEnvelope(account) {
     needle.style.left = `${pct}%`;
 
   } else if (account.activeOption === 'TENURE_EXTENSION') {
-    optionTitle.textContent = 'Option: Tenure Extension (Months)';
-    targetLabel.innerHTML = `Requested: <strong>${account.requestedValue} Months</strong>`;
-    needleBubble.textContent = `${account.requestedValue} Mo`;
+    optionTitle.textContent = 'OPTION: TENURE EXTENSION';
+    targetLabel.innerHTML = `REQUESTED: <strong>${account.requestedValue} MONTHS</strong>`;
+    needleBubble.textContent = `${account.requestedValue}M`;
     needle.style.left = `92%`; // Far right (Denied)
   }
 
   // Update Badge
   if (account.outcome === 'ALLOWED') {
-    outcomePill.textContent = 'ALLOWED (AGENT AUTONOMOUS)';
-    outcomePill.style.background = 'var(--color-allow-bg)';
-    outcomePill.style.color = 'var(--color-allow)';
-    outcomePill.style.borderColor = 'var(--color-allow-border)';
+    outcomePill.textContent = 'ALLOWED (AUTONOMOUS)';
+    outcomePill.style.color = 'var(--accent-terminal)';
   } else if (account.outcome === 'NEEDS_MANAGER_APPROVAL') {
     outcomePill.textContent = 'NEEDS MANAGER APPROVAL';
-    outcomePill.style.background = 'var(--color-review-bg)';
-    outcomePill.style.color = 'var(--color-review)';
-    outcomePill.style.borderColor = 'var(--color-review-border)';
+    outcomePill.style.color = 'var(--accent-review)';
   } else {
     outcomePill.textContent = 'DENIED BY POLICY';
-    outcomePill.style.background = 'var(--color-deny-bg)';
-    outcomePill.style.color = 'var(--color-deny)';
-    outcomePill.style.borderColor = 'var(--color-deny-border)';
+    outcomePill.style.color = 'var(--accent-danger)';
   }
 }
 
@@ -806,12 +798,12 @@ function renderPortfolioTable() {
 
     const factorsHtml = acc.factors ? 
       acc.factors.slice(0, 2).map(f => `<span class="factor-chip" title="${f.note}">${f.name} (+${f.points})</span>`).join('') :
-      `<span class="factor-chip">${acc.signal || 'Monitored'}</span>`;
+      `<span class="factor-chip">${acc.signal || 'MONITORED'}</span>`;
 
     tr.innerHTML = `
       <td>
         <div class="account-cell-title">
-          ${isHero ? '<i class="fa-solid fa-star" style="color: var(--color-review); font-size: 0.7rem;"></i>' : ''}
+          ${isHero ? '<i class="fa-solid fa-star" style="color: var(--accent-industrial); font-size: 0.65rem;"></i>' : ''}
           ${acc.name}
         </div>
         <span class="account-cell-subtitle">${acc.id}</span>
@@ -820,14 +812,14 @@ function renderPortfolioTable() {
         <div>${acc.segment}</div>
         <span class="account-cell-subtitle">${acc.product}</span>
       </td>
-      <td><strong>₹${acc.emi.toLocaleString('en-IN')}</strong></td>
-      <td><span style="font-weight:600; color:${acc.daysToEmi <= 5 ? 'var(--color-deny)' : 'var(--text-primary)'}">${acc.daysToEmi} Days</span></td>
+      <td><strong class="mono">₹${acc.emi.toLocaleString('en-IN')}</strong></td>
+      <td><span style="font-weight:700; font-family:var(--font-mono); color:${acc.daysToEmi <= 5 ? 'var(--accent-danger)' : 'var(--text-main)'}">${acc.daysToEmi} Days</span></td>
       <td>
         <div class="stress-gauge-cell">
           <div class="stress-bar-container">
             <div class="stress-bar-fill ${tierClass}" style="width: ${acc.stressScore}%;"></div>
           </div>
-          <span class="stress-score-text" style="color: var(--color-${tierClass === 'high' ? 'deny' : tierClass === 'watch' ? 'review' : 'allow'});">
+          <span class="stress-score-text" style="color: var(--accent-${tierClass === 'high' ? 'danger' : tierClass === 'watch' ? 'review' : 'terminal'});">
             ${acc.stressScore}
           </span>
         </div>
@@ -844,11 +836,11 @@ function renderPortfolioTable() {
       <td>
         ${isHero ? `
           <button class="table-action-btn" onclick="loadHeroScenario('${acc.id}'); switchTab('case');">
-            <i class="fa-solid fa-sliders"></i> Inspect
+            INSPECT
           </button>
         ` : `
           <button class="table-action-btn" onclick="showToast('Account ${acc.id} under monitoring', 'info')">
-            <i class="fa-solid fa-eye"></i> View
+            VIEW
           </button>
         `}
       </td>
@@ -868,10 +860,10 @@ function filterAccounts(filterType) {
 }
 
 function runStressDetection() {
-  showToast('Running Early Stress Detection Engine on 40 accounts...', 'info');
+  showToast('Running Early Stress Detection on 40 accounts...', 'info');
   setTimeout(() => {
-    showToast('Stress Detection complete: 16 accounts flagged pre-default (7 High Tier, 9 Watch Tier)', 'success');
-  }, 800);
+    showToast('Stress Detection complete: 16 accounts flagged pre-default', 'success');
+  }, 700);
 }
 
 // ==========================================================================
@@ -884,25 +876,25 @@ function renderApprovalsQueue() {
   container.innerHTML = `
     <div class="approval-queue-item">
       <div class="approval-item-header">
-        <strong style="color: var(--text-primary); font-size: 0.88rem;">
-          <i class="fa-solid fa-store" style="color: var(--color-brand); margin-right: 6px;"></i>
+        <strong style="color: var(--text-main); font-size: 0.82rem; font-family: var(--font-mono);">
+          <i class="fa-solid fa-store" style="color: var(--accent-industrial); margin-right: 4px;"></i>
           Arjun Mehta (ACC-1002)
         </strong>
-        <span class="plan-status-pill review">30-Day Due Date Shift</span>
+        <span class="status-badge-warning">30-DAY EXTENSION</span>
       </div>
       <div class="approval-item-body">
         <p><strong>Requested Term:</strong> Move EMI from 23 Sep to 23 Oct 2026 (₹14,500 EMI).</p>
-        <p style="margin-top: 4px;"><strong>Borrower Justification:</strong> Slow festive retail turnaround. Customer has 1 earlier relief, 9 DPD.</p>
-        <p style="margin-top: 4px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-brand);">
-          Cedar Authority Check: Manager tier permits up to 30 days (P2). TaskToken waiting.
+        <p style="margin-top: 3px;"><strong>Borrower Context:</strong> Festive retail slowdown. Customer has 1 earlier relief, 9 DPD.</p>
+        <p style="margin-top: 3px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-terminal);">
+          Cedar Authority Check: Manager tier permits up to 30 days (Policy P2). TaskToken active.
         </p>
       </div>
       <div class="approval-item-actions">
         <button class="btn-approve" onclick="managerDecision('APPROVED')">
-          <i class="fa-solid fa-check"></i> Approve Concession
+          <i class="fa-solid fa-check"></i> APPROVE CONCESSION
         </button>
         <button class="btn-reject" onclick="managerDecision('REJECTED')">
-          <i class="fa-solid fa-xmark"></i> Reject
+          <i class="fa-solid fa-xmark"></i> REJECT
         </button>
       </div>
     </div>
@@ -916,7 +908,7 @@ function managerDecision(decision) {
 
   if (decision === 'APPROVED') {
     sfnWait.className = 'sfn-node completed';
-    sfnWait.innerHTML = `<span>3. RequestApproval</span> <i class="fa-solid fa-circle-check"></i>`;
+    sfnWait.innerHTML = `<span>3. RequestApproval</span> <i class="fa-solid fa-check"></i>`;
     
     sfnApply.className = 'sfn-node active-wait';
     sfnApply.innerHTML = `<span>4. ApplyPlan (CoreBanking)</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
@@ -925,10 +917,10 @@ function managerDecision(decision) {
 
     setTimeout(() => {
       sfnApply.className = 'sfn-node completed';
-      sfnApply.innerHTML = `<span>4. ApplyPlan (CoreBanking)</span> <i class="fa-solid fa-circle-check"></i>`;
+      sfnApply.innerHTML = `<span>4. ApplyPlan (CoreBanking)</span> <i class="fa-solid fa-check"></i>`;
 
       sfnNotify.className = 'sfn-node completed';
-      sfnNotify.innerHTML = `<span>5. NotifyBorrower & Close</span> <i class="fa-solid fa-circle-check"></i>`;
+      sfnNotify.innerHTML = `<span>5. NotifyBorrower & Close</span> <i class="fa-solid fa-check"></i>`;
 
       appendLogEntry('PLAN_APPLIED', 'Core Banking updated next_due_date to 2026-10-23. Concession applied.', 'SYSTEM');
       showToast('Manager Decision Submitted: Plan Approved and Applied in Core Banking!', 'success');
@@ -936,7 +928,7 @@ function managerDecision(decision) {
       // Update Case 1002 state
       ACCOUNTS_DB['ACC-1002'].caseStatus = 'APPLIED';
       document.getElementById('tabPendingApprovalsCount').textContent = '0';
-    }, 1000);
+    }, 900);
   } else {
     showToast('Concession request rejected by credit manager.', 'warning');
     appendLogEntry('APPROVAL_DECIDED', 'Manager rejected concession. Reason: Exceeds risk tolerance.', 'MANAGER');
@@ -961,16 +953,16 @@ function renderCryptoTimeline() {
       </div>
       <div>
         <div class="event-tag">${entry.type}</div>
-        <span style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">${entry.actor.kind}</span>
+        <span style="font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-mono);">${entry.actor.kind}</span>
       </div>
       <div>
         <div class="summary-text" title="${entry.summary}">${entry.summary}</div>
-        <span style="font-size: 0.65rem; color: var(--text-muted);">${entry.ts}</span>
+        <span style="font-size: 0.62rem; color: var(--text-muted); font-family: var(--font-mono);">${entry.ts}</span>
       </div>
       <div class="crypto-hashes">
-        <span>Hash: <strong>${entry.entry_hash.substring(0, 14)}...</strong></span>
-        <span>Prev: ${entry.prev_hash.substring(0, 12)}...</span>
-        <span>KMS: ${entry.sig.substring(0, 12)}...</span>
+        <span>HASH: <strong>${entry.entry_hash.substring(0, 12)}...</strong></span>
+        <span>PREV: ${entry.prev_hash.substring(0, 10)}...</span>
+        <span>KMS: ${entry.sig.substring(0, 10)}...</span>
       </div>
     `;
 
@@ -983,14 +975,13 @@ function appendLogEntry(type, summary, actorKind = 'SYSTEM') {
   const newSeq = (lastEntry ? lastEntry.seq : 0) + 1;
   const prevHash = lastEntry ? lastEntry.entry_hash : '0000000000000000000000000000000000000000000000000000000000000000';
 
-  // Generate simulated deterministic sha256
   const newHash = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
 
   DECISION_LOG.push({
     seq: newSeq,
     ts: new Date().toISOString(),
     type: type,
-    actor: { kind: actorKind, id: 'reprieve-runtime' },
+    actor: { kind: actorKind, id: 'creditshield-runtime' },
     summary: summary,
     prev_hash: prevHash,
     entry_hash: newHash,
@@ -1012,18 +1003,18 @@ function verifyLogIntegrity() {
       shield.className = 'shield-icon-badge tampered';
       shield.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
       title.textContent = 'INTEGRITY VIOLATION: HASH COLLISION AT SEQ #4';
-      title.style.color = 'var(--color-deny)';
+      title.style.color = 'var(--accent-danger)';
       subtitle.textContent = 'Database entry payload was mutated after signature. S3 Lock mismatch.';
       showToast('ALERT: Cryptographic chain broken at Seq #4!', 'warning');
     } else {
       shield.className = 'shield-icon-badge valid';
       shield.innerHTML = '<i class="fa-solid fa-shield-check"></i>';
       title.textContent = 'CRYPTOGRAPHIC INTEGRITY: VALID & INTACT';
-      title.style.color = 'var(--text-primary)';
+      title.style.color = 'var(--text-main)';
       subtitle.textContent = `All ${DECISION_LOG.length} sequential entries verified against AWS KMS P-256 key & S3 checkpoints.`;
       showToast('Chain Intact: 100% Cryptographically Verified', 'success');
     }
-  }, 600);
+  }, 500);
 }
 
 function triggerTamperAttack() {
@@ -1079,12 +1070,12 @@ function renderToolTraces() {
     item.className = 'tool-trace-item';
     item.innerHTML = `
       <div class="tool-trace-header">
-        <span><i class="fa-solid fa-wrench"></i> ${t.name}</span>
-        <span style="font-size: 0.65rem; color: var(--color-allow);">HTTP 200 OK</span>
+        <span><i class="fa-solid fa-code"></i> ${t.name}</span>
+        <span style="font-size: 0.62rem; color: var(--accent-terminal);">HTTP 200 OK</span>
       </div>
       <div class="tool-trace-body">
-        <div><strong>Input:</strong> <code style="font-family: var(--font-mono);">${t.input}</code></div>
-        <div style="margin-top: 2px;"><strong>Result:</strong> <code style="font-family: var(--font-mono);">${t.output}</code></div>
+        <div><strong>Input:</strong> <code class="mono">${t.input}</code></div>
+        <div style="margin-top: 2px;"><strong>Output:</strong> <code class="mono">${t.output}</code></div>
       </div>
     `;
     container.appendChild(item);
@@ -1095,7 +1086,6 @@ function renderToolTraces() {
 // TAB SWITCHING
 // ==========================================================================
 function switchTab(tabId) {
-  // Tabs: portfolio, case, approvals, audit, impact, arch
   const tabs = ['portfolio', 'case', 'approvals', 'audit', 'impact', 'arch'];
   tabs.forEach(t => {
     const pane = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -1112,37 +1102,40 @@ function advanceSimulationDays() {
   const treatedRateEl = document.getElementById('impactTreatedRate');
   const controlRateEl = document.getElementById('impactControlRate');
 
-  // Slight stochastic variance
   const newTreated = (74.0 + (Math.random() * 2.5)).toFixed(1);
   const newControl = (46.5 + (Math.random() * 1.5)).toFixed(1);
 
   treatedRateEl.textContent = `${newTreated}%`;
   controlRateEl.textContent = `${newControl}%`;
 
-  showToast(`Advanced 30 Days Monte Carlo Simulation: Cure Uplift +${(newTreated - newControl).toFixed(1)} pp`, 'success');
+  showToast(`Simulated 30 Days: Net Uplift +${(newTreated - newControl).toFixed(1)} pp`, 'success');
 }
 
 // ==========================================================================
-// THEME TOGGLE
+// THEME TOGGLE: GRAPHITE TERMINAL & PAPER SHEET
 // ==========================================================================
 function toggleTheme() {
+  const root = document.documentElement;
   const body = document.body;
   const btn = document.getElementById('themeToggleBtn');
-  if (currentTheme === 'midnight') {
-    currentTheme = 'daylight';
-    body.classList.add('daylight-mode');
+
+  if (currentTheme === 'dark') {
+    currentTheme = 'light';
+    root.setAttribute('data-theme', 'light');
+    body.classList.remove('dark-mode');
     btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-    showToast('Switched to Daylight Executive Mode', 'info');
+    showToast('Switched to Paper Sheet Mode (#F9F9F7)', 'info');
   } else {
-    currentTheme = 'midnight';
-    body.classList.remove('daylight-mode');
+    currentTheme = 'dark';
+    root.setAttribute('data-theme', 'dark');
+    body.classList.add('dark-mode');
     btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-    showToast('Switched to Midnight Slate Mode', 'info');
+    showToast('Switched to Graphite Terminal Mode (#121212)', 'info');
   }
 }
 
 // ==========================================================================
-// TOAST NOTIFICATION
+// TOAST NOTIFICATION (SHARP RECTANGULAR BANNER)
 // ==========================================================================
 function showToast(message, type = 'info') {
   const toast = document.getElementById('toastNotification');
@@ -1151,18 +1144,18 @@ function showToast(message, type = 'info') {
 
   msgEl.textContent = message;
   if (type === 'success') {
-    icon.className = 'fa-solid fa-circle-check';
-    icon.style.color = 'var(--color-allow)';
+    icon.className = 'fa-solid fa-check';
+    icon.style.color = 'var(--accent-terminal)';
   } else if (type === 'warning') {
     icon.className = 'fa-solid fa-triangle-exclamation';
-    icon.style.color = 'var(--color-deny)';
+    icon.style.color = 'var(--accent-danger)';
   } else {
     icon.className = 'fa-solid fa-circle-info';
-    icon.style.color = 'var(--color-brand)';
+    icon.style.color = 'var(--accent-industrial)';
   }
 
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 3500);
+  }, 3000);
 }

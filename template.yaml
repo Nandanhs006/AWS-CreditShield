@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  Reprieve — Hardship-First Relief Agent for Lenders
+  CreditShield — Hardship-First Relief Governance Engine
   First Commit Hackathon 2026 (Ship It Track)
 
 Parameters:
@@ -40,7 +40,7 @@ Globals:
 
 Resources:
   # =========================================================================
-  # 1. DYNAMODB TABLES (ON-DEMAND)
+  # 1. DYNAMODB TABLES (ON-DEMAND - FREE TIER 25GB)
   # =========================================================================
   AccountsTable:
     Type: AWS::DynamoDB::Table
@@ -133,7 +133,7 @@ Resources:
   SigningKey:
     Type: AWS::KMS::Key
     Properties:
-      Description: Asymmetric P-256 key for signing Reprieve Decision Log entries
+      Description: Asymmetric P-256 key for signing CreditShield Decision Log entries
       KeySpec: ECC_NIST_P256
       KeyUsage: SIGN_VERIFY
       KeyPolicy:
@@ -168,12 +168,12 @@ Resources:
         Mode: STRICT
 
   # =========================================================================
-  # 4. COGNITO AUTHENTICATION
+  # 4. COGNITO AUTHENTICATION (FREE TIER 50,000 MAUs)
   # =========================================================================
   StaffUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: reprieve-staff-pool
+      UserPoolName: creditshield-staff-pool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -198,7 +198,7 @@ Resources:
   StaffUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: reprieve-staff-client
+      ClientName: creditshield-staff-client
       UserPoolId: !Ref StaffUserPool
       GenerateSecret: false
       ExplicitAuthFlows:

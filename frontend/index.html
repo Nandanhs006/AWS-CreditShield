@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reprieve — Hardship-First Relief Agent for Lenders (AWS Hackathon 2026)</title>
+  <title>CreditShield — Hardship-First Relief Governance Engine (AWS Hackathon 2026)</title>
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
-  <!-- Custom Modern Styling -->
+  <!-- Industrial Brutalist Stylesheet (Raw Design Token System) -->
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="dark-mode">
   <div class="app-container">
     
     <!-- ====================================================================
@@ -23,14 +23,14 @@
           <i class="fa-solid fa-shield-halved"></i>
         </div>
         <div class="brand-meta">
-          <h1>REPRIEVE <span class="highlight">CORE</span></h1>
-          <p>Hardship-First Relief Engine &bull; AWS Hackathon 2026</p>
+          <h1>CREDITSHIELD <span class="highlight">CORE</span></h1>
+          <p>Deterministic Hardship Governance &bull; AWS Free Tier &bull; Ship It Track</p>
         </div>
       </div>
 
       <!-- Quick Hero Scenario Switcher -->
       <div class="header-center-scenarios">
-        <span class="scenario-label">Hero Scenarios:</span>
+        <span class="scenario-label">Scenarios:</span>
         <button id="btnHeroMeera" class="scenario-btn active" onclick="loadHeroScenario('ACC-1001')">
           <i class="fa-solid fa-motorcycle"></i> Meera (7d Allow)
         </button>
@@ -45,27 +45,33 @@
         </button>
       </div>
 
-      <!-- AWS Services Strip & Theme Toggle -->
+      <!-- AWS Free Tier Strip & Theme Toggle -->
       <div class="header-right-actions">
         <div class="aws-services-strip">
-          <div class="aws-badge active-service" title="Amazon Bedrock Converse API with Amazon Nova Lite">
-            <span class="dot"></span> Bedrock Nova
+          <div class="aws-badge active-service" title="AWS Lambda Serverless Functions">
+            <span class="dot"></span> Lambda
           </div>
-          <div class="aws-badge active-service" title="Amazon Verified Permissions Cedar Policy Engine">
-            <span class="dot"></span> Cedar Strict
+          <div class="aws-badge active-service" title="Amazon API Gateway HTTP API">
+            <span class="dot"></span> API GW
           </div>
           <div class="aws-badge active-service" title="AWS Step Functions Human-in-the-loop State Machine">
             <span class="dot"></span> Step Functions
           </div>
-          <div class="aws-badge active-service" title="AWS KMS Asymmetric ECC_NIST_P256 Key">
+          <div class="aws-badge active-service" title="Amazon DynamoDB On-Demand NoSQL">
+            <span class="dot"></span> DynamoDB
+          </div>
+          <div class="aws-badge active-service" title="Amazon Cognito User Pools">
+            <span class="dot"></span> Cognito
+          </div>
+          <div class="aws-badge active-service" title="AWS KMS ECC_NIST_P256 Asymmetric Key">
             <span class="dot"></span> KMS P-256
           </div>
-          <div class="aws-badge" title="Amazon S3 Write-Once Object Lock Retention">
+          <div class="aws-badge" title="Amazon S3 Object Lock Checkpoints">
             <span class="dot"></span> S3 Lock
           </div>
         </div>
 
-        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Daylight / Midnight Mode" onclick="toggleTheme()">
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Terminal / Paper Mode" onclick="toggleTheme()">
           <i class="fa-solid fa-sun"></i>
         </button>
       </div>
@@ -81,23 +87,20 @@
            ================================================================== -->
       <section class="borrower-pane">
         <div class="pane-title-bar">
-          <h2><i class="fa-solid fa-mobile-screen"></i> Borrower Experience</h2>
-          <span class="channel-tag"><i class="fa-solid fa-lock"></i> Private Token Link</span>
+          <h2><i class="fa-solid fa-terminal"></i> Borrower Terminal</h2>
+          <span class="channel-tag">TOKEN: AES-GCM-256</span>
         </div>
 
-        <!-- Smartphone Frame Chassis -->
+        <!-- Smartphone Frame Chassis (Industrial Sharp Frame) -->
         <div class="smartphone-frame">
           
           <!-- Status Bar -->
           <div class="phone-status-bar">
-            <span id="phoneClock">10:45</span>
-            <div class="phone-notch">
-              <div class="notch-camera"></div>
-            </div>
+            <span id="phoneClock">10:45:00</span>
+            <div class="phone-notch">CREDITSHIELD-CLIENT</div>
             <div class="phone-icons">
               <i class="fa-solid fa-wifi"></i>
-              <i class="fa-solid fa-signal"></i>
-              <i class="fa-solid fa-battery-three-quarters"></i>
+              <i class="fa-solid fa-lock"></i>
             </div>
           </div>
 
@@ -109,11 +112,11 @@
               </div>
               <div class="lender-info">
                 <h3>Harbour Finance</h3>
-                <span><i class="fa-solid fa-circle-check"></i> Reprieve Relief Assistant</span>
+                <span><i class="fa-solid fa-circle-check"></i> CreditShield Assistant</span>
               </div>
             </div>
-            <button class="btn-handoff-phone" onclick="triggerHumanHandoff()" title="Request human specialist">
-              <i class="fa-solid fa-headset"></i> Human
+            <button class="btn-handoff-phone" onclick="triggerHumanHandoff()" title="Request human officer handoff">
+              HUMAN HANDOFF
             </button>
           </div>
 
@@ -124,19 +127,19 @@
                 <strong id="borrowerNameDisplay">Meera Iyer</strong>
                 <span id="borrowerSegmentTag" class="borrower-segment-tag">GIG RIDER</span>
               </div>
-              <span id="borrowerStressTag" class="stress-tag high">HIGH STRESS (73)</span>
+              <span id="borrowerStressTag" class="stress-tag high">HIGH (73)</span>
             </div>
             <div class="borrower-metrics-grid">
               <div class="borrower-metric-item">
-                <span>Monthly EMI</span>
+                <span>MONTHLY EMI</span>
                 <strong id="borrowerEmiDisplay">₹6,200</strong>
               </div>
               <div class="borrower-metric-item">
-                <span>Days to Due</span>
+                <span>DUE IN</span>
                 <strong id="borrowerDaysDisplay">6 Days</strong>
               </div>
               <div class="borrower-metric-item">
-                <span>Outstanding</span>
+                <span>OUTSTANDING</span>
                 <strong id="borrowerOutstandingDisplay">₹88,000</strong>
               </div>
             </div>
@@ -157,24 +160,24 @@
           <!-- Quick Scenario Trigger Chips -->
           <div class="phone-scenario-chips">
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_7D')">
-              <i class="fa-solid fa-calendar-day"></i> "Need 7 days"
+              [ 7D EXTENSION ]
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_30D')">
-              <i class="fa-solid fa-calendar-plus"></i> "Need 30 days"
+              [ 30D EXTENSION ]
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_JAILBREAK')">
-              <i class="fa-solid fa-bug"></i> "Waive all & 24mo"
+              [ TEST JAILBREAK ]
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_HANDOFF')">
-              <i class="fa-solid fa-circle-question"></i> "Talk to a person"
+              [ ESCALATE ]
             </button>
           </div>
 
           <!-- Phone Chat Input Bar -->
           <div class="phone-chat-input-bar">
-            <input type="text" id="phoneChatInput" class="chat-input" placeholder="Type a message to Reprieve Assistant..." onkeypress="handleInputKeyPress(event)">
+            <input type="text" id="phoneChatInput" class="chat-input" placeholder="Enter message to CreditShield Assistant..." onkeypress="handleInputKeyPress(event)">
             <button id="btnSendChat" class="btn-send-msg" onclick="sendBorrowerMessage()">
-              <i class="fa-solid fa-arrow-up"></i>
+              <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
         </div>
@@ -185,48 +188,48 @@
            ================================================================== -->
       <section class="command-center-pane">
         
-        <!-- Top Metric Ribbon -->
+        <!-- Top Metric Strip -->
         <div class="kpi-strip">
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-users"></i> Monitored Portfolio</span>
+            <span class="kpi-label">PORTFOLIO</span>
             <div class="kpi-value-row">
               <span class="kpi-value">40</span>
-              <span class="kpi-badge highlight">Active</span>
+              <span class="kpi-badge highlight">ACTIVE</span>
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-bell"></i> Flagged Pre-Default</span>
+            <span class="kpi-label">FLAGGED PRE-DEFAULT</span>
             <div class="kpi-value-row">
               <span id="kpiFlaggedCount" class="kpi-value">16</span>
               <span class="kpi-badge warning">40.0%</span>
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-triangle-exclamation"></i> Urgent Stress</span>
+            <span class="kpi-label">HIGH STRESS TIER</span>
             <div class="kpi-value-row">
               <span id="kpiUrgentCount" class="kpi-value">7</span>
-              <span class="kpi-badge warning">High Tier</span>
+              <span class="kpi-badge warning">CRITICAL</span>
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-hand-holding-hand"></i> Active Interventions</span>
+            <span class="kpi-label">ACTIVE CASES</span>
             <div class="kpi-value-row">
               <span id="kpiActiveCases" class="kpi-value">4</span>
-              <span class="kpi-badge positive">Treated</span>
+              <span class="kpi-badge positive">TREATED</span>
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-robot"></i> Cedar Autonomy Rate</span>
+            <span class="kpi-label">CEDAR AUTONOMY</span>
             <div class="kpi-value-row">
               <span class="kpi-value">81.8%</span>
-              <span class="kpi-badge positive">No Manager Wait</span>
+              <span class="kpi-badge positive">SOLVED</span>
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label"><i class="fa-solid fa-sack-dollar"></i> Net Bad-Debt Saved</span>
+            <span class="kpi-label">BAD DEBT AVOIDED</span>
             <div class="kpi-value-row">
               <span class="kpi-value">₹3.42L</span>
-              <span class="kpi-badge positive">3.2x ROI</span>
+              <span class="kpi-badge positive">3.2X ROI</span>
             </div>
           </div>
         </div>
@@ -234,22 +237,22 @@
         <!-- Tab Navigation Bar -->
         <nav class="nav-tab-bar">
           <button id="tabBtnPortfolio" class="tab-btn active" onclick="switchTab('portfolio')">
-            <i class="fa-solid fa-table-columns"></i> Portfolio Radar <span class="badge-count">40</span>
+            [01] PORTFOLIO RADAR <span class="badge-count">40</span>
           </button>
           <button id="tabBtnCase" class="tab-btn" onclick="switchTab('case')">
-            <i class="fa-solid fa-sliders"></i> Policy Envelope & Tools <span id="tabCaseAccountBadge" class="badge-count">ACC-1001</span>
+            [02] POLICY ENVELOPE & TOOLS <span id="tabCaseAccountBadge" class="badge-count">ACC-1001</span>
           </button>
           <button id="tabBtnApprovals" class="tab-btn" onclick="switchTab('approvals')">
-            <i class="fa-solid fa-network-wired"></i> Step Functions Approvals <span id="tabPendingApprovalsCount" class="badge-count">1</span>
+            [03] STEP FUNCTIONS QUEUE <span id="tabPendingApprovalsCount" class="badge-count">1</span>
           </button>
           <button id="tabBtnAudit" class="tab-btn" onclick="switchTab('audit')">
-            <i class="fa-solid fa-fingerprint"></i> Decision Log & Tamper Demo <span class="badge-count">KMS P-256</span>
+            [04] DECISION LOG & TAMPER DEMO <span class="badge-count">KMS P-256</span>
           </button>
           <button id="tabBtnImpact" class="tab-btn" onclick="switchTab('impact')">
-            <i class="fa-solid fa-chart-line"></i> A/B Impact & Unit Economics <span class="badge-count">+27.4%</span>
+            [05] A/B IMPACT & ECONOMICS <span class="badge-count">+27.4%</span>
           </button>
           <button id="tabBtnArch" class="tab-btn" onclick="switchTab('arch')">
-            <i class="fa-brands fa-aws"></i> AWS Cloud Topology
+            [06] AWS FREE TIER TOPOLOGY
           </button>
         </nav>
 
@@ -262,17 +265,17 @@
           <div id="tabPortfolio" class="tab-pane active">
             <div class="section-control-bar">
               <div class="section-title">
-                <h2><i class="fa-solid fa-crosshairs"></i> Pre-Default Stress Detection Radar</h2>
+                <h2>PORTFOLIO RADAR // EARLY STRESS TELEMETRY</h2>
                 <p>Deterministic cashflow scoring flags borrowers heading for missed EMIs before penalty damage occurs</p>
               </div>
               <div class="filter-button-group">
-                <button class="filter-btn active" onclick="filterAccounts('ALL')">All (40)</button>
-                <button class="filter-btn" onclick="filterAccounts('HIGH')">High Stress (7)</button>
-                <button class="filter-btn" onclick="filterAccounts('WATCH')">Watch Tier (9)</button>
-                <button class="filter-btn" onclick="filterAccounts('TREATED')">Treated Arm</button>
-                <button class="filter-btn" onclick="filterAccounts('CONTROL')">Control Arm</button>
-                <button class="btn-primary" onclick="runStressDetection()">
-                  <i class="fa-solid fa-rotate"></i> Run Stress Detection
+                <button class="filter-btn active" onclick="filterAccounts('ALL')">ALL (40)</button>
+                <button class="filter-btn" onclick="filterAccounts('HIGH')">HIGH STRESS (7)</button>
+                <button class="filter-btn" onclick="filterAccounts('WATCH')">WATCH TIER (9)</button>
+                <button class="filter-btn" onclick="filterAccounts('TREATED')">TREATED ARM</button>
+                <button class="filter-btn" onclick="filterAccounts('CONTROL')">CONTROL ARM</button>
+                <button class="btn-industrial" onclick="runStressDetection()">
+                  <i class="fa-solid fa-rotate"></i> RUN STRESS DETECTION
                 </button>
               </div>
             </div>
@@ -281,15 +284,15 @@
               <table class="custom-data-table">
                 <thead>
                   <tr>
-                    <th>Account & Name</th>
-                    <th>Segment / Product</th>
-                    <th>Current EMI</th>
-                    <th>Days to Due</th>
-                    <th>Stress Score & Tier</th>
-                    <th>Cashflow Stress Signals</th>
-                    <th>Cohort Arm</th>
-                    <th>Case Status</th>
-                    <th>Actions</th>
+                    <th>ACCOUNT ID & NAME</th>
+                    <th>SEGMENT / PRODUCT</th>
+                    <th>MONTHLY EMI</th>
+                    <th>DAYS TO DUE</th>
+                    <th>STRESS SCORE</th>
+                    <th>CASHFLOW SIGNALS</th>
+                    <th>COHORT</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
                   </tr>
                 </thead>
                 <tbody id="portfolioTableBody">
@@ -308,25 +311,25 @@
               <!-- Left: Case Overview & Tool Traces -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-comments"></i> Case Transcript & Model Trace</h3>
-                  <span id="caseDetailStatusBadge" class="case-status-pill open">OPEN // CHATTING</span>
+                  <h3>TRANSCRIPT & CONVERSE API TRACE</h3>
+                  <span id="caseDetailStatusBadge" class="status-badge-valid">OPEN // ACTIVE</span>
                 </div>
 
                 <div class="borrower-quick-card" style="margin: 0;">
                   <div class="borrower-card-header">
-                    <span id="activeCaseTitle">Case #CASE-1001 &bull; Meera Iyer</span>
+                    <span id="activeCaseTitle" class="mono">CASE-1001 &bull; Meera Iyer</span>
                     <span id="activeCaseCohort" class="cohort-badge treated">TREATED ARM</span>
                   </div>
-                  <p id="activeCaseDesc" style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">
-                    Gig platform payout delayed 5 days. High buffer depletion. Autonomous due-date shift eligible.
+                  <p id="activeCaseDesc" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">
+                    Gig platform payout delayed 5 days. Low buffer ratio. Autonomous due-date shift eligible under Policy P1.
                   </p>
                 </div>
 
-                <!-- Bedrock Tool Execution Traces -->
+                <!-- Tool Execution Traces -->
                 <div class="panel-subhead" style="margin-top: 0.5rem;">
-                  <h3><i class="fa-solid fa-code-branch"></i> Bedrock Tool Execution Trace (Converse API)</h3>
-                  <span style="font-size: 0.72rem; color: var(--color-brand); font-family: var(--font-mono);">
-                    <i class="fa-solid fa-bolt"></i> Amazon Nova Lite
+                  <h3>DETERMINISTIC TOOL EXECUTION TRACE</h3>
+                  <span style="font-size: 0.7rem; color: var(--accent-industrial); font-family: var(--font-mono);">
+                    AMAZON NOVA LITE
                   </span>
                 </div>
 
@@ -334,38 +337,35 @@
                   <!-- Loaded dynamically -->
                 </div>
 
-                <!-- Numeric Verifier Badge -->
-                <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid var(--color-allow-border); border-radius: var(--radius-sm); padding: 10px; display: flex; align-items: center; justify-content: space-between;">
-                  <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-shield-check" style="color: var(--color-allow); font-size: 1.1rem;"></i>
-                    <div>
-                      <strong style="color: var(--text-primary); font-size: 0.8rem;">Numeric Verifier: PASS</strong>
-                      <p style="font-size: 0.7rem; color: var(--text-secondary);">Zero hallucinated numbers. All dates and amounts match Cedar & tool outputs.</p>
-                    </div>
+                <!-- Numeric Verifier Status -->
+                <div style="background: var(--surface-alt); border: 1px solid var(--accent-terminal); padding: 8px 10px; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <strong style="color: var(--accent-terminal); font-size: 0.78rem; font-family: var(--font-mono);">NUMERIC VERIFIER: PASS</strong>
+                    <p style="font-size: 0.7rem; color: var(--text-muted);">Zero hallucinated digits. All dates and currency values strictly grounded in tool returns.</p>
                   </div>
-                  <span style="font-size: 0.68rem; font-family: var(--font-mono); color: var(--color-allow);">verifier: pass</span>
+                  <span class="status-badge-valid">VERIFIED</span>
                 </div>
               </div>
 
               <!-- Right: The Signature Policy Envelope Visualizer -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-gauge-high"></i> Cedar Policy Envelope (Verified Permissions)</h3>
-                  <span id="envelopeOutcomePill" class="envelope-outcome-badge" style="background: var(--color-allow-bg); color: var(--color-allow); border: 1px solid var(--color-allow-border);">
-                    ALLOWED (AGENT AUTONOMOUS)
+                  <h3>CEDAR POLICY ENVELOPE</h3>
+                  <span id="envelopeOutcomePill" class="envelope-outcome-badge" style="color: var(--accent-terminal);">
+                    ALLOWED (AUTONOMOUS)
                   </span>
                 </div>
 
                 <!-- Interactive Policy Envelope Component -->
                 <div class="envelope-interactive-card">
                   <div class="envelope-header">
-                    <span id="envelopeOptionName" class="option-title">Option: Due-Date Shift (Days)</span>
-                    <span id="envelopeTargetLabel" style="font-size: 0.75rem; color: var(--text-secondary); font-family: var(--font-mono);">
-                      Requested: <strong>7 Days</strong>
+                    <span id="envelopeOptionName" class="option-title">OPTION: DUE-DATE SHIFT</span>
+                    <span id="envelopeTargetLabel" style="font-size: 0.75rem; font-family: var(--font-mono);">
+                      REQUESTED: <strong>7 DAYS</strong>
                     </span>
                   </div>
 
-                  <!-- Graphic Tri-Color Gauge Bar with Needle -->
+                  <!-- Mechanical Gauge Track with Needle -->
                   <div class="envelope-track-wrapper">
                     <div class="envelope-track">
                       <div class="track-segment allow-zone" title="Agent Alone: 1 - 10 Days"></div>
@@ -377,32 +377,32 @@
                     <div id="envelopeNeedle" class="envelope-needle" style="left: 17.5%;">
                       <div class="needle-pin"></div>
                       <div class="needle-line"></div>
-                      <div id="needleBubble" class="needle-bubble">7 Days</div>
+                      <div id="needleBubble" class="needle-bubble">7D</div>
                     </div>
                   </div>
 
                   <!-- Legend -->
                   <div class="envelope-legend">
                     <div class="legend-item">
-                      <span class="legend-dot" style="background: var(--color-allow);"></span>
-                      <span>Agent Alone (1 - 10d)</span>
+                      <span class="legend-dot" style="background: var(--accent-terminal);"></span>
+                      <span>AGENT ALONE (1 - 10D)</span>
                     </div>
                     <div class="legend-item">
-                      <span class="legend-dot" style="background: var(--color-review);"></span>
-                      <span>Manager Required (11 - 30d)</span>
+                      <span class="legend-dot" style="background: var(--accent-review);"></span>
+                      <span>MANAGER DISCRETION (11 - 30D)</span>
                     </div>
                     <div class="legend-item">
-                      <span class="legend-dot" style="background: var(--color-deny);"></span>
-                      <span>Nobody (> 30d)</span>
+                      <span class="legend-dot" style="background: var(--accent-danger);"></span>
+                      <span>DENIED (> 30D)</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Determining Cedar Policy Code -->
                 <div class="panel-subhead" style="margin-top: 0.5rem;">
-                  <h3><i class="fa-solid fa-file-shield"></i> Determining Cedar Policy</h3>
+                  <h3>DETERMINING CEDAR POLICY</h3>
                   <span id="activePolicyIdBadge" style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-muted);">
-                    Policy ID: P1_agent_due_date_shift
+                    POLICY ID: P1_agent_due_date_shift
                   </span>
                 </div>
 
@@ -423,9 +423,9 @@
                 </div>
 
                 <!-- Explanation Note -->
-                <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.45; background: rgba(0, 0, 0, 0.2); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-glass);">
-                  <strong style="color: var(--text-primary);"><i class="fa-solid fa-circle-info"></i> Deterministic Governance:</strong>
-                  The LLM never chooses or approves the parameters. Limits are managed as data in Amazon Verified Permissions. If policies change in AWS Console, the agent adapts instantly with zero redeployment.
+                <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.4; background: var(--surface-alt); padding: 8px; border: 1px solid var(--border);">
+                  <strong style="color: var(--text-main);">DETERMINISTIC SEPARATION:</strong>
+                  The conversational LLM never authorizes terms. Concession limits exist exclusively in Cedar policy data. Limits can be tuned in real-time with zero code deployments.
                 </div>
               </div>
             </div>
@@ -440,13 +440,11 @@
               <!-- Left: Manager Pending Approvals -->
               <div class="sfn-card">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-inbox"></i> Manager Concession Queue</h3>
-                  <span class="badge-count" style="background: var(--color-review-bg); color: var(--color-review);">
-                    Cognito Group: manager
-                  </span>
+                  <h3>MANAGER CONCESSION QUEUE</h3>
+                  <span class="status-badge-warning">COGNITO: MANAGER</span>
                 </div>
 
-                <div id="approvalQueueContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <div id="approvalQueueContainer" style="display: flex; flex-direction: column; gap: 8px;">
                   <!-- Dynamic approval cards -->
                 </div>
               </div>
@@ -454,21 +452,21 @@
               <!-- Right: AWS Step Functions Execution Graph -->
               <div class="sfn-card">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-diagram-project"></i> AWS Step Functions Execution Graph</h3>
-                  <span id="sfnExecutionStatus" class="kpi-badge highlight">
-                    Execution: case-ACC1002-p01
+                  <h3>AWS STEP FUNCTIONS STATE MACHINE</h3>
+                  <span id="sfnExecutionStatus" class="sys-data" style="color: var(--accent-industrial); font-size: 0.7rem;">
+                    EXEC: case-ACC1002-p01
                   </span>
                 </div>
 
-                <p style="font-size: 0.74rem; color: var(--text-secondary);">
-                  Visual state machine orchestration with <code style="font-family: var(--font-mono); color: var(--color-brand);">waitForTaskToken</code> callback for human approvals.
+                <p style="font-size: 0.72rem; color: var(--text-muted);">
+                  Human-in-the-loop task token callback (<code class="mono">waitForTaskToken</code>).
                 </p>
 
-                <!-- Interactive Visual Node Graph -->
+                <!-- Step Functions Node Graph -->
                 <div class="sfn-graph-container">
                   <div id="sfnNodeRecheck" class="sfn-node completed">
                     <span>1. RecheckPolicy</span>
-                    <i class="fa-solid fa-circle-check"></i>
+                    <i class="fa-solid fa-check"></i>
                   </div>
                   <div class="sfn-connector-line active"></div>
                   
@@ -492,7 +490,7 @@
                   
                   <div id="sfnNodeNotify" class="sfn-node">
                     <span>5. NotifyBorrower & Close</span>
-                    <i class="fa-solid fa-flag-checkered"></i>
+                    <i class="fa-solid fa-check"></i>
                   </div>
                 </div>
               </div>
@@ -511,33 +509,33 @@
                   <i class="fa-solid fa-shield-check"></i>
                 </div>
                 <div>
-                  <h3 id="auditStatusTitle" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">
-                    Cryptographic Integrity: VALID & INTACT
+                  <h3 id="auditStatusTitle" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono);">
+                    CRYPTOGRAPHIC INTEGRITY: VALID & INTACT
                   </h3>
-                  <p id="auditStatusSubtitle" style="font-size: 0.72rem; color: var(--text-secondary);">
-                    Hash-chained (SHA-256) &bull; Signed via AWS KMS P-256 &bull; S3 Object Lock Checkpointed
+                  <p id="auditStatusSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
+                    SHA-256 Chain &bull; AWS KMS P-256 Signatures &bull; S3 Object Lock Checkpointed
                   </p>
                 </div>
               </div>
 
               <div class="audit-action-buttons">
                 <button class="btn-verify-integrity" onclick="verifyLogIntegrity()">
-                  <i class="fa-solid fa-fingerprint"></i> Verify Chain Integrity
+                  <i class="fa-solid fa-fingerprint"></i> VERIFY INTEGRITY
                 </button>
                 <button id="btnTamperAttack" class="btn-tamper-demo" onclick="triggerTamperAttack()">
-                  <i class="fa-solid fa-triangle-exclamation"></i> Simulate DB Tampering
+                  <i class="fa-solid fa-triangle-exclamation"></i> SIMULATE DB TAMPERING
                 </button>
                 <button id="btnRestoreTamper" class="btn-restore-demo" onclick="restoreTamperedLog()" style="display: none;">
-                  <i class="fa-solid fa-shield-halved"></i> Restore from S3 Lock
+                  <i class="fa-solid fa-shield-halved"></i> RESTORE FROM S3 LOCK
                 </button>
               </div>
             </div>
 
             <!-- Cryptographic Timeline Rail -->
-            <div class="data-table-wrapper" style="padding: 1rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; font-size: 0.75rem; color: var(--text-muted);">
-                <span>Case #CASE-1001 Audit Trail (Sequential Hash-Chained Proofs)</span>
-                <span>KMS Key ARN: <code style="font-family: var(--font-mono); color: var(--color-brand);">arn:aws:kms:ap-south-1:123456789012:key/reprieve-asym-p256</code></span>
+            <div class="data-table-wrapper" style="padding: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
+                <span>CASE #CASE-1001 IMMUTABLE LEDGER</span>
+                <span>KMS KEY: <code style="color: var(--accent-industrial);">arn:aws:kms:ap-south-1:123456789012:key/creditshield-p256</code></span>
               </div>
 
               <div id="cryptoTimelineContainer" class="crypto-rail-timeline">
@@ -555,41 +553,39 @@
               <!-- Left: Clinical A/B Cure Rate Lift -->
               <div class="impact-card">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-chart-column"></i> Program Clinical Efficacy (A/B Cure Lift)</h3>
-                  <span class="badge-count" style="background: rgba(16, 185, 129, 0.15); color: var(--color-allow);">
-                    Simulated Clinical Trial Data
-                  </span>
+                  <h3>A/B CURE RATE UPLIFT</h3>
+                  <span class="status-badge-valid">BENCHMARK TRIAL</span>
                 </div>
 
                 <div class="comparison-arms-grid">
                   <div class="arm-box treated-arm">
-                    <div class="arm-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Treated Arm (Reprieve AI)</div>
+                    <div class="arm-title">TREATED ARM (CREDITSHIELD AI)</div>
                     <div id="impactTreatedRate" class="arm-cure-rate">74.5%</div>
                     <div id="impactTreatedFraction" class="arm-subtext">15 Cured of 20 Flagged</div>
-                    <div class="stress-bar-container" style="margin-top: 10px;">
+                    <div class="stress-bar-container" style="margin-top: 8px;">
                       <div class="stress-bar-fill low" style="width: 74.5%;"></div>
                     </div>
                   </div>
 
                   <div class="arm-box control-arm">
-                    <div class="arm-title"><i class="fa-solid fa-envelope-open-text"></i> Control Arm (Standard Ops)</div>
+                    <div class="arm-title">CONTROL ARM (STANDARD CALLS)</div>
                     <div id="impactControlRate" class="arm-cure-rate">47.1%</div>
                     <div id="impactControlFraction" class="arm-subtext">8 Cured of 17 Flagged</div>
-                    <div class="stress-bar-container" style="margin-top: 10px;">
-                      <div class="stress-bar-fill" style="width: 47.1%; background: #64748B;"></div>
+                    <div class="stress-bar-container" style="margin-top: 8px;">
+                      <div class="stress-bar-fill" style="width: 47.1%; background: var(--text-muted);"></div>
                     </div>
                   </div>
                 </div>
 
-                <div style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: var(--radius-sm); padding: 12px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="background: var(--surface-alt); border: 1px solid var(--border); padding: 10px; display: flex; justify-content: space-between; align-items: center;">
                   <div>
-                    <strong style="color: var(--color-brand); font-size: 1.1rem;">+27.4 pp Net Cure Uplift</strong>
-                    <p style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;">
-                      95% Confidence Interval: [+14.2%, +40.6%] &bull; Wald p &lt; 0.01
+                    <strong style="color: var(--accent-terminal); font-size: 1rem; font-family: var(--font-mono);">+27.4 pp Net Cure Uplift</strong>
+                    <p style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
+                      95% CI: [+14.2%, +40.6%] &bull; Wald p &lt; 0.01
                     </p>
                   </div>
-                  <button class="btn-primary" onclick="advanceSimulationDays()">
-                    <i class="fa-solid fa-forward"></i> Advance 30 Days
+                  <button class="btn-industrial" onclick="advanceSimulationDays()">
+                    <i class="fa-solid fa-forward"></i> ADVANCE 30 DAYS
                   </button>
                 </div>
               </div>
@@ -597,39 +593,39 @@
               <!-- Right: Unit Economics & Bedrock Cost per Case -->
               <div class="impact-card">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-calculator"></i> Unit Economics & Bedrock Costs</h3>
-                  <span class="badge-count highlight">Amazon Nova Lite</span>
+                  <h3>UNIT ECONOMICS & COMPUTE COSTS</h3>
+                  <span class="status-badge-valid">SHIP IT FREE TIER</span>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                  <div style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-surface-elevated); border-radius: var(--radius-sm);">
-                    <span style="color: var(--text-secondary);">Avg. Concession Cost Granted:</span>
-                    <strong style="color: var(--text-primary);">₹480 / borrower</strong>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 0.74rem;">
+                  <div style="display: flex; justify-content: space-between; padding: 6px 8px; background: var(--surface-alt); border: 1px solid var(--border);">
+                    <span style="color: var(--text-muted);">Avg. Concession Cost Granted:</span>
+                    <strong style="color: var(--text-main);">₹480 / borrower</strong>
                   </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-surface-elevated); border-radius: var(--radius-sm);">
-                    <span style="color: var(--text-secondary);">Average Bad-Debt Loss Avoided:</span>
-                    <strong style="color: var(--color-allow);">₹16,500 / cured</strong>
+                  <div style="display: flex; justify-content: space-between; padding: 6px 8px; background: var(--surface-alt); border: 1px solid var(--border);">
+                    <span style="color: var(--text-muted);">Bad-Debt Writeoff Avoided:</span>
+                    <strong style="color: var(--accent-terminal);">₹16,500 / cured</strong>
                   </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-surface-elevated); border-radius: var(--radius-sm);">
-                    <span style="color: var(--text-secondary);">Bedrock Tokens / Case:</span>
-                    <strong style="color: var(--text-primary); font-family: var(--font-mono);">1,420 Tokens</strong>
+                  <div style="display: flex; justify-content: space-between; padding: 6px 8px; background: var(--surface-alt); border: 1px solid var(--border);">
+                    <span style="color: var(--text-muted);">Inference Tokens / Case:</span>
+                    <strong style="color: var(--text-main);">1,420 Tokens</strong>
                   </div>
-                  <div style="display: flex; justify-content: space-between; padding: 10px; background: var(--bg-surface-elevated); border-radius: var(--radius-sm);">
-                    <span style="color: var(--text-secondary);">Bedrock Cost / Case:</span>
-                    <strong style="color: var(--color-brand); font-family: var(--font-mono); font-size: 0.95rem;">$0.0031 (₹0.26)</strong>
+                  <div style="display: flex; justify-content: space-between; padding: 6px 8px; background: var(--surface-alt); border: 1px solid var(--border);">
+                    <span style="color: var(--text-muted);">Bedrock Nova Lite Cost:</span>
+                    <strong style="color: var(--accent-industrial);">$0.0031 (₹0.26)</strong>
                   </div>
                 </div>
 
-                <div style="background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-glass); border-radius: var(--radius-sm); padding: 10px; font-size: 0.73rem; color: var(--text-secondary); line-height: 1.4;">
-                  <strong style="color: var(--text-primary);">Serverless Cost Advantage:</strong>
-                  Near-zero idle cost. On-demand DynamoDB, serverless Lambda compute, and pay-per-token Amazon Nova Lite allow deploying to thousands of borrowers at under 0.02% of traditional recovery agency costs.
+                <div style="background: var(--surface-alt); border: 1px solid var(--border); padding: 8px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35;">
+                  <strong style="color: var(--text-main);">FREE TIER MARGIN:</strong>
+                  Zero idle server cost. 1M free Lambda invocations, 25GB free DynamoDB, and 50,000 free Cognito users allow launching CreditShield completely inside the AWS Free Tier.
                 </div>
               </div>
             </div>
           </div>
 
           <!-- ==============================================================
-               TAB 6: AWS CLOUD ARCHITECTURE & TOPOLOGY
+               TAB 6: AWS FREE TIER ARCHITECTURE
                ============================================================== -->
           <div id="tabArch" class="tab-pane">
             <div class="arch-grid">
@@ -637,48 +633,56 @@
               <!-- Left: AWS Services Map -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3><i class="fa-brands fa-aws"></i> AWS Cloud Native Architecture</h3>
-                  <span class="badge-count positive">SAM Stack: reprieve</span>
+                  <h3>AWS "SHIP IT" COMPLIANT TOPOLOGY</h3>
+                  <span class="status-badge-valid">AWS FREE TIER</span>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
                   <div class="arch-service-row">
-                    <div class="arch-icon-box"><i class="fa-solid fa-brain"></i></div>
+                    <div class="arch-icon-box"><i class="fa-solid fa-code"></i></div>
                     <div>
-                      <strong style="color: var(--text-primary); font-size: 0.84rem;">Amazon Bedrock &bull; Converse API</strong>
-                      <p style="font-size: 0.72rem; color: var(--text-secondary);">Powers Reprieve conversational loop with Amazon Nova Lite, deterministic tool calling, and numeric verifier.</p>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">AWS Lambda (Python 3.12, arm64)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Stateless execution for chat loop, stress detection, and workflow tasks. 1M free monthly requests.</p>
                     </div>
                   </div>
                   
                   <div class="arch-service-row">
-                    <div class="arch-icon-box"><i class="fa-solid fa-user-shield"></i></div>
+                    <div class="arch-icon-box"><i class="fa-solid fa-network-wired"></i></div>
                     <div>
-                      <strong style="color: var(--text-primary); font-size: 0.84rem;">Amazon Verified Permissions (Cedar)</strong>
-                      <p style="font-size: 0.72rem; color: var(--text-secondary);">Two-tier authorization spine. Enforces concession envelope limits in strict mode before any offer is made.</p>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">Amazon API Gateway (HTTP API)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Low-latency REST endpoints with Cognito JWT authorizer and public token-scoped borrower chat routes.</p>
                     </div>
                   </div>
 
                   <div class="arch-service-row">
-                    <div class="arch-icon-box"><i class="fa-solid fa-network-wired"></i></div>
+                    <div class="arch-icon-box"><i class="fa-solid fa-diagram-project"></i></div>
                     <div>
-                      <strong style="color: var(--text-primary); font-size: 0.84rem;">AWS Step Functions (Standard)</strong>
-                      <p style="font-size: 0.72rem; color: var(--text-secondary);">Human-in-the-loop task token callback for manager approvals and reliable multi-step relief execution.</p>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">AWS Step Functions (Standard)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Task token callback workflow orchestrating human approvals and simulated core banking updates. 4,000 free transitions.</p>
+                    </div>
+                  </div>
+
+                  <div class="arch-service-row">
+                    <div class="arch-icon-box"><i class="fa-solid fa-database"></i></div>
+                    <div>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">Amazon DynamoDB (On-Demand)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Five tables for accounts, cases, messages, approvals, and sequential decision log. 25 GB free tier.</p>
                     </div>
                   </div>
 
                   <div class="arch-service-row">
                     <div class="arch-icon-box"><i class="fa-solid fa-key"></i></div>
                     <div>
-                      <strong style="color: var(--text-primary); font-size: 0.84rem;">AWS KMS (ECC_NIST_P256)</strong>
-                      <p style="font-size: 0.72rem; color: var(--text-secondary);">Asymmetric signing key cryptographically signs every decision log entry at write-time.</p>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">AWS KMS (ECC_NIST_P256)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Asymmetric hardware cryptographic key signs every decision log entry at write-time.</p>
                     </div>
                   </div>
 
                   <div class="arch-service-row">
                     <div class="arch-icon-box"><i class="fa-solid fa-box-archive"></i></div>
                     <div>
-                      <strong style="color: var(--text-primary); font-size: 0.84rem;">Amazon S3 Object Lock & DynamoDB</strong>
-                      <p style="font-size: 0.72rem; color: var(--text-secondary);">Write-once WORM storage prevents database history tampering even with admin access.</p>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">Amazon S3 (Object Lock Governance Mode)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Write-once WORM checkpoints of log head to prevent retroactive database tampering. 5 GB free tier.</p>
                     </div>
                   </div>
                 </div>
@@ -687,40 +691,40 @@
               <!-- Right: Hackathon Submission Highlights -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3><i class="fa-solid fa-trophy"></i> Hackathon "Ship It" Criteria Checklist</h3>
-                  <span class="badge-count highlight">First Commit 2026</span>
+                  <h3>SHIP IT TRACK CHECKLIST</h3>
+                  <span class="status-badge-warning">FIRST COMMIT 2026</span>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.8rem;">
-                  <div style="display: flex; align-items: flex-start; gap: 8px;">
-                    <i class="fa-solid fa-circle-check" style="color: var(--color-allow); margin-top: 3px;"></i>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.75rem;">
+                  <div style="display: flex; align-items: flex-start; gap: 6px;">
+                    <i class="fa-solid fa-check" style="color: var(--accent-terminal); margin-top: 2px;"></i>
                     <div>
-                      <strong style="color: var(--text-primary);">Human Problem & Care over Pressure:</strong>
-                      <p style="color: var(--text-secondary); font-size: 0.72rem;">Replaces predatory post-default recovery calls with compassionate pre-default relief before credit scores are ruined.</p>
+                      <strong style="color: var(--text-main);">Real-World Problem:</strong>
+                      <p style="color: var(--text-muted); font-size: 0.7rem;">Provides compassionate early relief before missed payments trigger damaging penalty calls and credit downgrades.</p>
                     </div>
                   </div>
 
-                  <div style="display: flex; align-items: flex-start; gap: 8px;">
-                    <i class="fa-solid fa-circle-check" style="color: var(--color-allow); margin-top: 3px;"></i>
+                  <div style="display: flex; align-items: flex-start; gap: 6px;">
+                    <i class="fa-solid fa-check" style="color: var(--accent-terminal); margin-top: 2px;"></i>
                     <div>
-                      <strong style="color: var(--text-primary);">Deterministic Authority (LLM Never Decides):</strong>
-                      <p style="color: var(--text-secondary); font-size: 0.72rem;">Zero reliance on prompt engineering for limits. Cedar policies are audited code and impossible to jailbreak.</p>
+                      <strong style="color: var(--text-main);">Zero LLM Authority:</strong>
+                      <p style="color: var(--text-muted); font-size: 0.7rem;">Limits are pure Cedar policies in Amazon Verified Permissions. Impossible to bypass via prompt injection.</p>
                     </div>
                   </div>
 
-                  <div style="display: flex; align-items: flex-start; gap: 8px;">
-                    <i class="fa-solid fa-circle-check" style="color: var(--color-allow); margin-top: 3px;"></i>
+                  <div style="display: flex; align-items: flex-start; gap: 6px;">
+                    <i class="fa-solid fa-check" style="color: var(--accent-terminal); margin-top: 2px;"></i>
                     <div>
-                      <strong style="color: var(--text-primary);">Cryptographic Non-Repudiation:</strong>
-                      <p style="color: var(--text-secondary); font-size: 0.72rem;">Any altered log block is detected immediately via SHA-256 hash chaining, KMS signatures, and S3 Lock checkpoints.</p>
+                      <strong style="color: var(--text-main);">Tamper-Proof Proof:</strong>
+                      <p style="color: var(--text-muted); font-size: 0.7rem;">SHA-256 hash chaining + KMS P-256 signatures + S3 Object Lock makes unauthorized history edits mathematically detectable.</p>
                     </div>
                   </div>
 
-                  <div style="display: flex; align-items: flex-start; gap: 8px;">
-                    <i class="fa-solid fa-circle-check" style="color: var(--color-allow); margin-top: 3px;"></i>
+                  <div style="display: flex; align-items: flex-start; gap: 6px;">
+                    <i class="fa-solid fa-check" style="color: var(--accent-terminal); margin-top: 2px;"></i>
                     <div>
-                      <strong style="color: var(--text-primary);">A/B Tested Clinical Impact:</strong>
-                      <p style="color: var(--text-secondary); font-size: 0.72rem;">Treated vs Control arms prove measurable cure uplift with strict statistical rigor.</p>
+                      <strong style="color: var(--text-main);">100% Free Tier Deployable:</strong>
+                      <p style="color: var(--text-muted); font-size: 0.7rem;">Architected strictly for zero-cost standby and low-cost scaling.</p>
                     </div>
                   </div>
                 </div>
@@ -732,10 +736,10 @@
       </section>
     </main>
 
-    <!-- Toast Notification -->
+    <!-- Toast Notification (Brutalist Banner) -->
     <div class="toast-container">
       <div id="toastNotification" class="toast-msg">
-        <i id="toastIcon" class="fa-solid fa-circle-check" style="color: var(--color-allow);"></i>
+        <i id="toastIcon" class="fa-solid fa-check" style="color: var(--accent-terminal);"></i>
         <span id="toastMessage">System notification</span>
       </div>
     </div>

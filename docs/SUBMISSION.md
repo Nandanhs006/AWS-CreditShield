@@ -1,6 +1,6 @@
-# Reprieve — Hackathon Submission Writeup
+# CreditShield — Hackathon Submission Writeup
 
-**Project Title:** Reprieve — Hardship-First Relief Agent for Lenders  
+**Project Title:** CreditShield — Hardship-First Relief Governance Engine  
 **Track:** Ship It (First Commit — Bharat Builds Tour x WeMakeDevs x AWS)  
 **Live URL:** *(Deploy via Amplify or GitHub Pages — see docs/HUMAN_TODO.md)*  
 **Public Repository:** *(Your GitHub Repository URL)*  
@@ -19,7 +19,7 @@ Lenders want to intervene early, but cannot safely deploy an LLM:
 - How do you prove to regulatory auditors exactly what rules authorized every concession?
 
 ### 2. What We Built & How AWS Makes It Possible
-**Reprieve** wraps a compassionate conversational AI agent in a **deterministic governance spine**:
+**CreditShield** wraps a compassionate conversational AI agent in a **deterministic governance spine**:
 
 1. **Deterministic Cash-Flow Stress Detection:** Analyzes payout cycles, debit bounces, and balance buffers to identify borrowers heading for default 5 to 14 days before their due date.
 2. **Two-Tier Cedar Policy Authority (Amazon Verified Permissions):**
@@ -35,8 +35,14 @@ Lenders want to intervene early, but cannot safely deploy an LLM:
 5. **Amazon Bedrock (Converse API):**
    - Employs **Amazon Nova Lite** with deterministic tool calling and a server-side numeric verifier to guarantee zero invented numbers.
 
-### 3. Key Architectural & Cost Decisions
-- **Serverless & On-Demand Everywhere:** Using DynamoDB on-demand, AWS Lambda arm64, and Amazon Nova Lite means near-zero idle cost.
+### 3. Key Architectural & Cost Decisions (AWS Free Tier Compliance)
+- **Ship It Column Focus:** Designed to run 100% within the AWS Free Tier and initial starter credits:
+  - AWS Lambda (1M free monthly requests)
+  - Amazon API Gateway HTTP API
+  - AWS Step Functions (4,000 free state transitions)
+  - Amazon DynamoDB (25 GB free storage)
+  - Amazon Cognito (50,000 MAUs free tier)
+  - Amazon S3 (5 GB standard free tier with Object Lock)
 - **Micro-Cost per Borrower:** Amazon Nova Lite costs approximately **$0.0031 (₹0.26)** per resolved borrower interaction, compared to ₹150–₹300 for traditional call agency outreach.
 - **Separation of Reasoning and Authority:** Guardrails and system prompts can be jailbroken; Cedar policies in Amazon Verified Permissions cannot. Authorization is evaluated as data, not prompt text.
 

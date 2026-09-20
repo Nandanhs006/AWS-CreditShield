@@ -1,5 +1,5 @@
 {
-  "Comment": "Reprieve Relief Approval Workflow with waitForTaskToken human approval",
+  "Comment": "CreditShield Relief Approval Workflow with waitForTaskToken human approval (AWS Free Tier)",
   "StartAt": "RecheckPolicy",
   "States": {
     "RecheckPolicy": {

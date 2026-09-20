@@ -1,4 +1,4 @@
-# Reprieve — Hardship-First Relief Agent for Lenders
+# CreditShield — Hardship-First Relief Governance Engine
 
 > **Track:** Ship It (First Commit — Bharat Builds Tour x WeMakeDevs x AWS, Sept 2026)  
 > **Pitch:** The AI converses warmly; Amazon Verified Permissions (Cedar) decides; AWS KMS and S3 Object Lock prove it.
@@ -16,8 +16,8 @@ Lending collections teams lose goodwill and money when temporary liquidity crunc
 2. *What stops prompt injection or jailbreak attacks from adversarial borrowers?*
 3. *How do you prove in an audit exactly what rules permitted each concession?*
 
-### The Reprieve Solution
-Reprieve creates a **deterministic governance spine** around a conversational Bedrock agent:
+### The CreditShield Solution
+CreditShield creates a **deterministic governance spine** around a conversational Bedrock agent:
 - **Early Stress Detection:** Deterministic cash-flow telemetry identifies borrowers heading for default *before* the due date.
 - **Two-Tier Cedar Policy Authority:** The LLM has zero authority. Limits are stored as Cedar policies in **Amazon Verified Permissions**. Small concessions (`ALLOWED`) execute autonomously; larger ones (`NEEDS_MANAGER_APPROVAL`) route through **AWS Step Functions**; unauthorized asks (`DENIED`) are blocked for everyone.
 - **Cryptographic Decision Log:** Every event is hash-chained (SHA-256), signed with an asymmetric **AWS KMS P-256** key, and checkpointed to write-once **Amazon S3 Object Lock** storage.
@@ -29,12 +29,12 @@ Reprieve creates a **deterministic governance spine** around a conversational Be
 ```mermaid
 flowchart LR
   subgraph Users
-    B[Borrower<br/>Private Mobile Link]
-    S[Ops Analyst / Manager]
+    B[Borrower<br/>Private Mobile Terminal]
+    S[Credit Ops Analyst / Manager]
   end
 
   subgraph Presentation
-    AMP[Amplify Hosting / Frontend<br/>Interactive Executive Console]
+    AMP[Amplify Hosting / Frontend<br/>Raw Design System Console]
   end
 
   subgraph API and Auth
@@ -84,18 +84,18 @@ flowchart LR
 
 ---
 
-## ☁️ 3. AWS Services and Why Each Was Chosen
+## ☁️ 3. AWS Free Tier ("Ship It" Column) Compliance
 
-| AWS Service | Role in Reprieve | Architectural Rationale |
+| AWS Service | Role in CreditShield | Architectural Rationale & Free Tier Fit |
 |---|---|---|
-| **Amazon Bedrock (Converse API)** | Conversational agent with deterministic tool use (Amazon Nova Lite). | Low-latency inference, zero third-party API key exposure, strict tool schema validation. |
-| **Amazon Verified Permissions** | Authoritative Cedar policy engine evaluating relief options. | Auditable policies managed as data, sub-millisecond evaluation, strict separation of reasoning from governance. |
-| **AWS Step Functions** | Human-in-the-loop task token callback workflow for manager approvals. | Resilient state management, native timeout handling, visual execution graphs. |
-| **AWS KMS (ECC_NIST_P256)** | Cryptographically signs every decision log hash digest. | Private signing key never leaves FIPS 140-2 Level 3 HSM hardware; non-repudiation guarantee. |
-| **Amazon S3 (Object Lock)** | WORM (Write Once, Read Many) checkpoints of the log head. | Prevents database history rewriting even with full database administrator access. |
-| **Amazon DynamoDB** | On-demand tables for accounts, cases, messages, and audit trail. | Serverless scaling with zero idle cost; single-digit millisecond latency. |
-| **AWS Lambda** | Stateless business logic handlers (Python 3.12). | Zero idle server cost, instant scaling per request. |
-| **Amazon Cognito** | Role-based authentication (groups: `ops`, `manager`). | Managed JWT auth directly integrated with API Gateway. |
+| **AWS Lambda** | Stateless business logic handlers (Python 3.12, arm64). | 1 Million free invocations/month; zero idle costs. |
+| **Amazon API Gateway** | HTTP API for public chat and authenticated staff routes. | Lower latency and cost than REST APIs; JWT authorizer natively integrated. |
+| **AWS Step Functions** | Human-in-the-loop task token callback workflow for manager approvals. | 4,000 free state transitions/month; auditable pause/resume. |
+| **Amazon DynamoDB** | On-demand tables for accounts, cases, messages, approvals, and logs. | 25 GB free storage; pay-per-request ensures zero standby bill. |
+| **Amazon Cognito** | Staff authentication and group authorization (`ops`, `manager`). | 50,000 Monthly Active Users (MAUs) free tier. |
+| **AWS KMS (ECC_NIST_P256)** | Cryptographically signs every decision log hash digest. | Asymmetric hardware signing key; private key never leaves HSM. |
+| **Amazon S3 (Object Lock)** | WORM (Write Once, Read Many) checkpoints of the log head. | 5 GB standard free tier; prevents database history tampering. |
+| **Amazon Bedrock (Converse API)** | Conversational agent with deterministic tool use (Amazon Nova Lite). | Lowest token cost ($0.0031/case); covered by starter credits. |
 | **AWS Amplify Hosting** | Monorepo hosting for the interactive frontend. | Automated CI/CD deployments directly from GitHub pushes. |
 
 ---
@@ -136,7 +136,7 @@ Each entry is signed using an **AWS KMS P-256 ECDSA** key. The UI features an in
 
 ## 📈 6. A/B Clinical Trial & Unit Economics
 
-| Metric | Treated Arm (Reprieve AI) | Control Arm (Standard Collections) | Net Impact |
+| Metric | Treated Arm (CreditShield AI) | Control Arm (Standard Collections) | Net Impact |
 |---|---|---|---|
 | **Cure Rate** | **74.5%** | 47.1% | **+27.4 pp Net Uplift** (p < 0.01) |
 | **Concession Cost** | ₹480 avg. | ₹0 | Concession cost is 3% of bad debt loss |
@@ -150,8 +150,8 @@ Each entry is signed using an **AWS KMS P-256 ECDSA** key. The UI features an in
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/<your-username>/reprieve.git
-cd reprieve
+git clone https://github.com/<your-username>/CreditShield.git
+cd CreditShield
 
 # 2. Run the interactive showpiece
 cd frontend
@@ -166,4 +166,4 @@ python -m http.server 3000
 ## ⚖️ 8. Honest Limitations & Disclosures
 - **Synthetic Data:** All borrower personas, names, and cash-flow figures are synthetic and illustrative.
 - **Illustrative Limits:** Concession limits (e.g. 10 days vs 30 days) are demo parameters for a fictional lender and not credit advice.
-- **AI Disclosure:** Reprieve discloses its AI identity in its opening conversation turn.
+- **AI Disclosure:** CreditShield discloses its AI identity in its opening conversation turn.
