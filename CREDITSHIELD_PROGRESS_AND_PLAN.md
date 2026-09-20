@@ -292,4 +292,74 @@ Grouped by component layer:
 - UI verified running on `http://localhost:3000/`.
 - Dual role switching seamlessly toggles between AI Autonomous Ops and Human Supervisor Takeover.
 - Raw Design Token System adhered to with 100% fidelity.
+- Pytest unit test suite (`backend/tests/test_unit.py`) verified: 7/7 passed.
+- Smoke test suite (`scripts/smoke.py`) verified: 6/6 pipeline stages passed 100%.
+
+---
+
+## 5. Complete Production Backend & RBAC Architecture (Parts 1-5 Implemented)
+
+### A. Cognito Auth Gateway & Role-Based Access Control (RBAC)
+- **Authentic Login Gateway (`#authOverlay`)**:
+  - Modal window on initial load if unauthenticated, with email/password inputs, Cognito authentication branding, and one-click demo login buttons:
+    - `[ QUICK LOGIN: AI OPS ]`: Signs in as `analyst@harbourfin.com` (Cognito: `ops` group).
+    - `[ QUICK LOGIN: SUPERVISOR ]`: Signs in as `raman.supervisor@harbourfin.com` (Cognito: `manager` group).
+  - Session state persists via `localStorage` across reloads.
+  - `#btnLogoutBtn` clears session, resets interface, and presents the Auth Gateway.
+- **Strict Role Boundaries**:
+  - **AI Ops Analyst**:
+    - Access to standard AI accounts (`ACC-1001` Meera, `ACC-1002` Arjun, `ACC-1003` Sana).
+    - `ACC-1004` (Vikram Rao) is locked with a restricted badge: clicking it displays an explicit 403 error toast (*"ACCESS DENIED (403): Case ACC-1004 is under legal hold and escalated to Senior Supervisor."*).
+    - Step Functions Approvals Queue is disabled with *"403: SUPERVISOR APPROVAL REQUIRED"*.
+    - Human Handoff Desk displays *"SUPERVISOR AUTHORIZATION REQUIRED (403 FORBIDDEN)"*.
+  - **Senior Human Supervisor**:
+    - Master access to all 4 hero scenarios, including `ACC-1004` Vikram Rao.
+    - Full authority to approve or reject Step Functions concession task tokens.
+    - Live chat takeover capabilities as Officer Raman.
+    - Unrestricted access to the **Human Handoff & Escalations Desk (Tab 07)**.
+
+### B. Real-Time Human Handoff Escalations Desk (Tab 07)
+- Whenever a borrower clicks `"HUMAN HANDOFF"` in the phone simulator or types distress phrases (*"human"*, *"person"*, *"help"*), a real-time ticket `HD-XXXX` is generated.
+- The ticket immediately queues into the **Supervisor Human Handoff Desk** with an updated badge counter (`#tabHandoffBadge`).
+- The supervisor can review the ticket, urgency, reason, and loan context, and click `[ CLAIM & TAKE OVER CHAT ]`.
+- Claiming automatically transitions into live Supervisor Takeover mode, loads the borrower's chat, focuses the terminal, and injects an officer takeover greeting into the conversation.
+
+### C. Backend Modular Suite (`backend/src/`)
+1. **Common Layer (`backend/src/common/`)**:
+   - `config.py`: Environment configurations for DynamoDB tables, KMS key, S3 bucket, Bedrock Nova Lite model, and limits.
+   - `jsonutil.py`: Canonical JSON serializer with Decimal normalization and whitespace stripping for SHA-256 digests.
+   - `money.py`: Plain integer arithmetic and Indian numbering format rupee display (`₹1,45,000`).
+   - `auth.py`: JWT claim extractor supporting list and bracketed-string representations of `cognito:groups`.
+   - `ddb.py`: DynamoDB data access layer for accounts, cases, messages, approvals, and decision logs.
+2. **Domain Layer (`backend/src/domain/`)**:
+   - `stress.py`: Deterministic, explainable pre-default stress scoring across 4 cash-flow factors (income drop, balance buffer, EMI proximity, debit bounces). Validated: Meera=73, Arjun=87, Sana=62, Vikram=74.
+   - `plan.py`: Plain-language deterministic relief plan summaries (due-date shift, partial plan, tenure extension, fee waiver).
+   - `adapters.py`: Simulated core banking adapter updating `next_due_date`, incrementing `prior_reliefs`, and calculating `concession_cost`.
+3. **Governance Layer (`backend/src/governance/`)**:
+   - `authorize.py`: Amazon Verified Permissions (Cedar) two-tier authorization engine (`AiAgent` -> `ALLOWED`, `Manager` -> `NEEDS_MANAGER_APPROVAL`, otherwise `DENIED`) with fail-closed security.
+   - `decisionlog.py`: SHA-256 sequential hash chaining, AWS KMS ECC P-256 asymmetric signing, S3 Object Lock checkpointing, and `verify_chain()` integrity verification.
+   - `verifier.py`: Anti-hallucination numeric verifier matching every extracted number against tool execution context.
+4. **Agent Layer (`backend/src/agent/`)**:
+   - `prompts.py`: System prompt v1 enforcing empathy, tool-grounded facts, and strict prohibition on negotiating terms outside Cedar.
+   - `tools.py`: Bedrock Converse tool specifications (`get_case_context`, `get_relief_options`, `propose_relief`, `request_human_handoff`).
+   - `loop.py`: Bedrock Converse API multi-turn execution loop with tool invocation and verification.
+   - `personas.py`: Automated simulation personas (`COOPERATIVE_GIG`, `PUSHY_SHOPKEEPER`, `JAILBREAKER`, `DISTRESSED`).
+5. **Lambda Handlers (`backend/src/handlers/`)**:
+   - `public_api.py`: Public borrower endpoints (`/health`, `/public/chat/{token}`, `/accept`, `/decline`, `/handoff`).
+   - `staff_api.py`: Authenticated staff endpoints (`/me`, `/accounts`, `/cases`, `/approvals`, `/metrics/impact`, `/admin/*`).
+   - `detect.py`: Pre-default stress detection batch evaluator.
+   - `wf_recheck.py`, `wf_request_approval.py`, `wf_apply_plan.py`, `wf_notify.py`, `wf_close.py`: Step Functions workflow tasks.
+
+### D. Cedar Policies & Infrastructure as Code
+- **11 Audited Cedar Policies (`cedar/policies/`)**:
+  - `P1`, `P3`, `P5`, `P7`: Autonomous AI Agent concession bounds.
+  - `P2`, `P4`, `P6`, `P8`: Manager discretionary approval bounds.
+  - `F1`, `F2`, `F3`: Global forbids for legal holds, excessive DPD, and repeat relief history.
+- **AWS SAM Template (`template.yaml`)**:
+  - Fully defines DynamoDB tables on-demand, API Gateway HTTP API, Cognito User Pool with `ops` and `manager` groups, KMS ECC P-256 key, S3 Object Lock bucket, all 8 Lambda functions, and the `ReliefCaseStateMachine` Step Functions workflow.
+- **Automation Scripts (`scripts/`)**:
+  - `scripts/seed.py`: Seeds 40 accounts (4 heroes + 36 filler portfolio accounts).
+  - `scripts/sync_policies.py`: Synchronizes Cedar policies to Amazon Verified Permissions.
+  - `scripts/create_users.py`: Provisions Cognito staff users for ops and management.
+  - `scripts/smoke.py`: End-to-end automated verification suite validating stress scoring, Cedar boundaries, plan summaries, hash chaining, and tamper detection.
 
