@@ -21,7 +21,7 @@ Parameters:
 
 Globals:
   Function:
-    Runtime: python3.12
+    Runtime: python3.14
     Architectures:
       - arm64
     MemorySize: 512
@@ -224,7 +224,7 @@ Resources:
           - OPTIONS
 
   # =========================================================================
-  # 6. LAMBDA FUNCTIONS (PYTHON 3.12, ARM64)
+  # 6. LAMBDA FUNCTIONS (PYTHON 3.14, ARM64)
   # =========================================================================
   PublicApiFunction:
     Type: AWS::Serverless::Function

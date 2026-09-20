@@ -79,7 +79,7 @@ The working title was transitioned to **CreditShield**:
 
 ### D. Strict AWS Free Tier ("Ship It" Column) Alignment
 Configured to run 100% within the AWS Free Tier and initial credits without paid subscriptions:
-- **Compute:** AWS Lambda (1 Million free requests/month, Python 3.12, arm64).
+- **Compute:** AWS Lambda (1 Million free requests/month, Python 3.14, arm64).
 - **API:** Amazon API Gateway (HTTP API with JWT authorizer).
 - **Workflows:** AWS Step Functions (4,000 free state transitions/month).
 - **Database:** Amazon DynamoDB (25 GB free storage, on-demand pricing).

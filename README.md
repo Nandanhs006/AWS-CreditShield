@@ -88,7 +88,7 @@ flowchart LR
 
 | AWS Service | Role in CreditShield | Architectural Rationale & Free Tier Fit |
 |---|---|---|
-| **AWS Lambda** | Stateless business logic handlers (Python 3.12, arm64). | 1 Million free invocations/month; zero idle costs. |
+| **AWS Lambda** | Stateless business logic handlers (Python 3.14, arm64). | 1 Million free invocations/month; zero idle costs. |
 | **Amazon API Gateway** | HTTP API for public chat and authenticated staff routes. | Lower latency and cost than REST APIs; JWT authorizer natively integrated. |
 | **AWS Step Functions** | Human-in-the-loop task token callback workflow for manager approvals. | 4,000 free state transitions/month; auditable pause/resume. |
 | **Amazon DynamoDB** | On-demand tables for accounts, cases, messages, approvals, and logs. | 25 GB free storage; pay-per-request ensures zero standby bill. |
