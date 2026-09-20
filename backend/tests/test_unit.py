@@ -228,3 +228,39 @@ def test_gemini_agent_provider(monkeypatch):
     assert plan["outcome"] == "ALLOWED"
 
 
+# 9. TEST SNS & SQS MESSAGING PIPELINE (Manager Alert, Fan-out, Telemetry)
+def test_sns_sqs_messaging_pipeline(monkeypatch):
+    from backend.src.domain import messaging
+    from backend.src.governance import decisionlog
+    monkeypatch.setattr(decisionlog, "append_log_entry", lambda *args, **kwargs: {"seq": 99})
+
+    plan = {
+        "account_id": "ACC-1002",
+        "borrower_name": "Arjun Mehta",
+        "action": "DUE_DATE_SHIFT",
+        "params": {"days": 30},
+        "summary": "Move next EMI of ₹14,500 by 30 days"
+    }
+
+    # 1. SNS Manager Alert publish
+    alert = messaging.publish_manager_approval_alert("CASE-1002", plan, "task-token-xyz-123456789")
+    assert alert["case_id"] == "CASE-1002"
+    assert "status" in alert
+    assert "sns" in alert["message_id"]
+
+    # 2. SNS Fan-Out to CoreBanking and Borrower queues
+    fanout = messaging.fan_out_relief_event("CASE-1002", {"account_id": "ACC-1002"}, plan, "APPROVED")
+    assert "CoreBankingSyncQueue" in fanout["target_queues"]
+    assert "BorrowerCommQueue" in fanout["target_queues"]
+
+    # 3. SQS Telemetry Ingestion Buffer
+    telemetry = messaging.buffer_telemetry_event({
+        "account_id": "ACC-1001",
+        "balance_buffer": 0.18,
+        "bounced_debits_60d": 1
+    })
+    assert telemetry["account_id"] == "ACC-1001"
+    assert telemetry["status"] in ("BUFFERED", "SIMULATED_BUFFERED")
+
+
+

@@ -1455,7 +1455,7 @@ function renderApprovalsQueue() {
     <div class="approval-queue-item">
       <div class="approval-item-header">
         <strong style="color: var(--text-main); font-size: 0.82rem; font-family: var(--font-mono);">
-          <i class="fa-solid fa-store" style="color: var(--accent-industrial); margin-right: 4px;"></i>
+          <span class="scenario-indicator arjun" style="display:inline-block; margin-right: 6px;"></span>
           Arjun Mehta (ACC-1002)
         </strong>
         <span class="status-badge-warning">30-DAY EXTENSION</span>
@@ -1466,6 +1466,10 @@ function renderApprovalsQueue() {
         <p style="margin-top: 3px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-terminal);">
           Authority Check: Supervisor tier permits up to 30 days (Policy P2). Awaiting supervisor confirmation.
         </p>
+        <div style="margin-top: 8px; display: flex; gap: 8px; align-items: center; font-size: 0.68rem; font-family: var(--font-mono); background: rgba(245, 158, 11, 0.08); padding: 5px 8px; border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-sm); color: #F59E0B;">
+          <i class="fa-solid fa-bell"></i>
+          <span><strong>Amazon SNS Alert Dispatched:</strong> Topic <code>creditshield-manager-approvals</code> (Push Delivered)</span>
+        </div>
       </div>
       <div class="approval-item-actions">
         ${isSupervisor ? `
@@ -1507,7 +1511,8 @@ function managerDecision(decision) {
       sfnNotify.innerHTML = `<span>5. NotifyBorrower & Close</span> <i class="fa-solid fa-check"></i>`;
 
       appendLogEntry('PLAN_APPLIED', 'Core Banking updated next_due_date to 2026-10-23. Concession applied.', 'SYSTEM');
-      showToast('Manager Decision Submitted: Plan Approved and Applied in Core Banking!', 'success');
+      appendLogEntry('EVENT_FANOUT', 'Post-Relief Event published: SNS ReliefEventsTopic -> SQS (CoreBankingSyncQueue & BorrowerCommQueue)', 'SYSTEM');
+      showToast('Manager Decision Submitted: Plan Approved & Event Fanned Out via SNS -> SQS!', 'success');
 
       // Update Case 1002 state
       ACCOUNTS_DB['ACC-1002'].caseStatus = 'APPLIED';

@@ -14,6 +14,11 @@ CHECKPOINTS_BUCKET = os.environ.get("CHECKPOINTS_BUCKET", "")
 POLICY_STORE_ID = os.environ.get("POLICY_STORE_ID", "")
 STATE_MACHINE_ARN = os.environ.get("STATE_MACHINE_ARN", "")
 
+MANAGER_APPROVAL_TOPIC_ARN = os.environ.get("MANAGER_APPROVAL_TOPIC_ARN", "")
+RELIEF_EVENTS_TOPIC_ARN = os.environ.get("RELIEF_EVENTS_TOPIC_ARN", "")
+TELEMETRY_QUEUE_URL = os.environ.get("TELEMETRY_QUEUE_URL", "")
+CORE_BANKING_SYNC_QUEUE_URL = os.environ.get("CORE_BANKING_SYNC_QUEUE_URL", "")
+
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "apac.amazon.nova-lite-v1:0")
 LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "bedrock")  # "bedrock" or "gemini"
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")

@@ -730,6 +730,22 @@
                       <p style="font-size: 0.7rem; color: var(--text-muted);">Write-once WORM checkpoints of log head to prevent retroactive database tampering. 5 GB free tier.</p>
                     </div>
                   </div>
+
+                  <div class="arch-service-row">
+                    <div class="arch-icon-box" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.4);"><i class="fa-solid fa-bell" style="color: #F59E0B;"></i></div>
+                    <div>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">Amazon SNS (Manager Alerts & Fan-Out)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Publishes instant manager approval alerts on task-token pause; fans out applied relief events to CBS and borrower notification channels. 1M free publishes.</p>
+                    </div>
+                  </div>
+
+                  <div class="arch-service-row">
+                    <div class="arch-icon-box" style="background: rgba(139, 92, 246, 0.15); border-color: rgba(139, 92, 246, 0.4);"><i class="fa-solid fa-layer-group" style="color: #8B5CF6;"></i></div>
+                    <div>
+                      <strong style="color: var(--text-main); font-size: 0.8rem; font-family: var(--font-mono);">Amazon SQS (Telemetry Queue & DLQ)</strong>
+                      <p style="font-size: 0.7rem; color: var(--text-muted);">Buffers high-throughput transaction dips and debit bounces into micro-batches, preventing DynamoDB write throttle with automated dead-letter queues. 1M free requests.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 

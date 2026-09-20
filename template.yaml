@@ -406,6 +406,94 @@ Resources:
         - LambdaInvokePolicy:
             FunctionName: !Ref WfCloseFunction
 
+  # =========================================================================
+  # 8. AMAZON SNS & AMAZON SQS MESSAGING ARCHITECTURE
+  # =========================================================================
+  ManagerApprovalTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: creditshield-manager-approvals
+      DisplayName: CreditShield Escalated Approvals
+
+  ReliefEventsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: creditshield-relief-events
+      DisplayName: CreditShield Relief Decisions Fan-Out
+
+  TelemetryDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: creditshield-telemetry-dlq
+      MessageRetentionPeriod: 1209600
+
+  TelemetryQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: creditshield-telemetry-queue
+      VisibilityTimeout: 90
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt TelemetryDLQ.Arn
+        maxReceiveCount: 3
+
+  CoreBankingSyncQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: creditshield-cbs-sync-queue
+
+  BorrowerCommQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: creditshield-borrower-comm-queue
+
+  CbsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref ReliefEventsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt CoreBankingSyncQueue.Arn
+      RawMessageDelivery: true
+
+  CommSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref ReliefEventsTopic
+      Protocol: sqs
+      Endpoint: !GetAtt BorrowerCommQueue.Arn
+      RawMessageDelivery: true
+
+  CbsQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref CoreBankingSyncQueue
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: sns.amazonaws.com
+            Action: sqs:SendMessage
+            Resource: !GetAtt CoreBankingSyncQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ReliefEventsTopic
+
+  CommQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref BorrowerCommQueue
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: sns.amazonaws.com
+            Action: sqs:SendMessage
+            Resource: !GetAtt BorrowerCommQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref ReliefEventsTopic
+
 Outputs:
   ApiUrl:
     Description: HTTP API Stage Endpoint
@@ -425,4 +513,17 @@ Outputs:
   StateMachineArn:
     Description: Step Functions State Machine ARN
     Value: !Ref ReliefCaseStateMachine
+  ManagerApprovalTopicArn:
+    Description: SNS Topic for Escalated Case Approvals
+    Value: !Ref ManagerApprovalTopic
+  ReliefEventsTopicArn:
+    Description: SNS Topic for Post-Relief Fan-Out
+    Value: !Ref ReliefEventsTopic
+  TelemetryQueueUrl:
+    Description: SQS Telemetry Buffer Queue URL
+    Value: !Ref TelemetryQueue
+  CoreBankingSyncQueueUrl:
+    Description: SQS Core Banking Fan-Out Queue URL
+    Value: !Ref CoreBankingSyncQueue
+
 
