@@ -226,13 +226,11 @@ body {
 }
 
 .brand-logo-img {
-  height: 32px;
+  height: 42px;
   width: auto;
-  max-width: 80px;
+  max-width: 160px;
   object-fit: contain;
-  border: var(--border-weight) solid var(--border);
-  background: var(--surface-alt);
-  padding: 2px 4px;
+  display: block;
 }
 
 .brand-logo-badge {
