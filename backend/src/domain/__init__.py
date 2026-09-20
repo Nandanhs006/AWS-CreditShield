@@ -1,0 +1,3 @@
+"""
+CreditShield Domain Logic
+"""

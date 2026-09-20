@@ -1877,3 +1877,308 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   AUTH MODAL / OVERLAY (COGNITO INDUSTRIAL TERMINAL)
+   ========================================================================== */
+.auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-modal-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface);
+  border: 2px solid var(--border-strong);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-weight) solid var(--border);
+  padding-bottom: 0.85rem;
+}
+
+.auth-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-brand-row h3 {
+  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.auth-brand-row p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.auth-badge-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: var(--surface-alt);
+  border: var(--border-weight) solid var(--border);
+  color: var(--accent-terminal);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-field label {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.auth-input {
+  width: 100%;
+  background: var(--surface-alt);
+  border: var(--border-weight) solid var(--border);
+  padding: 8px 10px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  border-radius: var(--radius-sharp);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--accent-industrial);
+}
+
+.btn-auth-submit {
+  width: 100%;
+  padding: 10px;
+  background: var(--accent-industrial);
+  border: var(--border-weight) solid var(--accent-industrial);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-auth-submit:hover {
+  filter: brightness(1.1);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  margin: 0.25rem 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: var(--border-weight) solid var(--border);
+}
+
+.auth-divider span {
+  padding: 0 10px;
+}
+
+.quick-auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.btn-quick-auth {
+  background: var(--surface-alt);
+  border: var(--border-weight) solid var(--border);
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-quick-auth:hover {
+  border-color: var(--accent-industrial);
+  background: var(--surface);
+}
+
+.quick-auth-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+}
+
+.quick-auth-email {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.quick-auth-desc {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.auth-footer-note {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  border-top: var(--border-weight) solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.btn-toggle-role.logout {
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
+}
+
+.btn-toggle-role.logout:hover {
+  background: var(--accent-danger);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   HUMAN HANDOFF ESCALATIONS DESK
+   ========================================================================== */
+.handoff-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1rem;
+}
+
+.handoff-ticket-card {
+  background: var(--surface);
+  border: var(--border-weight) solid var(--border);
+  border-left: 4px solid var(--accent-danger);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.handoff-ticket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.handoff-ticket-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.handoff-ticket-meta {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.handoff-urgency-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(224, 46, 36, 0.1);
+  color: var(--accent-danger);
+  border: var(--border-weight) solid var(--accent-danger);
+}
+
+.handoff-ticket-body {
+  font-size: 0.75rem;
+  color: var(--text-main);
+  background: var(--surface-alt);
+  padding: 8px;
+  border: var(--border-weight) solid var(--border);
+}
+
+.handoff-ticket-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-claim-handoff {
+  background: var(--accent-industrial);
+  color: #FFFFFF;
+  border: none;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-claim-handoff:hover {
+  filter: brightness(1.1);
+}
+
+.scenario-btn.restricted {
+  opacity: 0.45;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.scenario-btn.restricted::after {
+  content: 'RESTRICTED';
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  font-size: 0.5rem;
+  background: var(--accent-danger);
+  color: #FFFFFF;
+  padding: 1px 3px;
+  font-family: var(--font-mono);
+}
+

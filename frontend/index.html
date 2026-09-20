@@ -45,10 +45,13 @@
 
       <!-- Dual Role Switcher & Auth Section -->
       <div class="role-auth-section">
-        <span id="currentUserEmail" class="mono" style="font-size:0.68rem; color:var(--text-muted); display:none;">analyst@harbourfin.com</span>
-        <span id="roleBadgeChip" class="role-tag-pill ops">AI OPS (4 AGENTS)</span>
+        <span id="currentUserEmail" class="mono" style="font-size:0.68rem; color:var(--text-muted);">analyst@harbourfin.com</span>
+        <span id="roleBadgeChip" class="role-tag-pill ops">AI OPS</span>
         <button id="btnSwitchRole" class="btn-toggle-role" onclick="toggleDualRole()" title="Switch between AI Operations and Supervisor Human Oversight">
           <i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR
+        </button>
+        <button id="btnLogoutBtn" class="btn-toggle-role logout" onclick="handleLogout()" title="Log out of current session">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> LOGOUT
         </button>
       </div>
 
@@ -276,6 +279,9 @@
           </button>
           <button id="tabBtnArch" class="tab-btn" onclick="switchTab('arch')">
             [06] AWS FREE TIER TOPOLOGY
+          </button>
+          <button id="tabBtnHandoff" class="tab-btn" onclick="switchTab('handoff')">
+            [07] HUMAN HANDOFF DESK <span id="tabHandoffBadge" class="badge-count" style="color:var(--accent-danger);">1</span>
           </button>
         </nav>
 
@@ -755,9 +761,94 @@
             </div>
           </div>
 
+          <!-- ==============================================================
+               TAB 7: SUPERVISOR HUMAN HANDOFF ESCALATIONS DESK
+               ============================================================== -->
+          <div id="tabHandoff" class="tab-pane">
+            <div class="section-control-bar">
+              <div class="section-title">
+                <h2><i class="fa-solid fa-headset" style="color: var(--accent-danger);"></i> HUMAN HANDOFF & ESCALATIONS DESK</h2>
+                <p>Real-time queue of cases where automated AI resolution was blocked by Cedar policy, legal holds, or borrower distress signals</p>
+              </div>
+              <div class="filter-button-group">
+                <span class="role-tag-pill supervisor">COGNITO: CREDIT_MANAGERS</span>
+                <button class="btn-industrial" onclick="refreshHandoffDesk()">
+                  <i class="fa-solid fa-rotate"></i> REFRESH QUEUE
+                </button>
+              </div>
+            </div>
+
+            <div id="handoffTicketsContainer" class="handoff-tickets-grid">
+              <!-- Dynamically rendered escalation tickets -->
+            </div>
+          </div>
+
         </div>
       </section>
     </main>
+
+    <!-- ====================================================================
+         AUTH LOGIN MODAL / OVERLAY (COGNITO INDUSTRIAL TERMINAL)
+         ==================================================================== -->
+    <div id="authOverlay" class="auth-overlay" style="display:none;">
+      <div class="auth-modal-card">
+        <div class="auth-modal-header">
+          <div class="auth-brand-row">
+            <img src="logo-light.png" alt="CreditShield" class="brand-logo-img">
+            <div>
+              <h3>CREDITSHIELD // AUTH GATEWAY</h3>
+              <p>Amazon Cognito Identity Pool &bull; Staff Authentication</p>
+            </div>
+          </div>
+          <span class="auth-badge-tag">SECURE JWT</span>
+        </div>
+
+        <form id="authLoginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
+          <div class="auth-field">
+            <label for="authEmailInput"><i class="fa-solid fa-envelope"></i> STAFF EMAIL</label>
+            <input type="email" id="authEmailInput" class="auth-input" placeholder="analyst@harbourfin.com or raman.supervisor@harbourfin.com" required>
+          </div>
+          <div class="auth-field">
+            <label for="authPasswordInput"><i class="fa-solid fa-lock"></i> PASSWORD</label>
+            <input type="password" id="authPasswordInput" class="auth-input" placeholder="••••••••••••" value="CreditShield2026!" required>
+          </div>
+          <div class="auth-actions-row">
+            <button type="submit" class="btn-auth-submit">
+              <i class="fa-solid fa-key"></i> SIGN IN WITH COGNITO
+            </button>
+          </div>
+        </form>
+
+        <div class="auth-divider">
+          <span>OR SELECT DEMO PERSONA</span>
+        </div>
+
+        <div class="quick-auth-grid">
+          <button class="btn-quick-auth" onclick="quickLogin('ops')">
+            <div class="quick-auth-title">
+              <i class="fa-solid fa-robot" style="color:var(--accent-industrial);"></i>
+              <strong>AI OPERATIONS ANALYST</strong>
+            </div>
+            <span class="quick-auth-email mono">analyst@harbourfin.com</span>
+            <span class="quick-auth-desc">Standard access &bull; 3 Hero Scenarios (Meera, Arjun, Sana) &bull; Manager approvals restricted</span>
+          </button>
+
+          <button class="btn-quick-auth" onclick="quickLogin('supervisor')">
+            <div class="quick-auth-title">
+              <i class="fa-solid fa-user-tie" style="color:var(--accent-terminal);"></i>
+              <strong>SENIOR HUMAN SUPERVISOR</strong>
+            </div>
+            <span class="quick-auth-email mono">raman.supervisor@harbourfin.com</span>
+            <span class="quick-auth-desc">Full Master access &bull; All 4 AI Ops &bull; Live chat takeover &bull; Human Handoff Desk &bull; Discretionary approvals</span>
+          </button>
+        </div>
+
+        <div class="auth-footer-note">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Protected by Amazon Cognito User Pool &bull; Group-based RBAC (`ops`, `manager`)</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Toast Notification (Brutalist Banner) -->
     <div class="toast-container">

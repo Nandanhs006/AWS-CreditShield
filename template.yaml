@@ -223,6 +223,189 @@ Resources:
           - POST
           - OPTIONS
 
+  # =========================================================================
+  # 6. LAMBDA FUNCTIONS (PYTHON 3.12, ARM64)
+  # =========================================================================
+  PublicApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.public_api.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccountsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CasesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MessagesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+        - KMSKeyPolicy:
+            KeyId: !Ref SigningKey
+        - S3WritePolicy:
+            BucketName: !Ref CheckpointsBucket
+      Events:
+        Health:
+          Type: HttpApi
+          Properties:
+            Path: /health
+            Method: GET
+            ApiId: !Ref HttpApi
+        PublicChatRoot:
+          Type: HttpApi
+          Properties:
+            Path: /public/chat/{token}
+            Method: GET
+            ApiId: !Ref HttpApi
+        PublicChatMessage:
+          Type: HttpApi
+          Properties:
+            Path: /public/chat/{token}
+            Method: POST
+            ApiId: !Ref HttpApi
+        PublicChatAccept:
+          Type: HttpApi
+          Properties:
+            Path: /public/chat/{token}/accept
+            Method: POST
+            ApiId: !Ref HttpApi
+        PublicChatDecline:
+          Type: HttpApi
+          Properties:
+            Path: /public/chat/{token}/decline
+            Method: POST
+            ApiId: !Ref HttpApi
+        PublicChatHandoff:
+          Type: HttpApi
+          Properties:
+            Path: /public/chat/{token}/handoff
+            Method: POST
+            ApiId: !Ref HttpApi
+
+  StaffApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.staff_api.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccountsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CasesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MessagesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ApprovalsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+        - KMSKeyPolicy:
+            KeyId: !Ref SigningKey
+        - S3WritePolicy:
+            BucketName: !Ref CheckpointsBucket
+      Events:
+        StaffRoutes:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            ApiId: !Ref HttpApi
+
+  DetectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.detect.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccountsTable
+
+  # Step Functions Task Handlers
+  WfRecheckFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.wf_recheck.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccountsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+
+  WfRequestApprovalFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.wf_request_approval.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CasesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ApprovalsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+
+  WfApplyPlanFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.wf_apply_plan.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref AccountsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CasesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+
+  WfNotifyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.wf_notify.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MessagesTable
+
+  WfCloseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/src/
+      Handler: handlers.wf_close.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CasesTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref DecisionLogTable
+        - S3WritePolicy:
+            BucketName: !Ref CheckpointsBucket
+
+  # =========================================================================
+  # 7. STEP FUNCTIONS STATE MACHINE
+  # =========================================================================
+  ReliefCaseStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      DefinitionUri: statemachine/relief_case.asl.json
+      DefinitionSubstitutions:
+        WfRecheckFnArn: !GetAtt WfRecheckFunction.Arn
+        WfRequestApprovalFnArn: !GetAtt WfRequestApprovalFunction.Arn
+        WfApplyFnArn: !GetAtt WfApplyPlanFunction.Arn
+        WfRejectFnArn: !GetAtt WfNotifyFunction.Arn
+        WfNotifyFnArn: !GetAtt WfNotifyFunction.Arn
+        WfCloseFnArn: !GetAtt WfCloseFunction.Arn
+        WfHandoffFnArn: !GetAtt WfCloseFunction.Arn
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WfRecheckFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WfRequestApprovalFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WfApplyPlanFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WfNotifyFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref WfCloseFunction
+
 Outputs:
   ApiUrl:
     Description: HTTP API Stage Endpoint
@@ -239,3 +422,7 @@ Outputs:
   SigningKeyArn:
     Description: KMS Asymmetric Key ARN
     Value: !GetAtt SigningKey.Arn
+  StateMachineArn:
+    Description: Step Functions State Machine ARN
+    Value: !Ref ReliefCaseStateMachine
+

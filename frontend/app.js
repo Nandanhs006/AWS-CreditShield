@@ -6,11 +6,27 @@
 
 // Global State
 let currentTheme = 'dark'; // 'dark' (Graphite Terminal) or 'light' (Paper Sheet)
-let currentRole = 'ops'; // 'ops' (AI Operations & 4 Hero Agents) or 'supervisor' (Human Officer Raman)
+let currentRole = 'ops'; // 'ops' (AI Operations) or 'supervisor' (Human Officer Raman)
+let isAuthenticated = true;
 let activeAccountId = 'ACC-1001';
 let activeFilter = 'ALL';
 let isTampered = false;
 let tamperOriginalEntry = null;
+
+// Supervisor Human Handoff Queue
+let HANDOFF_TICKETS = [
+  {
+    ticketId: 'HD-1004',
+    accountId: 'ACC-1004',
+    name: 'Vikram Rao',
+    segment: 'SALARIED',
+    emi: 11000,
+    reason: 'Active legal dispute attached to account. Automated relief blocked by Cedar policy F1. Immediate human specialist required.',
+    urgency: 'HIGH',
+    timestamp: '10:45 AM',
+    status: 'PENDING'
+  }
+];
 
 // ==========================================================================
 // SEED DATABASE: HERO & PORTFOLIO ACCOUNTS
@@ -377,11 +393,28 @@ when {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
   renderPortfolioTable();
-  loadHeroScenario('ACC-1001');
   renderToolTraces();
   renderApprovalsQueue();
   renderCryptoTimeline();
+  renderHandoffDesk();
   startClock();
+
+  // Session state & initial Auth display
+  const savedRole = localStorage.getItem('creditshield_user_role');
+  const savedEmail = localStorage.getItem('creditshield_user_email');
+  if (savedRole && savedEmail) {
+    isAuthenticated = true;
+    const overlay = document.getElementById('authOverlay');
+    if (overlay) overlay.style.display = 'none';
+    applyRole(savedRole, savedEmail);
+  } else {
+    isAuthenticated = false;
+    const overlay = document.getElementById('authOverlay');
+    if (overlay) overlay.style.display = 'flex';
+    applyRole('ops');
+  }
+
+  loadHeroScenario('ACC-1001');
 });
 
 function startClock() {
@@ -398,6 +431,12 @@ function startClock() {
 // HERO SCENARIO SWITCHER
 // ==========================================================================
 function loadHeroScenario(accountId) {
+  // RBAC Enforcement: AI Ops is restricted from Vikram Rao (Legal Hold)
+  if (currentRole === 'ops' && accountId === 'ACC-1004') {
+    showToast('ACCESS DENIED (403): Case ACC-1004 is under legal hold and escalated to Senior Supervisor.', 'warning');
+    return;
+  }
+
   activeAccountId = accountId;
   const account = ACCOUNTS_DB[accountId];
   if (!account) return;
@@ -522,8 +561,8 @@ function createPlanCardElement(plan) {
 // ==========================================================================
 // DUAL ROLE SWITCHING & AUTH (AI OPS VS SUPERVISOR HUMAN)
 // ==========================================================================
-function toggleDualRole() {
-  currentRole = currentRole === 'ops' ? 'supervisor' : 'ops';
+function applyRole(role, email = null) {
+  currentRole = role;
 
   const roleBadge = document.getElementById('roleBadgeChip');
   const btnSwitch = document.getElementById('btnSwitchRole');
@@ -532,9 +571,11 @@ function toggleDualRole() {
   const toolbar = document.getElementById('supervisorActionToolbar');
   const chips = document.getElementById('phoneScenarioChips');
   const chatInput = document.getElementById('phoneChatInput');
+  const btnVikram = document.getElementById('btnHeroVikram');
+  const tabHandoff = document.getElementById('tabBtnHandoff');
 
   if (currentRole === 'supervisor') {
-    // Switch to Supervisor / Human Oversight mode
+    // Supervisor Mode: Full Unrestricted Master Access
     if (roleBadge) {
       roleBadge.textContent = 'SUPERVISOR (HUMAN)';
       roleBadge.className = 'role-tag-pill supervisor';
@@ -543,7 +584,7 @@ function toggleDualRole() {
       btnSwitch.innerHTML = '<i class="fa-solid fa-robot"></i> SWITCH TO AI OPS';
     }
     if (userEmail) {
-      userEmail.textContent = 'raman.supervisor@harbourfin.com';
+      userEmail.textContent = email || 'raman.supervisor@harbourfin.com';
       userEmail.style.display = 'inline-block';
     }
     if (banner) {
@@ -558,23 +599,27 @@ function toggleDualRole() {
     if (chatInput) {
       chatInput.placeholder = 'Type response as Human Supervisor (Officer Raman)...';
     }
+    if (btnVikram) {
+      btnVikram.classList.remove('restricted');
+      btnVikram.title = 'Vikram Rao (Legal Hold - Escalated)';
+    }
+    if (tabHandoff) {
+      tabHandoff.style.display = 'inline-flex';
+    }
 
-    // Auto-navigate to approvals / concession queue
-    switchTab('approvals');
-    appendLogEntry('ROLE_SWITCH', 'Auth session switched to Human Supervisor: Raman (Cognito: CreditManagersGroup)', 'SUPERVISOR');
-    showToast('Authenticated as Human Supervisor (Officer Raman)', 'success');
+    appendLogEntry('ROLE_SWITCH', 'Auth session: Human Supervisor (Cognito: CreditManagersGroup)', 'SUPERVISOR');
   } else {
-    // Switch back to AI Operations mode (4 hero scenarios)
+    // AI Operations Mode: Restricted Access (Only 3 Hero accounts; no Vikram; no approvals)
     if (roleBadge) {
-      roleBadge.textContent = 'AI OPS (4 AGENTS)';
+      roleBadge.textContent = 'AI OPS';
       roleBadge.className = 'role-tag-pill ops';
     }
     if (btnSwitch) {
       btnSwitch.innerHTML = '<i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR';
     }
     if (userEmail) {
-      userEmail.textContent = 'analyst@harbourfin.com';
-      userEmail.style.display = 'none';
+      userEmail.textContent = email || 'analyst@harbourfin.com';
+      userEmail.style.display = 'inline-block';
     }
     if (banner) {
       banner.classList.remove('active');
@@ -588,10 +633,162 @@ function toggleDualRole() {
     if (chatInput) {
       chatInput.placeholder = 'Enter message to CreditShield Assistant...';
     }
+    if (btnVikram) {
+      btnVikram.classList.add('restricted');
+      btnVikram.title = 'Restricted: Legal Hold Escalated to Supervisor';
+    }
 
-    appendLogEntry('ROLE_SWITCH', 'Auth session switched to AI Operations & 4 Hero Agents', 'SYSTEM');
-    showToast('Switched to Autonomous AI Operations Mode', 'info');
+    // If currently on Vikram, force switch to Meera
+    if (activeAccountId === 'ACC-1004') {
+      loadHeroScenario('ACC-1001');
+    }
+
+    appendLogEntry('ROLE_SWITCH', 'Auth session: AI Operations (Cognito: OperationsGroup)', 'SYSTEM');
   }
+
+  renderApprovalsQueue();
+  renderHandoffDesk();
+}
+
+function toggleDualRole() {
+  const newRole = currentRole === 'ops' ? 'supervisor' : 'ops';
+  applyRole(newRole);
+  if (newRole === 'supervisor') {
+    switchTab('approvals');
+    showToast('Switched to Human Supervisor Mode (Cognito: CreditManagersGroup)', 'success');
+  } else {
+    switchTab('portfolio');
+    showToast('Switched to AI Operations Mode (Standard Access)', 'info');
+  }
+}
+
+function handleLogout() {
+  isAuthenticated = false;
+  localStorage.removeItem('creditshield_user_role');
+  localStorage.removeItem('creditshield_user_email');
+  const overlay = document.getElementById('authOverlay');
+  if (overlay) overlay.style.display = 'flex';
+  showToast('Logged out of Cognito session. Please sign in.', 'info');
+}
+
+function handleLoginSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('authEmailInput').value.trim();
+  const role = (email.toLowerCase().includes('supervisor') || email.toLowerCase().includes('manager')) ? 'supervisor' : 'ops';
+  
+  isAuthenticated = true;
+  localStorage.setItem('creditshield_user_role', role);
+  localStorage.setItem('creditshield_user_email', email);
+  document.getElementById('authOverlay').style.display = 'none';
+  applyRole(role, email);
+  showToast(`Signed in successfully as ${email}`, 'success');
+}
+
+function quickLogin(role) {
+  const email = role === 'supervisor' ? 'raman.supervisor@harbourfin.com' : 'analyst@harbourfin.com';
+  isAuthenticated = true;
+  localStorage.setItem('creditshield_user_role', role);
+  localStorage.setItem('creditshield_user_email', email);
+  document.getElementById('authOverlay').style.display = 'none';
+  applyRole(role, email);
+  showToast(`Signed in as ${role === 'supervisor' ? 'Senior Supervisor (Raman)' : 'AI Operations Analyst'}`, 'success');
+}
+
+// ==========================================================================
+// HUMAN HANDOFF DESK
+// ==========================================================================
+function renderHandoffDesk() {
+  const container = document.getElementById('handoffTicketsContainer');
+  const badge = document.getElementById('tabHandoffBadge');
+  if (badge) badge.textContent = HANDOFF_TICKETS.length;
+  if (!container) return;
+
+  if (currentRole === 'ops') {
+    container.innerHTML = `
+      <div style="padding: 2rem; background: var(--surface); border: var(--border-weight) solid var(--border); text-align: center;">
+        <i class="fa-solid fa-lock" style="font-size: 2rem; color: var(--accent-danger); margin-bottom: 0.75rem;"></i>
+        <h3 style="font-family: var(--font-mono); color: var(--text-main);">SUPERVISOR AUTHORIZATION REQUIRED (403 FORBIDDEN)</h3>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+          The Human Handoff Desk is reserved for Senior Credit Resolution Officers (Cognito: CreditManagersGroup).<br/>
+          Switch to Supervisor role in the header to claim and manage escalated handoffs.
+        </p>
+        <button class="btn-industrial" style="margin-top: 1rem;" onclick="toggleDualRole()">
+          <i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  if (HANDOFF_TICKETS.length === 0) {
+    container.innerHTML = `
+      <div style="padding: 2rem; background: var(--surface); border: var(--border-weight) solid var(--border); text-align: center;">
+        <i class="fa-solid fa-circle-check" style="font-size: 2rem; color: var(--accent-terminal); margin-bottom: 0.75rem;"></i>
+        <h3 style="font-family: var(--font-mono); color: var(--text-main);">ALL ESCALATIONS RESOLVED</h3>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+          Zero pending handoff tickets. AI Operations are operating autonomously within Cedar boundaries.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = '';
+  HANDOFF_TICKETS.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'handoff-ticket-card';
+    card.innerHTML = `
+      <div class="handoff-ticket-header">
+        <div>
+          <div class="handoff-ticket-title">${t.name} (${t.accountId})</div>
+          <div class="handoff-ticket-meta">${t.segment || 'PERSONAL_LOAN'} &bull; ₹${t.emi.toLocaleString('en-IN')} EMI &bull; ${t.timestamp}</div>
+        </div>
+        <span class="handoff-urgency-badge">${t.urgency} URGENCY</span>
+      </div>
+      <div class="handoff-ticket-body">
+        <strong>ESCALATION REASON:</strong> ${t.reason}
+      </div>
+      <div class="handoff-ticket-actions">
+        <button class="btn-claim-handoff" onclick="claimHandoffTicket('${t.accountId}', '${t.ticketId}')">
+          <i class="fa-solid fa-headset"></i> CLAIM & TAKE OVER CHAT
+        </button>
+        <button class="btn-plan-decline" onclick="dismissHandoffTicket('${t.ticketId}')">
+          DISMISS TICKET
+        </button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function refreshHandoffDesk() {
+  renderHandoffDesk();
+  showToast('Handoff Queue refreshed', 'info');
+}
+
+function claimHandoffTicket(accountId, ticketId) {
+  // Ensure supervisor mode
+  if (currentRole !== 'supervisor') {
+    applyRole('supervisor');
+  }
+
+  // Remove ticket from queue
+  HANDOFF_TICKETS = HANDOFF_TICKETS.filter(t => t.ticketId !== ticketId);
+  renderHandoffDesk();
+
+  // Load account
+  loadHeroScenario(accountId);
+
+  // Focus left pane / phone
+  supervisorSendQuick(`Hello, this is Officer Raman from Hardship Operations. I have claimed your handoff ticket (${ticketId}) directly. How can I best assist you today?`);
+
+  showToast(`Claimed Ticket ${ticketId}! Live Supervisor session started with ${ACCOUNTS_DB[accountId].name}.`, 'success');
+}
+
+function dismissHandoffTicket(ticketId) {
+  HANDOFF_TICKETS = HANDOFF_TICKETS.filter(t => t.ticketId !== ticketId);
+  renderHandoffDesk();
+  showToast(`Ticket ${ticketId} dismissed.`, 'info');
 }
 
 function supervisorSendQuick(text) {
@@ -871,8 +1068,24 @@ function triggerHumanHandoff() {
   document.getElementById('caseDetailStatusBadge').textContent = 'ESCALATED // SPECIALIST';
   document.getElementById('caseDetailStatusBadge').className = 'status-badge-danger';
 
-  appendLogEntry('HANDOFF_REQUESTED', 'Borrower requested human handoff. Reason: Direct request or legal restriction.', 'SYSTEM');
-  showToast('Human handoff ticket generated (Priority: High)', 'warning');
+  // Push ticket to Human Handoff Queue
+  const account = ACCOUNTS_DB[activeAccountId];
+  const newTicketId = `HD-${Math.floor(1000 + Math.random() * 9000)}`;
+  HANDOFF_TICKETS.unshift({
+    ticketId: newTicketId,
+    accountId: activeAccountId,
+    name: account ? account.name : 'Borrower',
+    segment: account ? account.segment : 'PERSONAL_LOAN',
+    emi: account ? account.emi : 5000,
+    reason: `Borrower initiated human handoff request from terminal. Cedar restriction or borrower distress noted.`,
+    urgency: 'HIGH',
+    timestamp: timeStr,
+    status: 'PENDING'
+  });
+  renderHandoffDesk();
+
+  appendLogEntry('HANDOFF_REQUESTED', `Borrower requested human handoff. Ticket ${newTicketId} queued in Supervisor Desk.`, 'SYSTEM');
+  showToast(`Human Handoff Ticket ${newTicketId} generated for Supervisor Desk!`, 'warning');
 }
 
 // ==========================================================================
@@ -1042,6 +1255,8 @@ function renderApprovalsQueue() {
   const container = document.getElementById('approvalQueueContainer');
   if (!container) return;
 
+  const isSupervisor = currentRole === 'supervisor';
+
   container.innerHTML = `
     <div class="approval-queue-item">
       <div class="approval-item-header">
@@ -1059,12 +1274,18 @@ function renderApprovalsQueue() {
         </p>
       </div>
       <div class="approval-item-actions">
-        <button class="btn-approve" onclick="managerDecision('APPROVED')">
-          <i class="fa-solid fa-check"></i> APPROVE CONCESSION
-        </button>
-        <button class="btn-reject" onclick="managerDecision('REJECTED')">
-          <i class="fa-solid fa-xmark"></i> REJECT
-        </button>
+        ${isSupervisor ? `
+          <button class="btn-approve" onclick="managerDecision('APPROVED')">
+            <i class="fa-solid fa-check"></i> APPROVE CONCESSION
+          </button>
+          <button class="btn-reject" onclick="managerDecision('REJECTED')">
+            <i class="fa-solid fa-xmark"></i> REJECT
+          </button>
+        ` : `
+          <button class="btn-approve" style="opacity: 0.45; cursor: not-allowed;" onclick="showToast('403 Forbidden: Only Senior Supervisor (manager group) can approve Step Functions task tokens.', 'warning')">
+            <i class="fa-solid fa-lock"></i> 403: SUPERVISOR APPROVAL REQUIRED
+          </button>
+        `}
       </div>
     </div>
   `;
@@ -1255,7 +1476,7 @@ function renderToolTraces() {
 // TAB SWITCHING
 // ==========================================================================
 function switchTab(tabId) {
-  const tabs = ['portfolio', 'case', 'approvals', 'audit', 'impact', 'arch'];
+  const tabs = ['portfolio', 'case', 'approvals', 'audit', 'impact', 'arch', 'handoff'];
   tabs.forEach(t => {
     const pane = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
     const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
