@@ -13,6 +13,7 @@ from . import prompts
 from . import tools
 from ..governance import verifier
 from ..governance import decisionlog
+from . import gemini_agent
 
 _bedrock = None
 
@@ -81,77 +82,87 @@ def run_agent_turn(case: Dict[str, Any], account: Dict[str, Any], new_borrower_t
     verifier_status = "pass"
     proposed_plan = None
 
-    # Try executing Bedrock Converse loop
-    try:
-        bedrock = get_bedrock()
-        iterations = 0
-
-        while iterations < 6:
-            iterations += 1
-            response = bedrock.converse(
-                modelId=config.BEDROCK_MODEL_ID,
-                messages=messages,
-                system=system_prompt,
-                toolConfig=tool_config,
-                inferenceConfig={"maxTokens": 400, "temperature": 0.2}
-            )
-
-            output_msg = response.get("output", {}).get("message", {})
-            stop_reason = response.get("stopReason", "end_turn")
-            messages.append(output_msg)
-
-            if stop_reason == "tool_use":
-                tool_results = []
-                for content_block in output_msg.get("content", []):
-                    if "toolUse" in content_block:
-                        t_use = content_block["toolUse"]
-                        t_name = t_use["name"]
-                        t_input = t_use.get("input", {})
-                        t_use_id = t_use["toolUseId"]
-
-                        t_output, maybe_plan = tools.execute_tool(t_name, t_input, case, account)
-                        if maybe_plan:
-                            proposed_plan = maybe_plan
-
-                        tool_traces.append({
-                            "name": t_name,
-                            "input": t_input,
-                            "output": t_output
-                        })
-
-                        # Log tool execution
-                        decisionlog.append_log_entry(
-                            case_id,
-                            "TOOL_CALL",
-                            {"kind": "AGENT", "id": "bedrock:nova-lite"},
-                            {"name": t_name, "input": t_input, "output_summary": str(t_output)[:100]}
-                        )
-
-                        tool_results.append({
-                            "toolResult": {
-                                "toolUseId": t_use_id,
-                                "content": [{"json": t_output}]
-                            }
-                        })
-
-                messages.append({
-                    "role": "user",
-                    "content": tool_results
-                })
-            else:
-                # Text response produced
-                for content_block in output_msg.get("content", []):
-                    if "text" in content_block:
-                        agent_reply_text = content_block["text"]
-                break
-
-    except Exception as e:
-        # Fallback for offline mode / network timeouts
-        agent_reply_text = (
-            f"Thank you for reaching out. Based on your current EMI of ₹{account.get('emi'):,}, "
-            f"I evaluated our Cedar policies. A 7-day due-date extension is pre-approved for your account."
+    # Execute LLM turn based on configured provider (Bedrock or Gemini)
+    if config.LLM_PROVIDER == "gemini":
+        agent_reply_text, g_traces, g_plan = gemini_agent.run_gemini_turn(
+            case, account, new_borrower_text, system_prompt[0]["text"]
         )
-        _, proposed_plan = tools.execute_tool("propose_relief", {"action": "DUE_DATE_SHIFT", "days": 7}, case, account)
+        tool_traces.extend(g_traces)
+        if g_plan:
+            proposed_plan = g_plan
+    else:
+        # Try executing Bedrock Converse loop
+        try:
+            bedrock = get_bedrock()
+            iterations = 0
+
+            while iterations < 6:
+                iterations += 1
+                response = bedrock.converse(
+                    modelId=config.BEDROCK_MODEL_ID,
+                    messages=messages,
+                    system=system_prompt,
+                    toolConfig=tool_config,
+                    inferenceConfig={"maxTokens": 400, "temperature": 0.2}
+                )
+
+                output_msg = response.get("output", {}).get("message", {})
+                stop_reason = response.get("stopReason", "end_turn")
+                messages.append(output_msg)
+
+                if stop_reason == "tool_use":
+                    tool_results = []
+                    for content_block in output_msg.get("content", []):
+                        if "toolUse" in content_block:
+                            t_use = content_block["toolUse"]
+                            t_name = t_use["name"]
+                            t_input = t_use.get("input", {})
+                            t_use_id = t_use["toolUseId"]
+
+                            t_output, maybe_plan = tools.execute_tool(t_name, t_input, case, account)
+                            if maybe_plan:
+                                proposed_plan = maybe_plan
+
+                            tool_traces.append({
+                                "name": t_name,
+                                "input": t_input,
+                                "output": t_output
+                            })
+
+                            # Log tool execution
+                            decisionlog.append_log_entry(
+                                case_id,
+                                "TOOL_CALL",
+                                {"kind": "AGENT", "id": "bedrock:nova-lite"},
+                                {"name": t_name, "input": t_input, "output_summary": str(t_output)[:100]}
+                            )
+
+                            tool_results.append({
+                                "toolResult": {
+                                    "toolUseId": t_use_id,
+                                    "content": [{"json": t_output}]
+                                }
+                            })
+
+                    messages.append({
+                        "role": "user",
+                        "content": tool_results
+                    })
+                else:
+                    # Text response produced
+                    for content_block in output_msg.get("content", []):
+                        if "text" in content_block:
+                            agent_reply_text = content_block["text"]
+                    break
+
+        except Exception as e:
+            # Fallback for offline mode / network timeouts
+            agent_reply_text = (
+                f"Thank you for reaching out. Based on your current EMI of ₹{account.get('emi'):,}, "
+                f"I evaluated our Cedar policies. A 7-day due-date extension is pre-approved for your account."
+            )
+            _, proposed_plan = tools.execute_tool("propose_relief", {"action": "DUE_DATE_SHIFT", "days": 7}, case, account)
+
 
     # 4. Numeric Verifier (Enforces zero invented figures)
     borrower_texts = [m.get("text", "") for m in stored_msgs if m.get("role") == "borrower"]
@@ -187,13 +198,17 @@ def run_agent_turn(case: Dict[str, Any], account: Dict[str, Any], new_borrower_t
         verifier=verifier_status
     )
 
+    active_model = config.GEMINI_MODEL_ID if config.LLM_PROVIDER == "gemini" else config.BEDROCK_MODEL_ID
+    active_agent_id = f"gemini:{config.GEMINI_MODEL_ID}" if config.LLM_PROVIDER == "gemini" else "bedrock:nova-lite"
+
     decisionlog.append_log_entry(
         case_id,
         "AGENT_MESSAGE",
-        {"kind": "AGENT", "id": "bedrock:nova-lite"},
+        {"kind": "AGENT", "id": active_agent_id},
         {
             "message_id": agent_msg_id,
-            "model_id": config.BEDROCK_MODEL_ID,
+            "provider": config.LLM_PROVIDER,
+            "model_id": active_model,
             "prompt_version": prompts.PROMPT_VERSION,
             "verifier": verifier_status
         }

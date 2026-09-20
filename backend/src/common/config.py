@@ -15,6 +15,10 @@ POLICY_STORE_ID = os.environ.get("POLICY_STORE_ID", "")
 STATE_MACHINE_ARN = os.environ.get("STATE_MACHINE_ARN", "")
 
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "apac.amazon.nova-lite-v1:0")
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "bedrock")  # "bedrock" or "gemini"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL_ID = os.environ.get("GEMINI_MODEL_ID", "gemini-2.5-flash")
+
 LENDER_NAME = os.environ.get("LENDER_NAME", "Harbour Finance")
 PUBLIC_APP_URL = os.environ.get("PUBLIC_APP_URL", "http://localhost:3000")
 ENABLE_TAMPER_DEMO = os.environ.get("ENABLE_TAMPER_DEMO", "true").lower() in ("true", "1", "yes")
@@ -23,3 +27,4 @@ AWS_REGION = os.environ.get("AWS_REGION", "ap-south-1")
 APPROVAL_TIMEOUT_SECONDS = int(os.environ.get("APPROVAL_TIMEOUT_SECONDS", "86400"))
 MAX_MESSAGES_PER_CASE = int(os.environ.get("MAX_MESSAGES_PER_CASE", "40"))
 MAX_MESSAGE_CHAR_LENGTH = int(os.environ.get("MAX_MESSAGE_CHAR_LENGTH", "600"))
+

@@ -197,3 +197,34 @@ def test_auth_group_parsing():
     assert "ops" in groups2
     assert auth.is_manager(claims_str) is False
     assert auth.is_ops(claims_str) is True
+
+
+# 8. TEST GEMINI AGENT PROVIDER & CONVERSE DISPATCH
+def test_gemini_agent_provider(monkeypatch):
+    from backend.src.agent import gemini_agent
+    from backend.src.common import ddb
+    from backend.src.governance import decisionlog
+    monkeypatch.setattr(ddb, "save_case", lambda case: None)
+    monkeypatch.setattr(decisionlog, "append_log_entry", lambda *args, **kwargs: {"seq": 1})
+
+    case = {"case_id": "CASE-1001", "status": "OPEN", "plan": None}
+    account = {
+        "account_id": "ACC-1001",
+        "name": "Meera Iyer",
+        "emi": 6200,
+        "product": "TWO_WHEELER",
+        "days_to_emi": 6,
+        "dpd": 0,
+        "prior_reliefs": 0,
+        "legal_hold": False
+    }
+    # Test conversational turn in offline fallback mode
+    reply, traces, plan = gemini_agent.run_gemini_turn(
+        case, account, "Can I get a 7-day shift for my upcoming EMI?", "You are CreditShield Assistant."
+    )
+    assert "6,200" in reply or "7-day" in reply
+    assert plan is not None
+    assert plan["action"] == "DUE_DATE_SHIFT"
+    assert plan["outcome"] == "ALLOWED"
+
+

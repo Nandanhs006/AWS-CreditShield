@@ -24,18 +24,18 @@
 
       <!-- Quick Hero Scenario Switcher -->
       <div class="header-center-scenarios">
-        <span id="scenarioGroupLabel" class="scenario-label">AI Scenarios:</span>
+        <span id="scenarioGroupLabel" class="scenario-label">SCENARIOS</span>
         <button id="btnHeroMeera" class="scenario-btn active" onclick="loadHeroScenario('ACC-1001')">
-          <i class="fa-solid fa-motorcycle"></i> Meera (7d)
+          <span class="scenario-indicator meera"></span> Meera (7d)
         </button>
         <button id="btnHeroArjun" class="scenario-btn" onclick="loadHeroScenario('ACC-1002')">
-          <i class="fa-solid fa-store"></i> Arjun (30d)
+          <span class="scenario-indicator arjun"></span> Arjun (30d)
         </button>
         <button id="btnHeroSana" class="scenario-btn" onclick="loadHeroScenario('ACC-1003')">
-          <i class="fa-solid fa-shield-cat"></i> Sana (Jailbreak)
+          <span class="scenario-indicator sana"></span> Sana (Jailbreak)
         </button>
         <button id="btnHeroVikram" class="scenario-btn" onclick="loadHeroScenario('ACC-1004')">
-          <i class="fa-solid fa-gavel"></i> Vikram (Hold)
+          <span class="scenario-indicator vikram"></span> Vikram (Hold)
         </button>
       </div>
 
@@ -45,6 +45,11 @@
         <span id="roleBadgeChip" class="role-tag-pill ops">AI OPS</span>
         <button id="btnSwitchRole" class="btn-toggle-role" onclick="toggleDualRole()" title="Switch between AI Operations and Supervisor Human Oversight">
           <i class="fa-solid fa-user-gear"></i> SWITCH TO SUPERVISOR
+        </button>
+        <button id="btnGeminiModal" class="btn-gemini-pill" onclick="openGeminiModal()" title="Configure Google Gemini 2.5 Flash Engine">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span id="geminiPillText">GEMINI 2.5</span>
+          <span class="gemini-live-dot"></span>
         </button>
         <button id="btnLogoutBtn" class="btn-toggle-role logout" onclick="handleLogout()" title="Log out of current session">
           <i class="fa-solid fa-arrow-right-from-bracket"></i> LOGOUT
@@ -148,32 +153,32 @@
           <!-- Quick Scenario Trigger Chips -->
           <div id="phoneScenarioChips" class="phone-scenario-chips">
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_7D')">
-              [ 7D EXTENSION ]
+              7d Extension
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_30D')">
-              [ 30D EXTENSION ]
+              30d Extension
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_JAILBREAK')">
-              [ TEST JAILBREAK ]
+              Test Policy Guard
             </button>
             <button class="scenario-chip" onclick="simulateBorrowerAction('REQUEST_HANDOFF')">
-              [ ESCALATE ]
+              Human Specialist
             </button>
           </div>
 
           <!-- Supervisor Quick Action Toolbar (Visible in Supervisor Role) -->
           <div id="supervisorActionToolbar" class="supervisor-action-toolbar">
             <button class="btn-supervisor-action" onclick="supervisorSendQuick('Hello, this is Officer Raman from Hardship Operations. I have taken over this chat directly.')" title="Takeover greeting">
-              [ GREET ]
+              Takeover Greet
             </button>
             <button class="btn-supervisor-action" onclick="supervisorSendQuick('I have reviewed your case and can approve a 30-day grace extension under discretionary authority.')" title="Discretionary 30d offer">
-              [ 30D WAIVER ]
+              30d Waiver
             </button>
             <button class="btn-supervisor-action" onclick="supervisorSendQuick('We will halt collections activity for 14 days while your medical documents are processed.')" title="Freeze collections">
-              [ FREEZE CALLS ]
+              Freeze Calls
             </button>
             <button class="btn-supervisor-action" onclick="supervisorForceApprove()" title="Approve pending task directly">
-              [ APPROVE NOW ]
+              Approve Now
             </button>
           </div>
 
@@ -498,6 +503,39 @@
                   <div id="sfnNodeNotify" class="sfn-node">
                     <span>5. Borrower Confirmation</span>
                     <i class="fa-solid fa-check"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom: Real-Time State Transitions & Verification Feed -->
+              <div class="sfn-card sfn-full-width">
+                <div class="panel-subhead">
+                  <h3>WORKFLOW TRANSITION TIMELINE & AUDIT RECORD</h3>
+                  <span class="sys-data" style="color: var(--accent-terminal); font-size: 0.7rem;">
+                    <i class="fa-solid fa-circle" style="font-size:0.45rem;"></i> AUTOMATED DISPATCH ACTIVE
+                  </span>
+                </div>
+                <div class="workflow-transitions-feed">
+                  <div class="transition-row completed">
+                    <span class="step-time mono">10:43:02 AM</span>
+                    <span class="step-pill success">PASS</span>
+                    <strong>EligibilityCheck</strong>
+                    <span class="step-details">Evaluated DPD &le; 30, prior reliefs = 0. Eligible under Relief Policy P1.</span>
+                    <span class="step-latency mono">14ms</span>
+                  </div>
+                  <div class="transition-row completed">
+                    <span class="step-time mono">10:43:03 AM</span>
+                    <span class="step-pill success">ROUTED</span>
+                    <strong>RouteByAuthority</strong>
+                    <span class="step-details">Requested 7 days &le; 10 days tier. Automated autonomous clearance granted.</span>
+                    <span class="step-latency mono">8ms</span>
+                  </div>
+                  <div class="transition-row active">
+                    <span class="step-time mono">10:43:04 AM</span>
+                    <span class="step-pill in-flight">MONITORING</span>
+                    <strong>TaskExecutionListener</strong>
+                    <span class="step-details">Awaiting borrower one-click confirmation or supervisor manual dispatch.</span>
+                    <span class="step-latency mono">Active</span>
                   </div>
                 </div>
               </div>
@@ -827,7 +865,69 @@
       </div>
     </div>
 
-    <!-- Toast Notification (Brutalist Banner) -->
+    <!-- ====================================================================
+         GEMINI AI OPS CONFIG MODAL
+         ==================================================================== -->
+    <div id="geminiOverlay" class="auth-overlay" style="display:none;">
+      <div class="auth-modal-card gemini-modal-card">
+        <div class="auth-modal-header">
+          <div class="auth-brand-row">
+            <div class="gemini-logo-badge">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div>
+              <h3>GOOGLE GEMINI AI ENGINE</h3>
+              <p>Real-Time Hardship Reasoning & Governed Turn Inference</p>
+            </div>
+          </div>
+          <button class="modal-close-btn" onclick="closeGeminiModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="gemini-modal-body">
+          <div class="gemini-status-banner">
+            <div class="gemini-status-indicator active"></div>
+            <div>
+              <strong id="geminiActiveModelTitle">Model: Google Gemini 2.5 Flash</strong>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">
+                Direct multimodal reasoning with strict Cedar policy boundary grounding.
+              </p>
+            </div>
+          </div>
+
+          <div class="auth-field" style="margin-top: 1rem;">
+            <label for="geminiApiKeyInput">
+              <i class="fa-solid fa-key"></i> GEMINI API KEY (OPTIONAL FOR LIVE CALLS)
+            </label>
+            <input type="password" id="geminiApiKeyInput" class="auth-input" placeholder="AIzaSy... (leave blank to use smart simulated engine)">
+            <p style="font-size: 0.68rem; color: var(--text-muted); margin-top: 4px;">
+              Stored locally in browser session. If empty, CreditShield runs high-fidelity policy-grounded simulation.
+            </p>
+          </div>
+
+          <div class="auth-field" style="margin-top: 0.75rem;">
+            <label><i class="fa-solid fa-sliders"></i> HARDSHIP INFERENCE PRESET</label>
+            <div class="preset-selector-row">
+              <button type="button" class="preset-pill active" onclick="setGeminiPreset('flash')">Gemini 2.5 Flash (Default)</button>
+              <button type="button" class="preset-pill" onclick="setGeminiPreset('pro')">Gemini 2.5 Pro</button>
+              <button type="button" class="preset-pill" onclick="setGeminiPreset('empathy')">Compassionate High-Empathy</button>
+            </div>
+          </div>
+
+          <div class="gemini-actions-row" style="margin-top: 1.25rem; display: flex; gap: 8px;">
+            <button type="button" class="btn-primary-action" style="flex: 1;" onclick="saveGeminiSettings()">
+              <i class="fa-solid fa-check"></i> SAVE & ACTIVATE
+            </button>
+            <button type="button" class="btn-secondary-action" onclick="testGeminiConnection()">
+              <i class="fa-solid fa-bolt"></i> TEST CONNECTION
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
     <div class="toast-container">
       <div id="toastNotification" class="toast-msg">
         <i id="toastIcon" class="fa-solid fa-check" style="color: var(--accent-terminal);"></i>
