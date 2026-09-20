@@ -51,26 +51,8 @@
         </button>
       </div>
 
-      <!-- AWS Free Tier Strip & Theme Toggle -->
+      <!-- Controls & Theme Toggle -->
       <div class="header-right-actions">
-        <div class="aws-services-strip">
-          <div class="aws-badge active-service" title="AWS Lambda Serverless Functions">
-            <span class="dot"></span> Lambda
-          </div>
-          <div class="aws-badge active-service" title="AWS Step Functions State Machine">
-            <span class="dot"></span> Step Functions
-          </div>
-          <div class="aws-badge active-service" title="Amazon DynamoDB On-Demand">
-            <span class="dot"></span> DynamoDB
-          </div>
-          <div class="aws-badge active-service" title="Amazon Cognito User Pools">
-            <span class="dot"></span> Cognito
-          </div>
-          <div class="aws-badge active-service" title="AWS KMS ECC P-256">
-            <span class="dot"></span> KMS P-256
-          </div>
-        </div>
-
         <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Terminal / Paper Mode" onclick="toggleTheme()">
           <i class="fa-solid fa-sun"></i>
         </button>
@@ -87,8 +69,8 @@
            ================================================================== -->
       <section class="borrower-pane">
         <div class="pane-title-bar">
-          <h2><i class="fa-solid fa-terminal"></i> Borrower Terminal</h2>
-          <span class="channel-tag">TOKEN: AES-GCM-256</span>
+          <h2><i class="fa-solid fa-mobile-screen"></i> Borrower App</h2>
+          <span class="channel-tag"><i class="fa-solid fa-circle" style="font-size:0.5rem; color:var(--accent-terminal);"></i> DIRECT LINK</span>
         </div>
 
         <!-- Smartphone Frame Chassis (Industrial Sharp Frame) -->
@@ -97,7 +79,7 @@
           <!-- Status Bar -->
           <div class="phone-status-bar">
             <span id="phoneClock">10:45:00</span>
-            <div class="phone-notch">CREDITSHIELD-CLIENT</div>
+            <div class="phone-notch">CREDITSHIELD</div>
             <div class="phone-icons">
               <i class="fa-solid fa-wifi"></i>
               <i class="fa-solid fa-lock"></i>
@@ -241,7 +223,7 @@
             </div>
           </div>
           <div class="kpi-card">
-            <span class="kpi-label">CEDAR AUTONOMY</span>
+            <span class="kpi-label">AUTOMATED RELIEF</span>
             <div class="kpi-value-row">
               <span class="kpi-value">81.8%</span>
               <span class="kpi-badge positive">SOLVED</span>
@@ -265,10 +247,10 @@
             [02] POLICY ENVELOPE & TOOLS <span id="tabCaseAccountBadge" class="badge-count">ACC-1001</span>
           </button>
           <button id="tabBtnApprovals" class="tab-btn" onclick="switchTab('approvals')">
-            [03] STEP FUNCTIONS QUEUE <span id="tabPendingApprovalsCount" class="badge-count">1</span>
+            [03] APPROVALS QUEUE <span id="tabPendingApprovalsCount" class="badge-count">1</span>
           </button>
           <button id="tabBtnAudit" class="tab-btn" onclick="switchTab('audit')">
-            [04] DECISION LOG & TAMPER DEMO <span class="badge-count">KMS P-256</span>
+            [04] DECISION LOG & AUDIT RAIL <span class="badge-count">VERIFIED</span>
           </button>
           <button id="tabBtnImpact" class="tab-btn" onclick="switchTab('impact')">
             [05] A/B IMPACT & ECONOMICS <span class="badge-count">+27.4%</span>
@@ -336,7 +318,7 @@
               <!-- Left: Case Overview & Tool Traces -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3>TRANSCRIPT & CONVERSE API TRACE</h3>
+                  <h3>CONVERSATION & ACTIVITY TRACE</h3>
                   <span id="caseDetailStatusBadge" class="status-badge-valid">OPEN // ACTIVE</span>
                 </div>
 
@@ -352,9 +334,9 @@
 
                 <!-- Tool Execution Traces -->
                 <div class="panel-subhead" style="margin-top: 0.5rem;">
-                  <h3>DETERMINISTIC TOOL EXECUTION TRACE</h3>
+                  <h3>TOOL EXECUTION TRACE</h3>
                   <span style="font-size: 0.7rem; color: var(--accent-industrial); font-family: var(--font-mono);">
-                    AMAZON NOVA LITE
+                    AI ASSISTANT
                   </span>
                 </div>
 
@@ -375,7 +357,7 @@
               <!-- Right: The Signature Policy Envelope Visualizer -->
               <div class="case-card-panel">
                 <div class="panel-subhead">
-                  <h3>CEDAR POLICY ENVELOPE</h3>
+                  <h3>RELIEF POLICY ENVELOPE</h3>
                   <span id="envelopeOutcomePill" class="envelope-outcome-badge" style="color: var(--accent-terminal);">
                     ALLOWED (AUTONOMOUS)
                   </span>
@@ -423,9 +405,9 @@
                   </div>
                 </div>
 
-                <!-- Determining Cedar Policy Code -->
+                <!-- Determining Policy Code -->
                 <div class="panel-subhead" style="margin-top: 0.5rem;">
-                  <h3>DETERMINING CEDAR POLICY</h3>
+                  <h3>GOVERNING POLICY RULES</h3>
                   <span id="activePolicyIdBadge" style="font-size: 0.7rem; font-family: var(--font-mono); color: var(--text-muted);">
                     POLICY ID: P1_agent_due_date_shift
                   </span>
@@ -449,8 +431,8 @@
 
                 <!-- Explanation Note -->
                 <div style="font-size: 0.73rem; color: var(--text-muted); line-height: 1.4; background: var(--surface-alt); padding: 8px; border: 1px solid var(--border);">
-                  <strong style="color: var(--text-main);">DETERMINISTIC SEPARATION:</strong>
-                  The conversational LLM never authorizes terms. Concession limits exist exclusively in Cedar policy data. Limits can be tuned in real-time with zero code deployments.
+                  <strong style="color: var(--text-main);">POLICY GUARDRAILS:</strong>
+                  The conversational assistant cannot grant arbitrary concessions. Relief limits are enforced strictly through verified policy rules and supervisor review.
                 </div>
               </div>
             </div>
@@ -466,7 +448,7 @@
               <div class="sfn-card">
                 <div class="panel-subhead">
                   <h3>MANAGER CONCESSION QUEUE</h3>
-                  <span class="status-badge-warning">COGNITO: MANAGER</span>
+                  <span class="status-badge-warning">SUPERVISOR APPROVAL</span>
                 </div>
 
                 <div id="approvalQueueContainer" style="display: flex; flex-direction: column; gap: 8px;">
@@ -474,47 +456,47 @@
                 </div>
               </div>
 
-              <!-- Right: AWS Step Functions Execution Graph -->
+              <!-- Right: Approval Workflow Execution Graph -->
               <div class="sfn-card">
                 <div class="panel-subhead">
-                  <h3>AWS STEP FUNCTIONS STATE MACHINE</h3>
+                  <h3>RELIEF APPROVAL WORKFLOW</h3>
                   <span id="sfnExecutionStatus" class="sys-data" style="color: var(--accent-industrial); font-size: 0.7rem;">
                     EXEC: case-ACC1002-p01
                   </span>
                 </div>
 
                 <p style="font-size: 0.72rem; color: var(--text-muted);">
-                  Human-in-the-loop task token callback (<code class="mono">waitForTaskToken</code>).
+                  Human-in-the-loop supervisor approval workflow with real-time callback.
                 </p>
 
-                <!-- Step Functions Node Graph -->
+                <!-- Workflow Node Graph -->
                 <div class="sfn-graph-container">
                   <div id="sfnNodeRecheck" class="sfn-node completed">
-                    <span>1. RecheckPolicy</span>
+                    <span>1. Eligibility Check</span>
                     <i class="fa-solid fa-check"></i>
                   </div>
                   <div class="sfn-connector-line active"></div>
                   
                   <div id="sfnNodeRoute" class="sfn-node completed">
-                    <span>2. RouteByAuthority</span>
+                    <span>2. Authority Routing</span>
                     <i class="fa-solid fa-code-fork"></i>
                   </div>
                   <div class="sfn-connector-line active"></div>
                   
                   <div id="sfnNodeWait" class="sfn-node active-wait">
-                    <span>3. RequestApproval (TaskToken)</span>
+                    <span>3. Supervisor Approval</span>
                     <i class="fa-solid fa-spinner fa-spin"></i>
                   </div>
                   <div class="sfn-connector-line"></div>
                   
                   <div id="sfnNodeApply" class="sfn-node">
-                    <span>4. ApplyPlan (CoreBanking)</span>
+                    <span>4. Apply Relief Plan</span>
                     <i class="fa-solid fa-database"></i>
                   </div>
                   <div class="sfn-connector-line"></div>
                   
                   <div id="sfnNodeNotify" class="sfn-node">
-                    <span>5. NotifyBorrower & Close</span>
+                    <span>5. Borrower Confirmation</span>
                     <i class="fa-solid fa-check"></i>
                   </div>
                 </div>
@@ -535,10 +517,10 @@
                 </div>
                 <div>
                   <h3 id="auditStatusTitle" style="font-size: 0.85rem; font-weight: 700; font-family: var(--font-mono);">
-                    CRYPTOGRAPHIC INTEGRITY: VALID & INTACT
+                    AUDIT LOG INTEGRITY: VERIFIED & INTACT
                   </h3>
                   <p id="auditStatusSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
-                    SHA-256 Chain &bull; AWS KMS P-256 Signatures &bull; S3 Object Lock Checkpointed
+                    Cryptographically Sealed &bull; Digital Signatures &bull; Immutable Checkpoints
                   </p>
                 </div>
               </div>
@@ -548,10 +530,10 @@
                   <i class="fa-solid fa-fingerprint"></i> VERIFY INTEGRITY
                 </button>
                 <button id="btnTamperAttack" class="btn-tamper-demo" onclick="triggerTamperAttack()">
-                  <i class="fa-solid fa-triangle-exclamation"></i> SIMULATE DB TAMPERING
+                  <i class="fa-solid fa-triangle-exclamation"></i> SIMULATE LOG TAMPERING
                 </button>
                 <button id="btnRestoreTamper" class="btn-restore-demo" onclick="restoreTamperedLog()" style="display: none;">
-                  <i class="fa-solid fa-shield-halved"></i> RESTORE FROM S3 LOCK
+                  <i class="fa-solid fa-shield-halved"></i> RESTORE ORIGINAL LOG
                 </button>
               </div>
             </div>
@@ -560,7 +542,7 @@
             <div class="data-table-wrapper" style="padding: 0.75rem;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">
                 <span>CASE #CASE-1001 IMMUTABLE LEDGER</span>
-                <span>KMS KEY: <code style="color: var(--accent-industrial);">arn:aws:kms:ap-south-1:123456789012:key/creditshield-p256</code></span>
+                <span>SIGNATURE KEY ID: <code style="color: var(--accent-industrial);">creditshield-master-key</code></span>
               </div>
 
               <div id="cryptoTimelineContainer" class="crypto-rail-timeline">
@@ -764,10 +746,10 @@
             <div class="section-control-bar">
               <div class="section-title">
                 <h2><i class="fa-solid fa-headset" style="color: var(--accent-danger);"></i> HUMAN HANDOFF & ESCALATIONS DESK</h2>
-                <p>Real-time queue of cases where automated AI resolution was blocked by Cedar policy, legal holds, or borrower distress signals</p>
+                <p>Real-time queue of cases where automated resolution was blocked by policy limits, legal holds, or borrower distress signals</p>
               </div>
               <div class="filter-button-group">
-                <span class="role-tag-pill supervisor">COGNITO: CREDIT_MANAGERS</span>
+                <span class="role-tag-pill supervisor">CREDIT SUPERVISORS</span>
                 <button class="btn-industrial" onclick="refreshHandoffDesk()">
                   <i class="fa-solid fa-rotate"></i> REFRESH QUEUE
                 </button>
@@ -784,7 +766,7 @@
     </main>
 
     <!-- ====================================================================
-         AUTH LOGIN MODAL / OVERLAY (COGNITO INDUSTRIAL TERMINAL)
+         STAFF LOGIN MODAL / OVERLAY
          ==================================================================== -->
     <div id="authOverlay" class="auth-overlay" style="display:none;">
       <div class="auth-modal-card">
@@ -792,11 +774,10 @@
           <div class="auth-brand-row">
             <img src="logo-light.png?v=3" alt="CreditShield" class="brand-logo-img" style="height: 48px; width: auto; max-width: 220px; object-fit: contain; background: transparent; border: none; padding: 0; display: block;">
             <div>
-              <h3>CREDITSHIELD // AUTH GATEWAY</h3>
-              <p>Amazon Cognito Identity Pool &bull; Staff Authentication</p>
+              <h3>CREDITSHIELD PORTAL</h3>
+              <p>Operations &bull; Supervisor Sign In</p>
             </div>
           </div>
-          <span class="auth-badge-tag">SECURE JWT</span>
         </div>
 
         <form id="authLoginForm" class="auth-form" onsubmit="handleLoginSubmit(event)">
@@ -810,13 +791,13 @@
           </div>
           <div class="auth-actions-row">
             <button type="submit" class="btn-auth-submit">
-              <i class="fa-solid fa-key"></i> SIGN IN WITH COGNITO
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> SIGN IN
             </button>
           </div>
         </form>
 
         <div class="auth-divider">
-          <span>OR SELECT DEMO PERSONA</span>
+          <span>OR SELECT DEMO ROLE</span>
         </div>
 
         <div class="quick-auth-grid">
@@ -841,7 +822,7 @@
 
         <div class="auth-footer-note">
           <i class="fa-solid fa-shield-halved"></i>
-          <span>Protected by Amazon Cognito User Pool &bull; Group-based RBAC (`ops`, `manager`)</span>
+          <span>Authorized staff sign-in &bull; Role-based access control</span>
         </div>
       </div>
     </div>

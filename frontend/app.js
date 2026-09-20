@@ -21,7 +21,7 @@ let HANDOFF_TICKETS = [
     name: 'Vikram Rao',
     segment: 'SALARIED',
     emi: 11000,
-    reason: 'Active legal dispute attached to account. Automated relief blocked by Cedar policy F1. Immediate human specialist required.',
+    reason: 'Active legal dispute attached to account. Automated relief blocked by policy rule F1. Immediate human specialist required.',
     urgency: 'HIGH',
     timestamp: '10:45 AM',
     status: 'PENDING'
@@ -238,7 +238,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '11:06 AM',
-      text: 'I cannot grant an extension beyond policy limits. Under Harbour Finance Verified Permissions, loan extensions are capped at a maximum of 6 months, and fee waivers require standard manager review. I can offer an approved 3-installment partial plan instead.'
+      text: 'I cannot grant an extension beyond policy limits. Under Harbour Finance relief guidelines, loan extensions are capped at a maximum of 6 months, and fee waivers require manager review. I can offer an approved 3-installment partial plan instead.'
     }
   ],
   'ACC-1004': [
@@ -255,7 +255,7 @@ const CONVERSATIONS_DB = {
     {
       role: 'agent',
       time: '08:31 AM',
-      text: 'Thank you for letting me know. Because your account has an active legal hold flag, Cedar governance rules forbid automated concessions. I have immediately connected your case to our Senior Resolution Specialist.'
+      text: 'Thank you for letting me know. Because your account has an active legal hold flag, our policies require specialist review. I have immediately connected your case to our Senior Resolution Specialist.'
     },
     {
       role: 'system',
@@ -282,10 +282,10 @@ let DECISION_LOG = [
     ts: '2026-09-20T05:12:05Z',
     type: 'CASE_OPENED',
     actor: { kind: 'SYSTEM', id: 'lambda:staff_api' },
-    summary: 'Case CASE-1001 created. Generated private borrower link token (AES-GCM-256).',
+    summary: 'Case CASE-1001 created. Generated private borrower access link.',
     prev_hash: '8f4c2e19b5d7a83f4e1c2b3a4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e',
     entry_hash: '3a7b9c1d5e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b',
-    sig: 'MEQCIA8x9rK2w1Q...KMS_P256'
+    sig: 'MEQCIA8x9rK2w1Q...[ECDSA-SIG]'
   },
   {
     seq: 3,
@@ -302,20 +302,20 @@ let DECISION_LOG = [
     ts: '2026-09-20T05:13:21Z',
     type: 'POLICY_DECISION',
     actor: { kind: 'SYSTEM', id: 'avp:cedar-engine' },
-    summary: 'Action OfferDueDateShift(days=7) tested against Cedar store. Outcome: ALLOWED by P1.',
+    summary: 'Action OfferDueDateShift(days=7) evaluated against policy rules. Outcome: APPROVED under Policy P1.',
     prev_hash: 'c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2',
     entry_hash: 'e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6',
-    sig: 'MEQCIB4v7n2M9xK...KMS_P256'
+    sig: 'MEQCIB4v7n2M9xK...[ECDSA-SIG]'
   },
   {
     seq: 5,
     ts: '2026-09-20T05:13:22Z',
     type: 'PLAN_PROPOSED',
-    actor: { kind: 'AGENT', id: 'bedrock:nova-lite' },
+    actor: { kind: 'AGENT', id: 'agent:relief-advisor' },
     summary: 'Plan PLAN-1001-01 proposed: Due-date shift 7 days. Verifier: PASS.',
     prev_hash: 'e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6',
     entry_hash: '7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b',
-    sig: 'MEQCID1w4p8Z3vL...KMS_P256'
+    sig: 'MEQCID1w4p8Z3vL...[ECDSA-SIG]'
   }
 ];
 
@@ -433,7 +433,7 @@ function startClock() {
 function loadHeroScenario(accountId) {
   // RBAC Enforcement: AI Ops is restricted from Vikram Rao (Legal Hold)
   if (currentRole === 'ops' && accountId === 'ACC-1004') {
-    showToast('ACCESS DENIED (403): Case ACC-1004 is under legal hold and escalated to Senior Supervisor.', 'warning');
+    showToast('SUPERVISOR REQUIRED: Case ACC-1004 is under legal hold and requires Senior Supervisor review.', 'warning');
     return;
   }
 
@@ -539,7 +539,7 @@ function createPlanCardElement(plan) {
       <span class="plan-status-pill ${statusClass}">
         ${statusLabel}
       </span>
-      <span class="plan-cedar-source">AUTH: CEDAR STRICT</span>
+      <span class="plan-cedar-source"><i class="fa-solid fa-circle-check"></i> POLICY COMPLIANT</span>
     </div>
     <div class="plan-card-summary">${actionLabel}</div>
     <div class="plan-card-details">${plan.summary}</div>
@@ -607,7 +607,7 @@ function applyRole(role, email = null) {
       tabHandoff.style.display = 'inline-flex';
     }
 
-    appendLogEntry('ROLE_SWITCH', 'Auth session: Human Supervisor (Cognito: CreditManagersGroup)', 'SUPERVISOR');
+    appendLogEntry('ROLE_SWITCH', 'Session switched: Senior Human Supervisor', 'SUPERVISOR');
   } else {
     // AI Operations Mode: Restricted Access (Only 3 Hero accounts; no Vikram; no approvals)
     if (roleBadge) {
@@ -643,7 +643,7 @@ function applyRole(role, email = null) {
       loadHeroScenario('ACC-1001');
     }
 
-    appendLogEntry('ROLE_SWITCH', 'Auth session: AI Operations (Cognito: OperationsGroup)', 'SYSTEM');
+    appendLogEntry('ROLE_SWITCH', 'Session switched: AI Operations Analyst', 'SYSTEM');
   }
 
   renderApprovalsQueue();
@@ -655,10 +655,10 @@ function toggleDualRole() {
   applyRole(newRole);
   if (newRole === 'supervisor') {
     switchTab('approvals');
-    showToast('Switched to Human Supervisor Mode (Cognito: CreditManagersGroup)', 'success');
+    showToast('Switched to Human Supervisor Mode', 'success');
   } else {
     switchTab('portfolio');
-    showToast('Switched to AI Operations Mode (Standard Access)', 'info');
+    showToast('Switched to AI Operations Mode', 'info');
   }
 }
 
@@ -668,7 +668,7 @@ function handleLogout() {
   localStorage.removeItem('creditshield_user_email');
   const overlay = document.getElementById('authOverlay');
   if (overlay) overlay.style.display = 'flex';
-  showToast('Logged out of Cognito session. Please sign in.', 'info');
+  showToast('Logged out of session. Please sign in.', 'info');
 }
 
 function handleLoginSubmit(e) {
@@ -707,9 +707,9 @@ function renderHandoffDesk() {
     container.innerHTML = `
       <div style="padding: 2rem; background: var(--surface); border: var(--border-weight) solid var(--border); text-align: center;">
         <i class="fa-solid fa-lock" style="font-size: 2rem; color: var(--accent-danger); margin-bottom: 0.75rem;"></i>
-        <h3 style="font-family: var(--font-mono); color: var(--text-main);">SUPERVISOR AUTHORIZATION REQUIRED (403 FORBIDDEN)</h3>
+        <h3 style="font-family: var(--font-mono); color: var(--text-main);">SUPERVISOR ACCESS REQUIRED</h3>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
-          The Human Handoff Desk is reserved for Senior Credit Resolution Officers (Cognito: CreditManagersGroup).<br/>
+          The Human Handoff Desk is reserved for Senior Credit Resolution Officers.<br/>
           Switch to Supervisor role in the header to claim and manage escalated handoffs.
         </p>
         <button class="btn-industrial" style="margin-top: 1rem;" onclick="toggleDualRole()">
@@ -726,7 +726,7 @@ function renderHandoffDesk() {
         <i class="fa-solid fa-circle-check" style="font-size: 2rem; color: var(--accent-terminal); margin-bottom: 0.75rem;"></i>
         <h3 style="font-family: var(--font-mono); color: var(--text-main);">ALL ESCALATIONS RESOLVED</h3>
         <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
-          Zero pending handoff tickets. AI Operations are operating autonomously within Cedar boundaries.
+          Zero pending handoff tickets. All cases operating autonomously within approved relief policies.
         </p>
       </div>
     `;
@@ -919,7 +919,7 @@ function sendBorrowerMessage() {
     let replyText = '';
 
     if (lower.includes('7') || lower.includes('week') || lower.includes('few days')) {
-      replyText = 'I evaluated our Cedar policies. Shifting your due date by 7 days is fully pre-approved. You can review and confirm below.';
+      replyText = 'I evaluated our relief policy guidelines. Shifting your due date by 7 days is fully pre-approved. You can review and confirm below.';
       simulateBorrowerAction('REQUEST_7D', false);
       return;
     } else if (lower.includes('30') || lower.includes('month') || lower.includes('diwali')) {
@@ -1077,7 +1077,7 @@ function triggerHumanHandoff() {
     name: account ? account.name : 'Borrower',
     segment: account ? account.segment : 'PERSONAL_LOAN',
     emi: account ? account.emi : 5000,
-    reason: `Borrower initiated human handoff request from terminal. Cedar restriction or borrower distress noted.`,
+    reason: `Borrower requested live specialist assistance. Policy escalation or borrower distress noted.`,
     urgency: 'HIGH',
     timestamp: timeStr,
     status: 'PENDING'
@@ -1270,7 +1270,7 @@ function renderApprovalsQueue() {
         <p><strong>Requested Term:</strong> Move EMI from 23 Sep to 23 Oct 2026 (₹14,500 EMI).</p>
         <p style="margin-top: 3px;"><strong>Borrower Context:</strong> Festive retail slowdown. Customer has 1 earlier relief, 9 DPD.</p>
         <p style="margin-top: 3px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-terminal);">
-          Cedar Authority Check: Manager tier permits up to 30 days (Policy P2). TaskToken active.
+          Authority Check: Supervisor tier permits up to 30 days (Policy P2). Awaiting supervisor confirmation.
         </p>
       </div>
       <div class="approval-item-actions">
@@ -1282,8 +1282,8 @@ function renderApprovalsQueue() {
             <i class="fa-solid fa-xmark"></i> REJECT
           </button>
         ` : `
-          <button class="btn-approve" style="opacity: 0.45; cursor: not-allowed;" onclick="showToast('403 Forbidden: Only Senior Supervisor (manager group) can approve Step Functions task tokens.', 'warning')">
-            <i class="fa-solid fa-lock"></i> 403: SUPERVISOR APPROVAL REQUIRED
+          <button class="btn-approve" style="opacity: 0.45; cursor: not-allowed;" onclick="showToast('Supervisor required: Only Senior Supervisors can approve extended concessions.', 'warning')">
+            <i class="fa-solid fa-lock"></i> SUPERVISOR APPROVAL REQUIRED
           </button>
         `}
       </div>
@@ -1352,7 +1352,7 @@ function renderCryptoTimeline() {
       <div class="crypto-hashes">
         <span>HASH: <strong>${entry.entry_hash.substring(0, 12)}...</strong></span>
         <span>PREV: ${entry.prev_hash.substring(0, 10)}...</span>
-        <span>KMS: ${entry.sig.substring(0, 10)}...</span>
+        <span>SIG: ${entry.sig.substring(0, 10)}...</span>
       </div>
     `;
 
@@ -1375,7 +1375,7 @@ function appendLogEntry(type, summary, actorKind = 'SYSTEM') {
     summary: summary,
     prev_hash: prevHash,
     entry_hash: newHash,
-    sig: 'MEQCID' + Math.random().toString(36).substring(2, 8) + '...KMS_P256'
+    sig: 'MEQCID' + Math.random().toString(36).substring(2, 8) + '...[VALID]'
   });
 
   renderCryptoTimeline();
@@ -1386,23 +1386,23 @@ function verifyLogIntegrity() {
   const title = document.getElementById('auditStatusTitle');
   const subtitle = document.getElementById('auditStatusSubtitle');
 
-  showToast('Verifying SHA-256 Hash Chain & AWS KMS P-256 signatures...', 'info');
+  showToast('Verifying audit ledger signatures and cryptographic integrity...', 'info');
 
   setTimeout(() => {
     if (isTampered) {
       shield.className = 'shield-icon-badge tampered';
       shield.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-      title.textContent = 'INTEGRITY VIOLATION: HASH COLLISION AT SEQ #4';
+      title.textContent = 'INTEGRITY VIOLATION: RECORD ALTERED AT SEQ #4';
       title.style.color = 'var(--accent-danger)';
-      subtitle.textContent = 'Database entry payload was mutated after signature. S3 Lock mismatch.';
-      showToast('ALERT: Cryptographic chain broken at Seq #4!', 'warning');
+      subtitle.textContent = 'Log entry payload was altered after signature. Checkpoint mismatch.';
+      showToast('ALERT: Integrity verification failed at Seq #4!', 'warning');
     } else {
       shield.className = 'shield-icon-badge valid';
       shield.innerHTML = '<i class="fa-solid fa-shield-check"></i>';
-      title.textContent = 'CRYPTOGRAPHIC INTEGRITY: VALID & INTACT';
+      title.textContent = 'AUDIT LOG INTEGRITY: VERIFIED & INTACT';
       title.style.color = 'var(--text-main)';
-      subtitle.textContent = `All ${DECISION_LOG.length} sequential entries verified against AWS KMS P-256 key & S3 checkpoints.`;
-      showToast('Chain Intact: 100% Cryptographically Verified', 'success');
+      subtitle.textContent = `All ${DECISION_LOG.length} sequential ledger entries verified against cryptographic keys and immutable checkpoints.`;
+      showToast('Audit Log Verified: 100% Intact', 'success');
     }
   }, 500);
 }
@@ -1411,11 +1411,11 @@ function triggerTamperAttack() {
   if (isTampered) return;
   isTampered = true;
 
-  // Mutate Entry 4 payload directly (simulating unauthorized DynamoDB write)
+  // Mutate Entry 4 payload directly (simulating unauthorized log modification)
   const entry4 = DECISION_LOG.find(e => e.seq === 4);
   if (entry4) {
     tamperOriginalEntry = { ...entry4 };
-    entry4.summary = '[TAMPERED] Action OfferDueDateShift modified to days=45 by unauthorized DB script';
+    entry4.summary = '[TAMPERED] Concession modified to days=45 by unauthorized script';
     entry4.tampered = true;
   }
 
@@ -1424,7 +1424,7 @@ function triggerTamperAttack() {
 
   renderCryptoTimeline();
   verifyLogIntegrity();
-  showToast('Simulated Database Injection: Entry #4 payload altered!', 'warning');
+  showToast('Simulated Log Tampering: Entry #4 payload altered!', 'warning');
 }
 
 function restoreTamperedLog(showNotification = true) {
@@ -1443,7 +1443,7 @@ function restoreTamperedLog(showNotification = true) {
   verifyLogIntegrity();
 
   if (showNotification) {
-    showToast('Restored genuine payload from AWS S3 Object Lock & Re-sealed!', 'success');
+    showToast('Restored genuine entry from immutable audit checkpoint!', 'success');
   }
 }
 
